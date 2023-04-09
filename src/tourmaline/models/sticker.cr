@@ -1,6 +1,7 @@
 module Tourmaline
   class Sticker
     include JSON::Serializable
+    include Tourmaline::Model
 
     getter file_id : String
 
@@ -18,7 +19,7 @@ module Tourmaline
     @[JSON::Field(key: "is_video")]
     getter? video : Bool
 
-    getter thumbnail : PhotoSize?
+    getter thumb : PhotoSize?
 
     getter emoji : String?
 
@@ -36,20 +37,6 @@ module Tourmaline
       Regular
       Mask
       CustomEmoji
-
-      def self.new(pull : JSON::PullParser)
-        parse(pull.read_string.camelcase)
-      end
-
-      def to_json(json : JSON::Builder)
-        json.string(to_s.underscore)
-      end
-    end
-
-    enum Format
-      Static
-      Animated
-      Video
 
       def self.new(pull : JSON::PullParser)
         parse(pull.read_string.camelcase)

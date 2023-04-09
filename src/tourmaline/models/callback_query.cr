@@ -1,6 +1,7 @@
 module Tourmaline
   class CallbackQuery
     include JSON::Serializable
+    include Tourmaline::Model
 
     getter id : String
 
@@ -15,5 +16,9 @@ module Tourmaline
     getter data : String?
 
     getter game_short_name : String?
+
+    def answer(*args, **kwargs)
+      client.answer_callback_query(id, *args, **kwargs)
+    end
   end
 end

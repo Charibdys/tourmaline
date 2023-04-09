@@ -1,6 +1,7 @@
 module Tourmaline
   class WebAppInfo
     include JSON::Serializable
+    include Tourmaline::Model
 
     getter url : String
 

@@ -1,6 +1,7 @@
 module Tourmaline
   class Video
     include JSON::Serializable
+    include Tourmaline::Model
 
     getter file_id : String
 
@@ -12,7 +13,7 @@ module Tourmaline
 
     getter duration : Int32
 
-    getter thumbnail : PhotoSize?
+    getter thumb : PhotoSize?
 
     getter file_name : String?
 

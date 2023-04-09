@@ -6,7 +6,9 @@
 
 [![Chat on Telegram](https://patrolavia.github.io/telegram-badge/chat.png)](https://t.me/protoncr)
 
-Telegram Bot API library written in Crystal. Meant to be a simple, easy to use, and fast library for writing Telegram bots.
+Telegram Bot API framework written in Crystal. Based heavily off of [Telegraf](http://telegraf.js.org) this Crystal implementation allows your Telegram bot to be written in a language that's both beautiful and fast. Benchmarks coming soon.
+
+If you want to extend your bot by using NLP, see my other library [Cadmium](https://github.com/cadmiumcr).
 
 ## Installation
 
@@ -30,16 +32,15 @@ Just for README purposes though, let's look at the echo bot example:
 ```crystal
 require "tourmaline"
 
-client = Tourmaline::Client.new(ENV["BOT_TOKEN"])
-
-echo_handler = Tourmaline::CommandHandler.new("echo") do |ctx|
-  text = ctx.text.to_s
-    ctx.reply(text) unless text.empty?
+class EchoBot < Tourmaline::Client
+  @[Command("echo")]
+  def echo_command(ctx)
+    ctx.message.reply(ctx.text)
+  end
 end
 
-client.register(echo_handler)
-
-client.poll
+bot = EchoBot.new(bot_token: ENV["API_KEY"])
+bot.poll
 ```
 
 ## Development
@@ -48,8 +49,8 @@ This currently supports the following features:
 
 - [x] Client API
   - [x] Implementation examples
-  - [x] Handlers for commands, queries, and more
-  - [x] Robust middleware system
+  - [x] Easy command syntax
+  - [ ] Robust middleware system
   - [x] Standard API queries
   - [x] Stickers
   - [x] Inline mode

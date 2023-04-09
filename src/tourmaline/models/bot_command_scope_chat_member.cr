@@ -1,6 +1,7 @@
 module Tourmaline
   class BotCommandScopeChatMember
     include JSON::Serializable
+    include Tourmaline::Model
 
     getter type : String = "chat_member"
 

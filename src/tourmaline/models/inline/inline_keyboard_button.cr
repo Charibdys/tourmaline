@@ -1,6 +1,7 @@
 module Tourmaline
   class InlineKeyboardButton
     include JSON::Serializable
+    include Tourmaline::Model
 
     property text : String
 
@@ -20,17 +21,7 @@ module Tourmaline
 
     property pay : Bool?
 
-    def initialize(
-      @text : String,
-      @url : String? = nil,
-      @login_url : LoginURL? = nil,
-      @callback_data : String? = nil,
-      @web_app = nil,
-      @switch_inline_query : String? = nil,
-      @switch_inline_query_current_chat : String? = nil,
-      @callback_game : CallbackGame? = nil,
-      @pay : Bool? = nil
-    )
+    def initialize(@text : String, @url : String? = nil, @login_url : LoginURL? = nil, @callback_data : String? = nil, @web_app = nil, @switch_inline_query : String? = nil, @switch_inline_query_current_chat : String? = nil, @callback_game : CallbackGame? = nil, @pay : Bool? = nil)
     end
   end
 end

@@ -1,6 +1,7 @@
 module Tourmaline
   class InputMediaPhoto
     include JSON::Serializable
+    include Tourmaline::Model
 
     @type = "photo"
 
@@ -12,9 +13,7 @@ module Tourmaline
 
     property caption_entities : Array(MessageEntity) = [] of MessageEntity
 
-    property? has_spoiler : Bool?
-
-    def initialize(@media, @caption = nil, @parse_mode = nil, @caption_entities = [] of MessageEntity, @has_spoiler = false)
+    def initialize(@media, @caption = nil, @parse_mode = nil, @caption_entities = [] of MessageEntity)
     end
   end
 end

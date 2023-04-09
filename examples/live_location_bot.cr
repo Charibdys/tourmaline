@@ -1,9 +1,8 @@
 require "../src/tourmaline"
 
-client = Tourmaline::Client.new(ENV["BOT_TOKEN"])
-
-send_live_location = Tourmaline::CommandHandler.new("start") do |ctx|
-  begin
+class LiveLocationBot < Tourmaline::Client
+  @[Command("start")]
+  def send_live_location(ctx)
     lat = 40.7608
     lon = 111.8910
     loc = ctx.message.reply_with_location(lat, lon, live_period: 60)
@@ -13,10 +12,9 @@ send_live_location = Tourmaline::CommandHandler.new("start") do |ctx|
       loc.edit_live_location(lat, lon)
       sleep(5)
     end
-  rescue ex : Tourmaline::Error::MessageCantBeEdited
+  rescue Error::MessageCantBeEdited
   end
 end
 
-client.register(send_live_location)
-
-client.poll
+bot = LiveLocationBot.new(bot_token: ENV["API_KEY"])
+bot.poll

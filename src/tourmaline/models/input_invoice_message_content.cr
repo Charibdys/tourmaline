@@ -4,6 +4,7 @@ require "./input_message_content.cr"
 module Tourmaline
   class InputInvoiceMessageContent
     include JSON::Serializable
+    include Tourmaline::Model
 
     getter title : String
 

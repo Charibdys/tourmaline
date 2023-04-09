@@ -1,6 +1,7 @@
 module Tourmaline
   class ChatMemberUpdated
     include JSON::Serializable
+    include Tourmaline::Model
 
     getter chat : Chat
 

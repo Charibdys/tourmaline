@@ -1,10 +1,34 @@
 module Tourmaline
-  alias EventHandlerProc = Proc(Tourmaline::Context, Nil)
-
+  # Base class for all handlers.
   abstract class EventHandler
-    abstract def actions : Array(UpdateAction)
-    abstract def call(ctx : Tourmaline::Context)
-  end
+    property! client : Client
 
-  alias EventHandlerType = EventHandler | EventHandlerProc
+    abstract def call(update : Update)
+
+    # :nodoc:
+    module Annotator
+      macro register_event_handler_annotations
+        {% begin %}\
+          {% for method in @type.methods %}\
+            {% for event_handler in Tourmaline::EventHandler.all_subclasses %}\
+              {% if event_handler.has_constant?("ANNOTATION") %}\
+                {% for ann in method.annotations(event_handler.constant("ANNOTATION").resolve) %}\
+                    %handler = {{ event_handler.id }}.new(
+                      {% unless ann.args.empty? %}*{{ ann.args }}, {% end %}
+                      {% unless ann.named_args.empty? %}**{{ ann.named_args }}, {% end %}
+                      &->(ctx : {{ event_handler.id }}::Context) { {{ method.name.id }}(ctx); nil }
+                    )
+                    %handler.client = self
+
+                    @event_handlers << %handler
+                {% end %}\
+              {% end %}\
+            {% end %}\
+          {% end %}\
+        {% end %}\
+      end
+    end
+  end
 end
+
+require "./handlers/*"

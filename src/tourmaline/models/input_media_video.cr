@@ -1,6 +1,7 @@
 module Tourmaline
   class InputMediaVideo
     include JSON::Serializable
+    include Tourmaline::Model
 
     @type = "video"
 
@@ -20,12 +21,10 @@ module Tourmaline
 
     property duration : Int32?
 
-    property? supports_streaming : Bool?
-
-    property? has_spoiler : Bool?
+    property supports_streaming : Bool?
 
     def initialize(@media, @thumb = nil, @caption = nil, @parse_mode = nil, @caption_entities = [] of MessageEntity,
-                   @width = nil, @height = nil, duration = nil, @supports_streaming = nil, @has_spoiler = false)
+                   @width = nil, @height = nil, duration = nil, @supports_streaming = nil)
     end
   end
 end

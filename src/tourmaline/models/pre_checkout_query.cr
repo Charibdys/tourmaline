@@ -1,6 +1,7 @@
 module Tourmaline
   class PreCheckoutQuery
     include JSON::Serializable
+    include Tourmaline::Model
 
     getter id : String
 
@@ -15,5 +16,9 @@ module Tourmaline
     getter shipping_option_id : String?
 
     getter order_info : OrderInfo?
+
+    def answer(ok, **kwargs)
+      client.answer_pre_checkout_query(id, ok, **kwargs)
+    end
   end
 end

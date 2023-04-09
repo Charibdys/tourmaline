@@ -1,6 +1,7 @@
 module Tourmaline
   class StickerSet
     include JSON::Serializable
+    include Tourmaline::Model
 
     getter name : String
 
@@ -16,6 +17,6 @@ module Tourmaline
 
     getter stickers : Array(Sticker)
 
-    getter thumbnail : PhotoSize?
+    getter thumb : PhotoSize?
   end
 end

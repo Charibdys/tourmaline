@@ -1,6 +1,7 @@
 module Tourmaline
   class Audio
     include JSON::Serializable
+    include Tourmaline::Model
 
     getter file_id : String
 
@@ -18,6 +19,6 @@ module Tourmaline
 
     getter file_size : Int64?
 
-    getter thumbnail : PhotoSize?
+    getter thumb : PhotoSize?
   end
 end
