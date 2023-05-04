@@ -21,8 +21,10 @@ module Tourmaline
 
     property duration : Int32?
 
+    property? has_spoiler : Bool?
+
     def initialize(@media, @thumb = nil, @caption = nil, @parse_mode = nil, @caption_entities = [] of MessageEntity,
-                   @width = nil, @height = nil, duration = nil)
+                   @width = nil, @height = nil, duration = nil, @has_spoiler = nil)
     end
   end
 end

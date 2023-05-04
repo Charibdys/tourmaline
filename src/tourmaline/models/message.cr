@@ -80,6 +80,8 @@ module Tourmaline
 
     getter caption_entities : Array(MessageEntity) = [] of Tourmaline::MessageEntity
 
+    getter? has_media_spoiler : Bool?
+
     getter contact : Contact?
 
     getter dice : Dice?
