@@ -51,7 +51,6 @@ module Tourmaline
     }
 
     def unparse_html(text : String, entities ents : Array(MessageEntity))
-      pp! text, ents
       parser = HTMLParser.new
       parser.unparse(text, ents)
     end
