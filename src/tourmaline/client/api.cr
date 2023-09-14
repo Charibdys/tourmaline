@@ -76,7 +76,7 @@ module Tourmaline
         chat_id : Int32 | Int64 | String,
         text : String,
         message_thread_id : Int32 | Int64 | ::Nil = nil,
-        parse_mode : ParseMode = default_parse_mode,
+        parse_mode : ParseMode? = default_parse_mode,
         entities : Array(Tourmaline::MessageEntity) | ::Nil = nil,
         disable_web_page_preview : Bool | ::Nil = nil,
         disable_notification : Bool | ::Nil = nil,
@@ -126,7 +126,7 @@ module Tourmaline
         message_id : Int32 | Int64,
         message_thread_id : Int32 | Int64 | ::Nil = nil,
         caption : String | ::Nil = nil,
-        parse_mode : ParseMode = default_parse_mode,
+        parse_mode : ParseMode? = default_parse_mode,
         caption_entities : Array(Tourmaline::MessageEntity) | ::Nil = nil,
         disable_notification : Bool | ::Nil = nil,
         protect_content : Bool | ::Nil = nil,
@@ -156,7 +156,7 @@ module Tourmaline
         photo : ::File | String,
         message_thread_id : Int32 | Int64 | ::Nil = nil,
         caption : String | ::Nil = nil,
-        parse_mode : ParseMode = default_parse_mode,
+        parse_mode : ParseMode? = default_parse_mode,
         caption_entities : Array(Tourmaline::MessageEntity) | ::Nil = nil,
         has_spoiler : Bool | ::Nil = nil,
         disable_notification : Bool | ::Nil = nil,
@@ -188,7 +188,7 @@ module Tourmaline
         audio : ::File | String,
         message_thread_id : Int32 | Int64 | ::Nil = nil,
         caption : String | ::Nil = nil,
-        parse_mode : ParseMode = default_parse_mode,
+        parse_mode : ParseMode? = default_parse_mode,
         caption_entities : Array(Tourmaline::MessageEntity) | ::Nil = nil,
         duration : Int32 | Int64 | ::Nil = nil,
         performer : String | ::Nil = nil,
@@ -226,7 +226,7 @@ module Tourmaline
         message_thread_id : Int32 | Int64 | ::Nil = nil,
         thumbnail : ::File | String | ::Nil = nil,
         caption : String | ::Nil = nil,
-        parse_mode : ParseMode = default_parse_mode,
+        parse_mode : ParseMode? = default_parse_mode,
         caption_entities : Array(Tourmaline::MessageEntity) | ::Nil = nil,
         disable_content_type_detection : Bool | ::Nil = nil,
         disable_notification : Bool | ::Nil = nil,
@@ -262,7 +262,7 @@ module Tourmaline
         height : Int32 | Int64 | ::Nil = nil,
         thumbnail : ::File | String | ::Nil = nil,
         caption : String | ::Nil = nil,
-        parse_mode : ParseMode = default_parse_mode,
+        parse_mode : ParseMode? = default_parse_mode,
         caption_entities : Array(Tourmaline::MessageEntity) | ::Nil = nil,
         has_spoiler : Bool | ::Nil = nil,
         supports_streaming : Bool | ::Nil = nil,
@@ -303,7 +303,7 @@ module Tourmaline
         height : Int32 | Int64 | ::Nil = nil,
         thumbnail : ::File | String | ::Nil = nil,
         caption : String | ::Nil = nil,
-        parse_mode : ParseMode = default_parse_mode,
+        parse_mode : ParseMode? = default_parse_mode,
         caption_entities : Array(Tourmaline::MessageEntity) | ::Nil = nil,
         has_spoiler : Bool | ::Nil = nil,
         disable_notification : Bool | ::Nil = nil,
@@ -338,7 +338,7 @@ module Tourmaline
         voice : ::File | String,
         message_thread_id : Int32 | Int64 | ::Nil = nil,
         caption : String | ::Nil = nil,
-        parse_mode : ParseMode = default_parse_mode,
+        parse_mode : ParseMode? = default_parse_mode,
         caption_entities : Array(Tourmaline::MessageEntity) | ::Nil = nil,
         duration : Int32 | Int64 | ::Nil = nil,
         disable_notification : Bool | ::Nil = nil,
@@ -395,7 +395,7 @@ module Tourmaline
       # Use this method to send a group of photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type. On success, an array of Messages that were sent is returned.
       def send_media_group(
         chat_id : Int32 | Int64 | String,
-        media : Array(Tourmaline::InputMediaAudio) | Array(Tourmaline::InputMediaDocument) | Array(Tourmaline::InputMediaPhoto) | Array(Tourmaline::InputMediaVideo),
+        media : Array(Tourmaline::InputMediaAudio | Tourmaline::InputMediaDocument | Tourmaline::InputMediaPhoto | Tourmaline::InputMediaVideo),
         message_thread_id : Int32 | Int64 | ::Nil = nil,
         disable_notification : Bool | ::Nil = nil,
         protect_content : Bool | ::Nil = nil,
@@ -1091,6 +1091,15 @@ module Tourmaline
         })
       end
 
+      # Use this method to clear the list of pinned messages in a General forum topic. The bot must be an administrator in the chat for this to work and must have the can_pin_messages administrator right in the supergroup. Returns True on success.
+      def unpin_all_general_forum_topic_messages(
+        chat_id : Int32 | Int64 | String
+      )
+        request(Bool, "unpinAllGeneralForumTopicMessages", {
+          chat_id: chat_id,
+        })
+      end
+
       # Use this method to send answers to callback queries sent from inline keyboards. The answer will be displayed to the user as a notification at the top of the chat screen or as an alert. On success, True is returned.
       def answer_callback_query(
         callback_query_id : String,
@@ -1249,7 +1258,7 @@ module Tourmaline
         chat_id : Int32 | Int64 | String | ::Nil = nil,
         message_id : Int32 | Int64 | ::Nil = nil,
         inline_message_id : String | ::Nil = nil,
-        parse_mode : ParseMode = default_parse_mode,
+        parse_mode : ParseMode? = default_parse_mode,
         entities : Array(Tourmaline::MessageEntity) | ::Nil = nil,
         disable_web_page_preview : Bool | ::Nil = nil,
         reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil
@@ -1272,7 +1281,7 @@ module Tourmaline
         message_id : Int32 | Int64 | ::Nil = nil,
         inline_message_id : String | ::Nil = nil,
         caption : String | ::Nil = nil,
-        parse_mode : ParseMode = default_parse_mode,
+        parse_mode : ParseMode? = default_parse_mode,
         caption_entities : Array(Tourmaline::MessageEntity) | ::Nil = nil,
         reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil
       )

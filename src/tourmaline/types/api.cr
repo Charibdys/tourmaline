@@ -207,6 +207,10 @@ module Tourmaline
     # Optional. Custom emoji identifier of emoji status of the other party in a private chat. Returned only in getChat.
     property emoji_status_custom_emoji_id : String | ::Nil
 
+    # Optional. Expiration date of the emoji status of the other party in a private chat in Unix time, if any. Returned only in getChat.
+    @[JSON::Field(converter: Time::EpochConverter)]
+    property emoji_status_expiration_date : Time | ::Nil
+
     # Optional. Bio of the other party in a private chat. Returned only in getChat.
     property bio : String | ::Nil
 
@@ -273,6 +277,7 @@ module Tourmaline
       @photo : Tourmaline::ChatPhoto | ::Nil = nil,
       @active_usernames : Array(String) = [] of String,
       @emoji_status_custom_emoji_id : String | ::Nil = nil,
+      @emoji_status_expiration_date : Int32 | Int64 | ::Nil = nil,
       @bio : String | ::Nil = nil,
       @has_private_forwards : Bool | ::Nil = nil,
       @has_restricted_voice_and_video_messages : Bool | ::Nil = nil,
@@ -382,6 +387,9 @@ module Tourmaline
 
     # Optional. Message is a sticker, information about the sticker
     property sticker : Tourmaline::Sticker | ::Nil
+
+    # Optional. Message is a forwarded story
+    property story : Tourmaline::Story | ::Nil
 
     # Optional. Message is a video, information about the video
     property video : Tourmaline::Video | ::Nil
@@ -543,6 +551,7 @@ module Tourmaline
       @document : Tourmaline::Document | ::Nil = nil,
       @photo : Array(Tourmaline::PhotoSize) = [] of Tourmaline::PhotoSize,
       @sticker : Tourmaline::Sticker | ::Nil = nil,
+      @story : Tourmaline::Story | ::Nil = nil,
       @video : Tourmaline::Video | ::Nil = nil,
       @video_note : Tourmaline::VideoNote | ::Nil = nil,
       @voice : Tourmaline::Voice | ::Nil = nil,
@@ -793,6 +802,11 @@ module Tourmaline
     end
   end
 
+  # This object represents a message about a forwarded story in the chat. Currently holds no information.
+  class Story
+    include JSON::Serializable
+  end
+
   # This object represents a video file.
   class Video
     include JSON::Serializable
@@ -970,16 +984,20 @@ module Tourmaline
     # Unique poll identifier
     property poll_id : String
 
-    # The user, who changed the answer to the poll
-    property user : Tourmaline::User
-
-    # 0-based identifiers of answer options, chosen by the user. May be empty if the user retracted their vote.
+    # 0-based identifiers of chosen answer options. May be empty if the vote was retracted.
     property option_ids : Array(Int32 | Int64) = [] of Int32 | Int64
+
+    # Optional. The chat that changed the answer to the poll, if the voter is anonymous
+    property voter_chat : Tourmaline::Chat | ::Nil
+
+    # Optional. The user that changed the answer to the poll, if the voter isn't anonymous
+    property user : Tourmaline::User | ::Nil
 
     def initialize(
       @poll_id,
-      @user,
-      @option_ids : Array(Int32 | Int64) = [] of Int32 | Int64
+      @option_ids : Array(Int32 | Int64) = [] of Int32 | Int64,
+      @voter_chat : Tourmaline::Chat | ::Nil = nil,
+      @user : Tourmaline::User | ::Nil = nil
     )
     end
   end
@@ -1572,7 +1590,7 @@ module Tourmaline
     # Optional. An HTTPS URL used to automatically authorize the user. Can be used as a replacement for the Telegram Login Widget.
     property login_url : Tourmaline::LoginUrl | ::Nil
 
-    # Optional. If set, pressing the button will prompt the user to select one of their chats, open that chat and insert the bot's username and the specified inline query in the input field. May be empty, in which case just the bot's username will be inserted. Note: This offers an easy way for users to start using your bot in inline mode when they are currently in a private chat with it. Especially useful when combined with switch_pm... actions - in this case the user will be automatically returned to the chat they switched from, skipping the chat selection screen.
+    # Optional. If set, pressing the button will prompt the user to select one of their chats, open that chat and insert the bot's username and the specified inline query in the input field. May be empty, in which case just the bot's username will be inserted.
     property switch_inline_query : String | ::Nil
 
     # Optional. If set, pressing the button will insert the bot's username and the specified inline query in the current chat's input field. May be empty, in which case only the bot's username will be inserted. This offers a quick way for the user to open your bot in inline mode in the same chat - good for selecting something from multiple options.
@@ -2022,7 +2040,7 @@ module Tourmaline
     # True, if the user is allowed to create forum topics
     property? can_manage_topics : Bool
 
-    # Date when restrictions will be lifted for this user; unix time. If 0, then the user is restricted forever
+    # Date when restrictions will be lifted for this user; Unix time. If 0, then the user is restricted forever
     @[JSON::Field(converter: Time::EpochConverter)]
     property until_date : Time
 
@@ -2076,7 +2094,7 @@ module Tourmaline
     # Information about the user
     property user : Tourmaline::User
 
-    # Date when restrictions will be lifted for this user; unix time. If 0, then the user is banned forever
+    # Date when restrictions will be lifted for this user; Unix time. If 0, then the user is banned forever
     @[JSON::Field(converter: Time::EpochConverter)]
     property until_date : Time
 
@@ -2533,7 +2551,7 @@ module Tourmaline
     property caption : String | ::Nil
 
     # Optional. Mode for parsing entities in the photo caption. See formatting options for more details.
-    property parse_mode : ParseMode = ParseMode::Markdown
+    property parse_mode : ParseMode? = ParseMode::Markdown
 
     # Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
     property caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity
@@ -2545,7 +2563,7 @@ module Tourmaline
       @media,
       @type = "photo",
       @caption : String | ::Nil = nil,
-      @parse_mode : ParseMode = ParseMode::Markdown,
+      @parse_mode : ParseMode? = ParseMode::Markdown,
       @caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity,
       @has_spoiler : Bool | ::Nil = nil
     )
@@ -2569,7 +2587,7 @@ module Tourmaline
     property caption : String | ::Nil
 
     # Optional. Mode for parsing entities in the video caption. See formatting options for more details.
-    property parse_mode : ParseMode = ParseMode::Markdown
+    property parse_mode : ParseMode? = ParseMode::Markdown
 
     # Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
     property caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity
@@ -2594,7 +2612,7 @@ module Tourmaline
       @type = "video",
       @thumbnail : ::File | String | ::Nil = nil,
       @caption : String | ::Nil = nil,
-      @parse_mode : ParseMode = ParseMode::Markdown,
+      @parse_mode : ParseMode? = ParseMode::Markdown,
       @caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity,
       @width : Int32 | Int64 | ::Nil = nil,
       @height : Int32 | Int64 | ::Nil = nil,
@@ -2622,7 +2640,7 @@ module Tourmaline
     property caption : String | ::Nil
 
     # Optional. Mode for parsing entities in the animation caption. See formatting options for more details.
-    property parse_mode : ParseMode = ParseMode::Markdown
+    property parse_mode : ParseMode? = ParseMode::Markdown
 
     # Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
     property caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity
@@ -2644,7 +2662,7 @@ module Tourmaline
       @type = "animation",
       @thumbnail : ::File | String | ::Nil = nil,
       @caption : String | ::Nil = nil,
-      @parse_mode : ParseMode = ParseMode::Markdown,
+      @parse_mode : ParseMode? = ParseMode::Markdown,
       @caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity,
       @width : Int32 | Int64 | ::Nil = nil,
       @height : Int32 | Int64 | ::Nil = nil,
@@ -2671,7 +2689,7 @@ module Tourmaline
     property caption : String | ::Nil
 
     # Optional. Mode for parsing entities in the audio caption. See formatting options for more details.
-    property parse_mode : ParseMode = ParseMode::Markdown
+    property parse_mode : ParseMode? = ParseMode::Markdown
 
     # Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
     property caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity
@@ -2690,7 +2708,7 @@ module Tourmaline
       @type = "audio",
       @thumbnail : ::File | String | ::Nil = nil,
       @caption : String | ::Nil = nil,
-      @parse_mode : ParseMode = ParseMode::Markdown,
+      @parse_mode : ParseMode? = ParseMode::Markdown,
       @caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity,
       @duration : Int32 | Int64 | ::Nil = nil,
       @performer : String | ::Nil = nil,
@@ -2716,7 +2734,7 @@ module Tourmaline
     property caption : String | ::Nil
 
     # Optional. Mode for parsing entities in the document caption. See formatting options for more details.
-    property parse_mode : ParseMode = ParseMode::Markdown
+    property parse_mode : ParseMode? = ParseMode::Markdown
 
     # Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
     property caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity
@@ -2729,7 +2747,7 @@ module Tourmaline
       @type = "document",
       @thumbnail : ::File | String | ::Nil = nil,
       @caption : String | ::Nil = nil,
-      @parse_mode : ParseMode = ParseMode::Markdown,
+      @parse_mode : ParseMode? = ParseMode::Markdown,
       @caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity,
       @disable_content_type_detection : Bool | ::Nil = nil
     )
@@ -3060,7 +3078,7 @@ module Tourmaline
     property caption : String | ::Nil
 
     # Optional. Mode for parsing entities in the photo caption. See formatting options for more details.
-    property parse_mode : ParseMode = ParseMode::Markdown
+    property parse_mode : ParseMode? = ParseMode::Markdown
 
     # Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
     property caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity
@@ -3081,7 +3099,7 @@ module Tourmaline
       @title : String | ::Nil = nil,
       @description : String | ::Nil = nil,
       @caption : String | ::Nil = nil,
-      @parse_mode : ParseMode = ParseMode::Markdown,
+      @parse_mode : ParseMode? = ParseMode::Markdown,
       @caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity,
       @reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil,
       @input_message_content : Tourmaline::InputMessageContent | ::Nil = nil
@@ -3124,7 +3142,7 @@ module Tourmaline
     property caption : String | ::Nil
 
     # Optional. Mode for parsing entities in the caption. See formatting options for more details.
-    property parse_mode : ParseMode = ParseMode::Markdown
+    property parse_mode : ParseMode? = ParseMode::Markdown
 
     # Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
     property caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity
@@ -3146,7 +3164,7 @@ module Tourmaline
       @thumbnail_mime_type : String | ::Nil = nil,
       @title : String | ::Nil = nil,
       @caption : String | ::Nil = nil,
-      @parse_mode : ParseMode = ParseMode::Markdown,
+      @parse_mode : ParseMode? = ParseMode::Markdown,
       @caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity,
       @reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil,
       @input_message_content : Tourmaline::InputMessageContent | ::Nil = nil
@@ -3189,7 +3207,7 @@ module Tourmaline
     property caption : String | ::Nil
 
     # Optional. Mode for parsing entities in the caption. See formatting options for more details.
-    property parse_mode : ParseMode = ParseMode::Markdown
+    property parse_mode : ParseMode? = ParseMode::Markdown
 
     # Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
     property caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity
@@ -3211,7 +3229,7 @@ module Tourmaline
       @thumbnail_mime_type : String | ::Nil = nil,
       @title : String | ::Nil = nil,
       @caption : String | ::Nil = nil,
-      @parse_mode : ParseMode = ParseMode::Markdown,
+      @parse_mode : ParseMode? = ParseMode::Markdown,
       @caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity,
       @reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil,
       @input_message_content : Tourmaline::InputMessageContent | ::Nil = nil
@@ -3245,7 +3263,7 @@ module Tourmaline
     property caption : String | ::Nil
 
     # Optional. Mode for parsing entities in the video caption. See formatting options for more details.
-    property parse_mode : ParseMode = ParseMode::Markdown
+    property parse_mode : ParseMode? = ParseMode::Markdown
 
     # Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
     property caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity
@@ -3276,7 +3294,7 @@ module Tourmaline
       @title,
       @type = "video",
       @caption : String | ::Nil = nil,
-      @parse_mode : ParseMode = ParseMode::Markdown,
+      @parse_mode : ParseMode? = ParseMode::Markdown,
       @caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity,
       @video_width : Int32 | Int64 | ::Nil = nil,
       @video_height : Int32 | Int64 | ::Nil = nil,
@@ -3309,7 +3327,7 @@ module Tourmaline
     property caption : String | ::Nil
 
     # Optional. Mode for parsing entities in the audio caption. See formatting options for more details.
-    property parse_mode : ParseMode = ParseMode::Markdown
+    property parse_mode : ParseMode? = ParseMode::Markdown
 
     # Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
     property caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity
@@ -3332,7 +3350,7 @@ module Tourmaline
       @title,
       @type = "audio",
       @caption : String | ::Nil = nil,
-      @parse_mode : ParseMode = ParseMode::Markdown,
+      @parse_mode : ParseMode? = ParseMode::Markdown,
       @caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity,
       @performer : String | ::Nil = nil,
       @audio_duration : Int32 | Int64 | ::Nil = nil,
@@ -3363,7 +3381,7 @@ module Tourmaline
     property caption : String | ::Nil
 
     # Optional. Mode for parsing entities in the voice message caption. See formatting options for more details.
-    property parse_mode : ParseMode = ParseMode::Markdown
+    property parse_mode : ParseMode? = ParseMode::Markdown
 
     # Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
     property caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity
@@ -3383,7 +3401,7 @@ module Tourmaline
       @title,
       @type = "voice",
       @caption : String | ::Nil = nil,
-      @parse_mode : ParseMode = ParseMode::Markdown,
+      @parse_mode : ParseMode? = ParseMode::Markdown,
       @caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity,
       @voice_duration : Int32 | Int64 | ::Nil = nil,
       @reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil,
@@ -3416,7 +3434,7 @@ module Tourmaline
     property caption : String | ::Nil
 
     # Optional. Mode for parsing entities in the document caption. See formatting options for more details.
-    property parse_mode : ParseMode = ParseMode::Markdown
+    property parse_mode : ParseMode? = ParseMode::Markdown
 
     # Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
     property caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity
@@ -3446,7 +3464,7 @@ module Tourmaline
       @mime_type,
       @type = "document",
       @caption : String | ::Nil = nil,
-      @parse_mode : ParseMode = ParseMode::Markdown,
+      @parse_mode : ParseMode? = ParseMode::Markdown,
       @caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity,
       @description : String | ::Nil = nil,
       @reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil,
@@ -3697,7 +3715,7 @@ module Tourmaline
     property caption : String | ::Nil
 
     # Optional. Mode for parsing entities in the photo caption. See formatting options for more details.
-    property parse_mode : ParseMode = ParseMode::Markdown
+    property parse_mode : ParseMode? = ParseMode::Markdown
 
     # Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
     property caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity
@@ -3715,7 +3733,7 @@ module Tourmaline
       @title : String | ::Nil = nil,
       @description : String | ::Nil = nil,
       @caption : String | ::Nil = nil,
-      @parse_mode : ParseMode = ParseMode::Markdown,
+      @parse_mode : ParseMode? = ParseMode::Markdown,
       @caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity,
       @reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil,
       @input_message_content : Tourmaline::InputMessageContent | ::Nil = nil
@@ -3743,7 +3761,7 @@ module Tourmaline
     property caption : String | ::Nil
 
     # Optional. Mode for parsing entities in the caption. See formatting options for more details.
-    property parse_mode : ParseMode = ParseMode::Markdown
+    property parse_mode : ParseMode? = ParseMode::Markdown
 
     # Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
     property caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity
@@ -3760,7 +3778,7 @@ module Tourmaline
       @type = "gif",
       @title : String | ::Nil = nil,
       @caption : String | ::Nil = nil,
-      @parse_mode : ParseMode = ParseMode::Markdown,
+      @parse_mode : ParseMode? = ParseMode::Markdown,
       @caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity,
       @reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil,
       @input_message_content : Tourmaline::InputMessageContent | ::Nil = nil
@@ -3788,7 +3806,7 @@ module Tourmaline
     property caption : String | ::Nil
 
     # Optional. Mode for parsing entities in the caption. See formatting options for more details.
-    property parse_mode : ParseMode = ParseMode::Markdown
+    property parse_mode : ParseMode? = ParseMode::Markdown
 
     # Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
     property caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity
@@ -3805,7 +3823,7 @@ module Tourmaline
       @type = "mpeg4_gif",
       @title : String | ::Nil = nil,
       @caption : String | ::Nil = nil,
-      @parse_mode : ParseMode = ParseMode::Markdown,
+      @parse_mode : ParseMode? = ParseMode::Markdown,
       @caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity,
       @reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil,
       @input_message_content : Tourmaline::InputMessageContent | ::Nil = nil
@@ -3867,7 +3885,7 @@ module Tourmaline
     property caption : String | ::Nil
 
     # Optional. Mode for parsing entities in the document caption. See formatting options for more details.
-    property parse_mode : ParseMode = ParseMode::Markdown
+    property parse_mode : ParseMode? = ParseMode::Markdown
 
     # Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
     property caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity
@@ -3885,7 +3903,7 @@ module Tourmaline
       @type = "document",
       @description : String | ::Nil = nil,
       @caption : String | ::Nil = nil,
-      @parse_mode : ParseMode = ParseMode::Markdown,
+      @parse_mode : ParseMode? = ParseMode::Markdown,
       @caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity,
       @reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil,
       @input_message_content : Tourmaline::InputMessageContent | ::Nil = nil
@@ -3916,7 +3934,7 @@ module Tourmaline
     property caption : String | ::Nil
 
     # Optional. Mode for parsing entities in the video caption. See formatting options for more details.
-    property parse_mode : ParseMode = ParseMode::Markdown
+    property parse_mode : ParseMode? = ParseMode::Markdown
 
     # Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
     property caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity
@@ -3934,7 +3952,7 @@ module Tourmaline
       @type = "video",
       @description : String | ::Nil = nil,
       @caption : String | ::Nil = nil,
-      @parse_mode : ParseMode = ParseMode::Markdown,
+      @parse_mode : ParseMode? = ParseMode::Markdown,
       @caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity,
       @reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil,
       @input_message_content : Tourmaline::InputMessageContent | ::Nil = nil
@@ -3963,7 +3981,7 @@ module Tourmaline
     property caption : String | ::Nil
 
     # Optional. Mode for parsing entities in the voice message caption. See formatting options for more details.
-    property parse_mode : ParseMode = ParseMode::Markdown
+    property parse_mode : ParseMode? = ParseMode::Markdown
 
     # Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
     property caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity
@@ -3980,7 +3998,7 @@ module Tourmaline
       @title,
       @type = "voice",
       @caption : String | ::Nil = nil,
-      @parse_mode : ParseMode = ParseMode::Markdown,
+      @parse_mode : ParseMode? = ParseMode::Markdown,
       @caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity,
       @reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil,
       @input_message_content : Tourmaline::InputMessageContent | ::Nil = nil
@@ -4006,7 +4024,7 @@ module Tourmaline
     property caption : String | ::Nil
 
     # Optional. Mode for parsing entities in the audio caption. See formatting options for more details.
-    property parse_mode : ParseMode = ParseMode::Markdown
+    property parse_mode : ParseMode? = ParseMode::Markdown
 
     # Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
     property caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity
@@ -4022,7 +4040,7 @@ module Tourmaline
       @audio_file_id,
       @type = "audio",
       @caption : String | ::Nil = nil,
-      @parse_mode : ParseMode = ParseMode::Markdown,
+      @parse_mode : ParseMode? = ParseMode::Markdown,
       @caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity,
       @reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil,
       @input_message_content : Tourmaline::InputMessageContent | ::Nil = nil
@@ -4046,7 +4064,7 @@ module Tourmaline
     property message_text : String
 
     # Optional. Mode for parsing entities in the message text. See formatting options for more details.
-    property parse_mode : ParseMode = ParseMode::Markdown
+    property parse_mode : ParseMode? = ParseMode::Markdown
 
     # Optional. List of special entities that appear in message text, which can be specified instead of parse_mode
     property entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity
@@ -4056,7 +4074,7 @@ module Tourmaline
 
     def initialize(
       @message_text,
-      @parse_mode : ParseMode = ParseMode::Markdown,
+      @parse_mode : ParseMode? = ParseMode::Markdown,
       @entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity,
       @disable_web_page_preview : Bool | ::Nil = nil
     )

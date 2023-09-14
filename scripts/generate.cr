@@ -148,7 +148,13 @@ end
 
 def type_to_cr(type : String | Array(String))
   if type.is_a?(Array)
-    return type.map(&->type_to_cr(String)).join(" | ")
+    # Handle send_media_group parameters for albums containing different types
+    unless type[0].starts_with?("Array of InputMedia")
+      return type.map(&->type_to_cr(String)).join(" | ")
+    end
+
+    types = type.map { |input| type_to_cr(input.sub("Array of ", "")) }.join(" | ")
+    return "Array(" + types + ")"
   end
 
   if type.starts_with?("Array of ")
@@ -204,7 +210,7 @@ def write_method(writer : CodeWriter, method : Api::TypeDef)
         writer.print(field_name)
 
         if field_name == "parse_mode"
-          writer.print(" : ParseMode = default_parse_mode")
+          writer.print(" : ParseMode? = default_parse_mode")
         else
           writer.print(" : #{crystal_type}")
 
@@ -298,7 +304,7 @@ def write_type(writer : CodeWriter, type : Api::TypeDef)
       if default = field.default_value(type.name)
         writer.print("property #{field_name} : #{crystal_type} = \"#{default}\"")
       elsif field_name == "parse_mode"
-        writer.print("property #{field_name} : ParseMode = ParseMode::Markdown")
+        writer.print("property #{field_name} : ParseMode? = ParseMode::Markdown")
       elsif field_name =~ /\b(date|time)\b|_date$|_time$/i
         writer.puts("@[JSON::Field(converter: Time::EpochConverter)]")
         writer.print("property #{field_name} : Time")
@@ -330,7 +336,7 @@ def write_type(writer : CodeWriter, type : Api::TypeDef)
           if default = field.default_value(type.name)
             writer.print(" = \"#{default}\"")
           elsif field_name == "parse_mode"
-            writer.print(" : ParseMode = ParseMode::Markdown")
+            writer.print(" : ParseMode? = ParseMode::Markdown")
           elsif crystal_type.starts_with?("Array(")
             inner_type = crystal_type.sub("Array(", "").sub(")", "")
             writer.print(" : #{crystal_type} = [] of #{inner_type}")
