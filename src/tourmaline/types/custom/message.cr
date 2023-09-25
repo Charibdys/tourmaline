@@ -31,7 +31,7 @@ module Tourmaline
     def text_entities
       text = self.caption || self.text
       [entities, caption_entities].flatten.reduce({} of MessageEntity => String) do |acc, ent|
-        acc[ent] = text.to_s[ent.offset, ent.length]
+        acc[ent] = String.from_utf16(text.to_s.to_utf16[ent.offset, ent.length])
         acc
       end
     end
