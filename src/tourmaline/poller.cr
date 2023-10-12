@@ -32,6 +32,13 @@ module Tourmaline
         @client.dispatcher.process(update)
         @offset = Int64.new(update.update_id + 1)
       end
+    rescue ex : DB::PoolRetryAttemptsExceeded
+      raise ex
+    rescue ex : Error::RetryAfter
+      Log.info { "Flood control exceeded while polling. Retrying in #{ex.seconds} seconds." }
+      sleep(ex.seconds)
+    rescue ex
+      Log.error(exception: ex) { "Error during polling" }
     end
 
     def get_updates
