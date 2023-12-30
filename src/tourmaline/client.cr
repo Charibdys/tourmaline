@@ -268,6 +268,8 @@ module Tourmaline
           HTTP::Headers{"Content-Disposition" => "form-data; name=#{id}; filename=#{filename}"},
           value
         )
+      when ReplyParameters
+        form.body_part(headers, value.to_json)
       else
         form.body_part(headers, value.to_s)
       end
