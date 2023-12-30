@@ -15,8 +15,11 @@ module Tourmaline
 
     def call(ctx : Context)
       if (message = ctx.message) || (message = ctx.channel_post)
-        if (text = message.text) || (text = message.caption)
-          command_entities = message.text_entities("bot_command").to_a
+        return if message.date == 0
+
+        accessible_message = message.as(Tourmaline::Message)
+        if (text = accessible_message.text) || (text = accessible_message.caption)
+          command_entities = accessible_message.text_entities("bot_command").to_a
           return if command_entities.empty?
 
           _, command = command_entities.first
