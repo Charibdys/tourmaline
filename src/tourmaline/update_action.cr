@@ -117,11 +117,7 @@ module Tourmaline
         actions << UpdateAction::ThreadMessage if message.message_thread_id
         actions << UpdateAction::ReplyMessage if message.reply_to_message
         actions << UpdateAction::ForwardedMessage if message.forward_origin
-
-        if chat = message.chat
-          actions << UpdateAction::PinnedMessage if chat.pinned_message
-        end
-
+        actions << UpdateAction::PinnedMessage if message.pinned_message
         actions << UpdateAction::ViaBot if message.via_bot
         actions << UpdateAction::Text if message.text
         actions << UpdateAction::Caption if message.caption

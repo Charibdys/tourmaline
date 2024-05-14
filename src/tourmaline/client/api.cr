@@ -434,6 +434,7 @@ module Tourmaline
       def send_media_group(
         chat_id : Int32 | Int64 | String,
         media : Array(Tourmaline::InputMediaAudio | Tourmaline::InputMediaDocument | Tourmaline::InputMediaPhoto | Tourmaline::InputMediaVideo),
+        business_connection_id : String | ::Nil = nil,
         message_thread_id : Int32 | Int64 | ::Nil = nil,
         disable_notification : Bool | ::Nil = nil,
         protect_content : Bool | ::Nil = nil,
