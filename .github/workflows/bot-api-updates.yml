@@ -30,8 +30,8 @@ jobs:
               run: crystal tool format
             - name: Commit changes
               run: |
-                  git config --local user.email "cawatson1993@gmail.com"
-                  git config --local user.name "Chris Watson"
+                  git config --local user.email "87929585+Charibdys@users.noreply.github.com"
+                  git config --local user.name "Charibdys"
                   git add .
                   git commit -am "bot api update"
             - name: Push changes
