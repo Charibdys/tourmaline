@@ -507,7 +507,7 @@ module Tourmaline
         })
       end
 
-      # Use this method to send a group of photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type. On success, an array of Messages that were sent is returned.
+      # Use this method to send a group of photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type. On success, an array of Message objects that were sent is returned.
       def send_media_group(
         chat_id : Int32 | Int64 | String,
         media : Array(Tourmaline::InputMediaAudio) | Array(Tourmaline::InputMediaDocument) | Array(Tourmaline::InputMediaPhoto) | Array(Tourmaline::InputMediaVideo),
@@ -693,6 +693,29 @@ module Tourmaline
           message_effect_id:       message_effect_id,
           reply_parameters:        reply_parameters,
           reply_markup:            reply_markup.try(&.to_json),
+        })
+      end
+
+      # Use this method to send a checklist on behalf of a connected business account. On success, the sent Message is returned.
+      def send_checklist(
+        business_connection_id : String,
+        chat_id : Int32 | Int64,
+        checklist : Tourmaline::InputChecklist,
+        disable_notification : Bool | ::Nil = nil,
+        protect_content : Bool | ::Nil = nil,
+        message_effect_id : String | ::Nil = nil,
+        reply_parameters : Tourmaline::ReplyParameters | ::Nil = nil,
+        reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil
+      )
+        request(Tourmaline::Message, "sendChecklist", {
+          business_connection_id: business_connection_id,
+          chat_id:                chat_id,
+          checklist:              checklist.to_json,
+          disable_notification:   disable_notification,
+          protect_content:        protect_content,
+          message_effect_id:      message_effect_id,
+          reply_parameters:       reply_parameters.try(&.to_json),
+          reply_markup:           reply_markup.try(&.to_json),
         })
       end
 
@@ -2123,6 +2146,11 @@ module Tourmaline
           ok:                    ok,
           error_message:         error_message,
         })
+      end
+
+      # A method to get the current Telegram Stars balance of the bot. Requires no parameters. On success, returns a StarAmount object.
+      def get_my_star_balance
+        request(Tourmaline::StarAmount, "getMyStarBalance")
       end
 
       # Returns the bot's Telegram Star transactions in chronological order. On success, returns a StarTransactions object.

@@ -567,6 +567,9 @@ module Tourmaline
     # Optional. True, if the message media is covered by a spoiler animation
     property? has_media_spoiler : Bool | ::Nil
 
+    # Optional. Message is a checklist
+    property checklist : Tourmaline::Checklist | ::Nil
+
     # Optional. Message is a shared contact, information about the contact
     property contact : Tourmaline::Contact | ::Nil
 
@@ -653,6 +656,15 @@ module Tourmaline
 
     # Optional. Service message: chat background set
     property chat_background_set : Tourmaline::ChatBackground | ::Nil
+
+    # Optional. Service message: some tasks in a checklist were marked as done or not done
+    property checklist_tasks_done : Tourmaline::ChecklistTasksDone | ::Nil
+
+    # Optional. Service message: tasks were added to a checklist
+    property checklist_tasks_added : Tourmaline::ChecklistTasksAdded | ::Nil
+
+    # Optional. Service message: the price for paid messages in the corresponding direct messages chat of a channel has changed
+    property direct_message_price_changed : Tourmaline::DirectMessagePriceChanged | ::Nil
 
     # Optional. Service message: forum topic created
     property forum_topic_created : Tourmaline::ForumTopicCreated | ::Nil
@@ -743,6 +755,7 @@ module Tourmaline
       @caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity,
       @show_caption_above_media : Bool | ::Nil = nil,
       @has_media_spoiler : Bool | ::Nil = nil,
+      @checklist : Tourmaline::Checklist | ::Nil = nil,
       @contact : Tourmaline::Contact | ::Nil = nil,
       @dice : Tourmaline::Dice | ::Nil = nil,
       @game : Tourmaline::Game | ::Nil = nil,
@@ -772,6 +785,9 @@ module Tourmaline
       @proximity_alert_triggered : Tourmaline::ProximityAlertTriggered | ::Nil = nil,
       @boost_added : Tourmaline::ChatBoostAdded | ::Nil = nil,
       @chat_background_set : Tourmaline::ChatBackground | ::Nil = nil,
+      @checklist_tasks_done : Tourmaline::ChecklistTasksDone | ::Nil = nil,
+      @checklist_tasks_added : Tourmaline::ChecklistTasksAdded | ::Nil = nil,
+      @direct_message_price_changed : Tourmaline::DirectMessagePriceChanged | ::Nil = nil,
       @forum_topic_created : Tourmaline::ForumTopicCreated | ::Nil = nil,
       @forum_topic_edited : Tourmaline::ForumTopicEdited | ::Nil = nil,
       @forum_topic_closed : Tourmaline::ForumTopicClosed | ::Nil = nil,
@@ -943,6 +959,9 @@ module Tourmaline
     # Optional. True, if the message media is covered by a spoiler animation
     property? has_media_spoiler : Bool | ::Nil
 
+    # Optional. Message is a checklist
+    property checklist : Tourmaline::Checklist | ::Nil
+
     # Optional. Message is a shared contact, information about the contact
     property contact : Tourmaline::Contact | ::Nil
 
@@ -986,6 +1005,7 @@ module Tourmaline
       @video_note : Tourmaline::VideoNote | ::Nil = nil,
       @voice : Tourmaline::Voice | ::Nil = nil,
       @has_media_spoiler : Bool | ::Nil = nil,
+      @checklist : Tourmaline::Checklist | ::Nil = nil,
       @contact : Tourmaline::Contact | ::Nil = nil,
       @dice : Tourmaline::Dice | ::Nil = nil,
       @game : Tourmaline::Game | ::Nil = nil,
@@ -2370,6 +2390,80 @@ module Tourmaline
     end
   end
 
+  # Describes the price of a suggested post.
+  class SuggestedPostPrice
+    include JSON::Serializable
+
+    # Currency in which the post will be paid. Currently, must be one of "XTR" for Telegram Stars or "TON" for toncoins
+    property currency : String
+
+    # The amount of the currency that will be paid for the post in the smallest units of the currency, i.e. Telegram Stars or nanotoncoins. Currently, price in Telegram Stars must be between 5 and 100000, and price in nanotoncoins must be between 10000000 and 10000000000000.
+    property amount : Int32 | Int64
+
+    def initialize(
+      @currency,
+      @amount
+    )
+    end
+  end
+
+  # Contains information about a suggested post.
+  class SuggestedPostInfo
+    include JSON::Serializable
+
+    # State of the suggested post. Currently, it can be one of "pending", "approved", "declined".
+    property state : String
+
+    # Optional. Proposed price of the post. If the field is omitted, then the post is unpaid.
+    property price : Tourmaline::SuggestedPostPrice | ::Nil
+
+    # Optional. Proposed send date of the post. If the field is omitted, then the post can be published at any time within 30 days at the sole discretion of the user or administrator who approves it.
+    @[JSON::Field(converter: Time::EpochConverter)]
+    property send_date : Time | ::Nil
+
+    def initialize(
+      @state,
+      @price : Tourmaline::SuggestedPostPrice | ::Nil = nil,
+      @send_date : Int32 | Int64 | ::Nil = nil
+    )
+    end
+  end
+
+  # Contains parameters of a post that is being suggested by the bot.
+  class SuggestedPostParameters
+    include JSON::Serializable
+
+    # Optional. Proposed price for the post. If the field is omitted, then the post is unpaid.
+    property price : Tourmaline::SuggestedPostPrice | ::Nil
+
+    # Optional. Proposed send date of the post. If specified, then the date must be between 300 second and 2678400 seconds (30 days) in the future. If the field is omitted, then the post can be published at any time within 30 days at the sole discretion of the user who approves it.
+    @[JSON::Field(converter: Time::EpochConverter)]
+    property send_date : Time | ::Nil
+
+    def initialize(
+      @price : Tourmaline::SuggestedPostPrice | ::Nil = nil,
+      @send_date : Int32 | Int64 | ::Nil = nil
+    )
+    end
+  end
+
+  # Describes a topic of a direct messages chat.
+  class DirectMessagesTopic
+    include JSON::Serializable
+
+    # Unique identifier of the topic. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier.
+    property topic_id : Int32 | Int64
+
+    # Optional. Information about the user that created the topic. Currently, it is always present
+    property user : Tourmaline::User | ::Nil
+
+    def initialize(
+      @topic_id,
+      @user : Tourmaline::User | ::Nil = nil
+    )
+    end
+  end
+
   # This object represent a user's profile pictures.
   class UserProfilePhotos
     include JSON::Serializable
@@ -2894,7 +2988,7 @@ module Tourmaline
     # True, if the user's presence in the chat is hidden
     property? is_anonymous : Bool
 
-    # True, if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages and ignore slow mode. Implied by any other administrator privilege.
+    # True, if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages, ignore slow mode, and send messages to the chat without paying Telegram Stars. Implied by any other administrator privilege.
     property? can_manage_chat : Bool
 
     # True, if the administrator can delete messages of other users
@@ -2924,7 +3018,7 @@ module Tourmaline
     # True, if the administrator can delete stories posted by other users
     property? can_delete_stories : Bool
 
-    # Optional. True, if the administrator can post messages in the channel, or access channel statistics; for channels only
+    # Optional. True, if the administrator can post messages in the channel, approve suggested posts, or access channel statistics; for channels only
     property? can_post_messages : Bool | ::Nil
 
     # Optional. True, if the administrator can edit messages of other users and can pin messages; for channels only
@@ -3048,7 +3142,7 @@ module Tourmaline
     # True, if the user's presence in the chat is hidden
     property? is_anonymous : Bool
 
-    # True, if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages and ignore slow mode. Implied by any other administrator privilege.
+    # True, if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages, ignore slow mode, and send messages to the chat without paying Telegram Stars. Implied by any other administrator privilege.
     property? can_manage_chat : Bool
 
     # True, if the administrator can delete messages of other users
@@ -3078,7 +3172,7 @@ module Tourmaline
     # True, if the administrator can delete stories posted by other users
     property? can_delete_stories : Bool
 
-    # Optional. True, if the administrator can post messages in the channel, or access channel statistics; for channels only
+    # Optional. True, if the administrator can post messages in the channel, approve suggested posts, or access channel statistics; for channels only
     property? can_post_messages : Bool | ::Nil
 
     # Optional. True, if the administrator can edit messages of other users and can pin messages; for channels only
@@ -3173,7 +3267,7 @@ module Tourmaline
     # True, if the user is allowed to send voice notes
     property? can_send_voice_notes : Bool
 
-    # True, if the user is allowed to send polls
+    # True, if the user is allowed to send polls and checklists
     property? can_send_polls : Bool
 
     # True, if the user is allowed to send animations, games, stickers and use inline bots
@@ -3319,7 +3413,7 @@ module Tourmaline
     # Optional. True, if the user is allowed to send voice notes
     property? can_send_voice_notes : Bool | ::Nil
 
-    # Optional. True, if the user is allowed to send polls
+    # Optional. True, if the user is allowed to send polls and checklists
     property? can_send_polls : Bool | ::Nil
 
     # Optional. True, if the user is allowed to send animations, games, stickers and use inline bots
@@ -3482,7 +3576,7 @@ module Tourmaline
     # Type of the reaction, always "emoji"
     property type : String
 
-    # Reaction emoji. Currently, it can be one of "👍", "👎", "❤", "🔥", "🥰", "👏", "😁", "🤔", "🤯", "😱", "🤬", "😢", "🎉", "🤩", "🤮", "💩", "🙏", "👌", "🕊", "🤡", "🥱", "🥴", "😍", "🐳", "❤‍🔥", "🌚", "🌭", "💯", "🤣", "⚡", "🍌", "🏆", "💔", "🤨", "😐", "🍓", "🍾", "💋", "🖕", "😈", "😴", "😭", "🤓", "👻", "👨‍💻", "👀", "🎃", "🙈", "😇", "😨", "🤝", "✍", "🤗", "🫡", "🎅", "🎄", "☃", "💅", "🤪", "🗿", "🆒", "💘", "🙉", "🦄", "😘", "💊", "🙊", "😎", "👾", "🤷‍♂", "🤷", "🤷‍♀", "😡"
+    # Reaction emoji. Currently, it can be one of "❤", "👍", "👎", "🔥", "🥰", "👏", "😁", "🤔", "🤯", "😱", "🤬", "😢", "🎉", "🤩", "🤮", "💩", "🙏", "👌", "🕊", "🤡", "🥱", "🥴", "😍", "🐳", "❤‍🔥", "🌚", "🌭", "💯", "🤣", "⚡", "🍌", "🏆", "💔", "🤨", "😐", "🍓", "🍾", "💋", "🖕", "😈", "😴", "😭", "🤓", "👻", "👨‍💻", "👀", "🎃", "🙈", "😇", "😨", "🤝", "✍", "🤗", "🫡", "🎅", "🎄", "☃", "💅", "🤪", "🗿", "🆒", "💘", "🙉", "🦄", "😘", "💊", "🙊", "😎", "👾", "🤷‍♂", "🤷", "🤷‍♀", "😡"
     property emoji : String
 
     def initialize(
@@ -4007,6 +4101,71 @@ module Tourmaline
     end
   end
 
+  # Represents the rights of a business bot.
+  class BusinessBotRights
+    include JSON::Serializable
+
+    # Optional. True, if the bot can send and edit messages in the private chats that had incoming messages in the last 24 hours
+    property? can_reply : Bool | ::Nil
+
+    # Optional. True, if the bot can mark incoming private messages as read
+    property? can_read_messages : Bool | ::Nil
+
+    # Optional. True, if the bot can delete messages sent by the bot
+    property? can_delete_sent_messages : Bool | ::Nil
+
+    # Optional. True, if the bot can delete all private messages in managed chats
+    property? can_delete_all_messages : Bool | ::Nil
+
+    # Optional. True, if the bot can edit the first and last name of the business account
+    property? can_edit_name : Bool | ::Nil
+
+    # Optional. True, if the bot can edit the bio of the business account
+    property? can_edit_bio : Bool | ::Nil
+
+    # Optional. True, if the bot can edit the profile photo of the business account
+    property? can_edit_profile_photo : Bool | ::Nil
+
+    # Optional. True, if the bot can edit the username of the business account
+    property? can_edit_username : Bool | ::Nil
+
+    # Optional. True, if the bot can change the privacy settings pertaining to gifts for the business account
+    property? can_change_gift_settings : Bool | ::Nil
+
+    # Optional. True, if the bot can view gifts and the amount of Telegram Stars owned by the business account
+    property? can_view_gifts_and_stars : Bool | ::Nil
+
+    # Optional. True, if the bot can convert regular gifts owned by the business account to Telegram Stars
+    property? can_convert_gifts_to_stars : Bool | ::Nil
+
+    # Optional. True, if the bot can transfer and upgrade gifts owned by the business account
+    property? can_transfer_and_upgrade_gifts : Bool | ::Nil
+
+    # Optional. True, if the bot can transfer Telegram Stars received by the business account to its own account, or use them to upgrade and transfer gifts
+    property? can_transfer_stars : Bool | ::Nil
+
+    # Optional. True, if the bot can post, edit and delete stories on behalf of the business account
+    property? can_manage_stories : Bool | ::Nil
+
+    def initialize(
+      @can_reply : Bool | ::Nil = nil,
+      @can_read_messages : Bool | ::Nil = nil,
+      @can_delete_sent_messages : Bool | ::Nil = nil,
+      @can_delete_all_messages : Bool | ::Nil = nil,
+      @can_edit_name : Bool | ::Nil = nil,
+      @can_edit_bio : Bool | ::Nil = nil,
+      @can_edit_profile_photo : Bool | ::Nil = nil,
+      @can_edit_username : Bool | ::Nil = nil,
+      @can_change_gift_settings : Bool | ::Nil = nil,
+      @can_view_gifts_and_stars : Bool | ::Nil = nil,
+      @can_convert_gifts_to_stars : Bool | ::Nil = nil,
+      @can_transfer_and_upgrade_gifts : Bool | ::Nil = nil,
+      @can_transfer_stars : Bool | ::Nil = nil,
+      @can_manage_stories : Bool | ::Nil = nil
+    )
+    end
+  end
+
   # Describes the connection of the bot with a business account.
   class BusinessConnection
     include JSON::Serializable
@@ -4376,6 +4535,100 @@ module Tourmaline
       @height : Int32 | Int64 | ::Nil = nil,
       @duration : Int32 | Int64 | ::Nil = nil,
       @supports_streaming : Bool | ::Nil = nil
+    )
+    end
+  end
+
+  # This object describes a profile photo to set. Currently, it can be one of
+  # - InputProfilePhotoStatic
+  # - InputProfilePhotoAnimated
+  alias InputProfilePhoto = Tourmaline::InputProfilePhotoStatic | Tourmaline::InputProfilePhotoAnimated
+
+  # A static profile photo in the .JPG format.
+  class InputProfilePhotoStatic
+    include JSON::Serializable
+
+    # Type of the profile photo, must be static
+    property type : String
+
+    # The static profile photo. Profile photos can't be reused and can only be uploaded as a new file, so you can pass "attach://<file_attach_name>" if the photo was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files: https://core.telegram.org/bots/api#sending-files
+    property photo : String
+
+    def initialize(
+      @type,
+      @photo
+    )
+    end
+  end
+
+  # An animated profile photo in the MPEG4 format.
+  class InputProfilePhotoAnimated
+    include JSON::Serializable
+
+    # Type of the profile photo, must be animated
+    property type : String
+
+    # The animated profile photo. Profile photos can't be reused and can only be uploaded as a new file, so you can pass "attach://<file_attach_name>" if the photo was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files: https://core.telegram.org/bots/api#sending-files
+    property animation : String
+
+    # Optional. Timestamp in seconds of the frame that will be used as the static profile photo. Defaults to 0.0.
+    property main_frame_timestamp : Float64 | ::Nil
+
+    def initialize(
+      @type,
+      @animation,
+      @main_frame_timestamp : Float64 | ::Nil = nil
+    )
+    end
+  end
+
+  # This object describes the content of a story to post. Currently, it can be one of
+  # - InputStoryContentPhoto
+  # - InputStoryContentVideo
+  alias InputStoryContent = Tourmaline::InputStoryContentPhoto | Tourmaline::InputStoryContentVideo
+
+  # Describes a photo to post as a story.
+  class InputStoryContentPhoto
+    include JSON::Serializable
+
+    # Type of the content, must be photo
+    property type : String
+
+    # The photo to post as a story. The photo must be of the size 1080x1920 and must not exceed 10 MB. The photo can't be reused and can only be uploaded as a new file, so you can pass "attach://<file_attach_name>" if the photo was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files: https://core.telegram.org/bots/api#sending-files
+    property photo : String
+
+    def initialize(
+      @type,
+      @photo
+    )
+    end
+  end
+
+  # Describes a video to post as a story.
+  class InputStoryContentVideo
+    include JSON::Serializable
+
+    # Type of the content, must be video
+    property type : String
+
+    # The video to post as a story. The video must be of the size 720x1280, streamable, encoded with H.265 codec, with key frames added each second in the MPEG4 format, and must not exceed 30 MB. The video can't be reused and can only be uploaded as a new file, so you can pass "attach://<file_attach_name>" if the video was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files: https://core.telegram.org/bots/api#sending-files
+    property video : String
+
+    # Optional. Precise duration of the video in seconds; 0-60
+    property duration : Float64 | ::Nil
+
+    # Optional. Timestamp in seconds of the frame that will be used as the static cover for the story. Defaults to 0.0.
+    property cover_frame_timestamp : Float64 | ::Nil
+
+    # Optional. Pass True if the video has no sound
+    property? is_animation : Bool | ::Nil
+
+    def initialize(
+      @type,
+      @video,
+      @duration : Float64 | ::Nil = nil,
+      @cover_frame_timestamp : Float64 | ::Nil = nil,
+      @is_animation : Bool | ::Nil = nil
     )
     end
   end
