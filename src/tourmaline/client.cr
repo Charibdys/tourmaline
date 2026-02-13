@@ -149,7 +149,7 @@ module Tourmaline
       Server.new(self).serve(path, host, port, ssl_certificate_path, ssl_key_path, no_middleware_check)
     end
 
-    protected def using_connection
+    protected def using_connection(&)
       @pool.retry do
         @pool.checkout do |conn|
           yield conn
