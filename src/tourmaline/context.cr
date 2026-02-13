@@ -209,7 +209,7 @@ module Tourmaline
     end
 
     # If the update contains a message, pass it to the block. Less boilerplate.
-    def with_message
+    def with_message(&)
       if message
         yield message!
       end
