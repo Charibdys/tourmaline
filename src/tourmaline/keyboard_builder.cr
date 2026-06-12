@@ -26,7 +26,7 @@ module Tourmaline
       @resize = false,
       @one_time = false,
       @persistent = false,
-      @input_field_placeholder = nil,
+      @input_field_placeholder = nil
     )
     end
 
@@ -97,7 +97,7 @@ module Tourmaline
     def self.build_keyboard(
       buttons : Array(T),
       columns = 1,
-      wrap = nil,
+      wrap = nil
     )
       # If `columns` is one or less we don't need to do
       # any hard work
