@@ -10,7 +10,7 @@ module Tourmaline
         offset : Int32 | Int64 | ::Nil = nil,
         limit : Int32 | Int64 | ::Nil = nil,
         timeout : Int32 | Int64 | ::Nil = nil,
-        allowed_updates : Array(String) | ::Nil = nil,
+        allowed_updates : Array(String) | ::Nil = nil
       )
         request(Array(Tourmaline::Update), "getUpdates", {
           offset:          offset,
@@ -29,7 +29,7 @@ module Tourmaline
         max_connections : Int32 | Int64 | ::Nil = nil,
         allowed_updates : Array(String) | ::Nil = nil,
         drop_pending_updates : Bool | ::Nil = nil,
-        secret_token : String | ::Nil = nil,
+        secret_token : String | ::Nil = nil
       )
         request(Bool, "setWebhook", {
           url:                  url,
@@ -44,7 +44,7 @@ module Tourmaline
 
       # Use this method to remove webhook integration if you decide to switch back to getUpdates. Returns True on success.
       def delete_webhook(
-        drop_pending_updates : Bool | ::Nil = nil,
+        drop_pending_updates : Bool | ::Nil = nil
       )
         request(Bool, "deleteWebhook", {
           drop_pending_updates: drop_pending_updates,
@@ -87,7 +87,7 @@ module Tourmaline
         message_effect_id : String | ::Nil = nil,
         suggested_post_parameters : Tourmaline::SuggestedPostParameters | ::Nil = nil,
         reply_parameters : Tourmaline::ReplyParameters | ::Nil = nil,
-        reply_markup : Tourmaline::InlineKeyboardMarkup | Tourmaline::ReplyKeyboardMarkup | Tourmaline::ReplyKeyboardRemove | Tourmaline::ForceReply | ::Nil = nil,
+        reply_markup : Tourmaline::InlineKeyboardMarkup | Tourmaline::ReplyKeyboardMarkup | Tourmaline::ReplyKeyboardRemove | Tourmaline::ForceReply | ::Nil = nil
       )
         request(Tourmaline::Message, "sendMessage", {
           chat_id:                   chat_id,
@@ -119,7 +119,7 @@ module Tourmaline
         disable_notification : Bool | ::Nil = nil,
         protect_content : Bool | ::Nil = nil,
         message_effect_id : String | ::Nil = nil,
-        suggested_post_parameters : Tourmaline::SuggestedPostParameters | ::Nil = nil,
+        suggested_post_parameters : Tourmaline::SuggestedPostParameters | ::Nil = nil
       )
         request(Tourmaline::Message, "forwardMessage", {
           chat_id:                   chat_id,
@@ -143,7 +143,7 @@ module Tourmaline
         message_thread_id : Int32 | Int64 | ::Nil = nil,
         direct_messages_topic_id : Int32 | Int64 | ::Nil = nil,
         disable_notification : Bool | ::Nil = nil,
-        protect_content : Bool | ::Nil = nil,
+        protect_content : Bool | ::Nil = nil
       )
         request(Array(Tourmaline::MessageId), "forwardMessages", {
           chat_id:                  chat_id,
@@ -174,7 +174,7 @@ module Tourmaline
         message_effect_id : String | ::Nil = nil,
         suggested_post_parameters : Tourmaline::SuggestedPostParameters | ::Nil = nil,
         reply_parameters : Tourmaline::ReplyParameters | ::Nil = nil,
-        reply_markup : Tourmaline::InlineKeyboardMarkup | Tourmaline::ReplyKeyboardMarkup | Tourmaline::ReplyKeyboardRemove | Tourmaline::ForceReply | ::Nil = nil,
+        reply_markup : Tourmaline::InlineKeyboardMarkup | Tourmaline::ReplyKeyboardMarkup | Tourmaline::ReplyKeyboardRemove | Tourmaline::ForceReply | ::Nil = nil
       )
         request(Tourmaline::MessageId, "copyMessage", {
           chat_id:                   chat_id,
@@ -206,7 +206,7 @@ module Tourmaline
         direct_messages_topic_id : Int32 | Int64 | ::Nil = nil,
         disable_notification : Bool | ::Nil = nil,
         protect_content : Bool | ::Nil = nil,
-        remove_caption : Bool | ::Nil = nil,
+        remove_caption : Bool | ::Nil = nil
       )
         request(Array(Tourmaline::MessageId), "copyMessages", {
           chat_id:                  chat_id,
@@ -238,7 +238,7 @@ module Tourmaline
         message_effect_id : String | ::Nil = nil,
         suggested_post_parameters : Tourmaline::SuggestedPostParameters | ::Nil = nil,
         reply_parameters : Tourmaline::ReplyParameters | ::Nil = nil,
-        reply_markup : Tourmaline::InlineKeyboardMarkup | Tourmaline::ReplyKeyboardMarkup | Tourmaline::ReplyKeyboardRemove | Tourmaline::ForceReply | ::Nil = nil,
+        reply_markup : Tourmaline::InlineKeyboardMarkup | Tourmaline::ReplyKeyboardMarkup | Tourmaline::ReplyKeyboardRemove | Tourmaline::ForceReply | ::Nil = nil
       )
         request(Tourmaline::Message, "sendPhoto", {
           chat_id:                   chat_id,
@@ -282,7 +282,7 @@ module Tourmaline
         message_effect_id : String | ::Nil = nil,
         suggested_post_parameters : Tourmaline::SuggestedPostParameters | ::Nil = nil,
         reply_parameters : Tourmaline::ReplyParameters | ::Nil = nil,
-        reply_markup : Tourmaline::InlineKeyboardMarkup | Tourmaline::ReplyKeyboardMarkup | Tourmaline::ReplyKeyboardRemove | Tourmaline::ForceReply | ::Nil = nil,
+        reply_markup : Tourmaline::InlineKeyboardMarkup | Tourmaline::ReplyKeyboardMarkup | Tourmaline::ReplyKeyboardRemove | Tourmaline::ForceReply | ::Nil = nil
       )
         request(Tourmaline::Message, "sendAudio", {
           chat_id:                   chat_id,
@@ -325,7 +325,7 @@ module Tourmaline
         message_effect_id : String | ::Nil = nil,
         suggested_post_parameters : Tourmaline::SuggestedPostParameters | ::Nil = nil,
         reply_parameters : Tourmaline::ReplyParameters | ::Nil = nil,
-        reply_markup : Tourmaline::InlineKeyboardMarkup | Tourmaline::ReplyKeyboardMarkup | Tourmaline::ReplyKeyboardRemove | Tourmaline::ForceReply | ::Nil = nil,
+        reply_markup : Tourmaline::InlineKeyboardMarkup | Tourmaline::ReplyKeyboardMarkup | Tourmaline::ReplyKeyboardRemove | Tourmaline::ForceReply | ::Nil = nil
       )
         request(Tourmaline::Message, "sendDocument", {
           chat_id:                        chat_id,
@@ -373,7 +373,7 @@ module Tourmaline
         message_effect_id : String | ::Nil = nil,
         suggested_post_parameters : Tourmaline::SuggestedPostParameters | ::Nil = nil,
         reply_parameters : Tourmaline::ReplyParameters | ::Nil = nil,
-        reply_markup : Tourmaline::InlineKeyboardMarkup | Tourmaline::ReplyKeyboardMarkup | Tourmaline::ReplyKeyboardRemove | Tourmaline::ForceReply | ::Nil = nil,
+        reply_markup : Tourmaline::InlineKeyboardMarkup | Tourmaline::ReplyKeyboardMarkup | Tourmaline::ReplyKeyboardRemove | Tourmaline::ForceReply | ::Nil = nil
       )
         request(Tourmaline::Message, "sendVideo", {
           chat_id:                   chat_id,
@@ -425,7 +425,7 @@ module Tourmaline
         message_effect_id : String | ::Nil = nil,
         suggested_post_parameters : Tourmaline::SuggestedPostParameters | ::Nil = nil,
         reply_parameters : Tourmaline::ReplyParameters | ::Nil = nil,
-        reply_markup : Tourmaline::InlineKeyboardMarkup | Tourmaline::ReplyKeyboardMarkup | Tourmaline::ReplyKeyboardRemove | Tourmaline::ForceReply | ::Nil = nil,
+        reply_markup : Tourmaline::InlineKeyboardMarkup | Tourmaline::ReplyKeyboardMarkup | Tourmaline::ReplyKeyboardRemove | Tourmaline::ForceReply | ::Nil = nil
       )
         request(Tourmaline::Message, "sendAnimation", {
           chat_id:                   chat_id,
@@ -469,7 +469,7 @@ module Tourmaline
         message_effect_id : String | ::Nil = nil,
         suggested_post_parameters : Tourmaline::SuggestedPostParameters | ::Nil = nil,
         reply_parameters : Tourmaline::ReplyParameters | ::Nil = nil,
-        reply_markup : Tourmaline::InlineKeyboardMarkup | Tourmaline::ReplyKeyboardMarkup | Tourmaline::ReplyKeyboardRemove | Tourmaline::ForceReply | ::Nil = nil,
+        reply_markup : Tourmaline::InlineKeyboardMarkup | Tourmaline::ReplyKeyboardMarkup | Tourmaline::ReplyKeyboardRemove | Tourmaline::ForceReply | ::Nil = nil
       )
         request(Tourmaline::Message, "sendVoice", {
           chat_id:                   chat_id,
@@ -507,7 +507,7 @@ module Tourmaline
         message_effect_id : String | ::Nil = nil,
         suggested_post_parameters : Tourmaline::SuggestedPostParameters | ::Nil = nil,
         reply_parameters : Tourmaline::ReplyParameters | ::Nil = nil,
-        reply_markup : Tourmaline::InlineKeyboardMarkup | Tourmaline::ReplyKeyboardMarkup | Tourmaline::ReplyKeyboardRemove | Tourmaline::ForceReply | ::Nil = nil,
+        reply_markup : Tourmaline::InlineKeyboardMarkup | Tourmaline::ReplyKeyboardMarkup | Tourmaline::ReplyKeyboardRemove | Tourmaline::ForceReply | ::Nil = nil
       )
         request(Tourmaline::Message, "sendVideoNote", {
           chat_id:                   chat_id,
@@ -546,7 +546,7 @@ module Tourmaline
         allow_paid_broadcast : Bool | ::Nil = nil,
         suggested_post_parameters : Tourmaline::SuggestedPostParameters | ::Nil = nil,
         reply_parameters : Tourmaline::ReplyParameters | ::Nil = nil,
-        reply_markup : Tourmaline::InlineKeyboardMarkup | Tourmaline::ReplyKeyboardMarkup | Tourmaline::ReplyKeyboardRemove | Tourmaline::ForceReply | ::Nil = nil,
+        reply_markup : Tourmaline::InlineKeyboardMarkup | Tourmaline::ReplyKeyboardMarkup | Tourmaline::ReplyKeyboardRemove | Tourmaline::ForceReply | ::Nil = nil
       )
         request(Tourmaline::Message, "sendPaidMedia", {
           chat_id:                   chat_id,
@@ -580,7 +580,7 @@ module Tourmaline
         protect_content : Bool | ::Nil = nil,
         allow_paid_broadcast : Bool | ::Nil = nil,
         message_effect_id : String | ::Nil = nil,
-        reply_parameters : Tourmaline::ReplyParameters | ::Nil = nil,
+        reply_parameters : Tourmaline::ReplyParameters | ::Nil = nil
       )
         request(Array(Tourmaline::Message), "sendMediaGroup", {
           chat_id:                  chat_id,
@@ -614,7 +614,7 @@ module Tourmaline
         message_effect_id : String | ::Nil = nil,
         suggested_post_parameters : Tourmaline::SuggestedPostParameters | ::Nil = nil,
         reply_parameters : Tourmaline::ReplyParameters | ::Nil = nil,
-        reply_markup : Tourmaline::InlineKeyboardMarkup | Tourmaline::ReplyKeyboardMarkup | Tourmaline::ReplyKeyboardRemove | Tourmaline::ForceReply | ::Nil = nil,
+        reply_markup : Tourmaline::InlineKeyboardMarkup | Tourmaline::ReplyKeyboardMarkup | Tourmaline::ReplyKeyboardRemove | Tourmaline::ForceReply | ::Nil = nil
       )
         request(Tourmaline::Message, "sendLocation", {
           chat_id:                   chat_id,
@@ -657,7 +657,7 @@ module Tourmaline
         message_effect_id : String | ::Nil = nil,
         suggested_post_parameters : Tourmaline::SuggestedPostParameters | ::Nil = nil,
         reply_parameters : Tourmaline::ReplyParameters | ::Nil = nil,
-        reply_markup : Tourmaline::InlineKeyboardMarkup | Tourmaline::ReplyKeyboardMarkup | Tourmaline::ReplyKeyboardRemove | Tourmaline::ForceReply | ::Nil = nil,
+        reply_markup : Tourmaline::InlineKeyboardMarkup | Tourmaline::ReplyKeyboardMarkup | Tourmaline::ReplyKeyboardRemove | Tourmaline::ForceReply | ::Nil = nil
       )
         request(Tourmaline::Message, "sendVenue", {
           chat_id:                   chat_id,
@@ -698,7 +698,7 @@ module Tourmaline
         message_effect_id : String | ::Nil = nil,
         suggested_post_parameters : Tourmaline::SuggestedPostParameters | ::Nil = nil,
         reply_parameters : Tourmaline::ReplyParameters | ::Nil = nil,
-        reply_markup : Tourmaline::InlineKeyboardMarkup | Tourmaline::ReplyKeyboardMarkup | Tourmaline::ReplyKeyboardRemove | Tourmaline::ForceReply | ::Nil = nil,
+        reply_markup : Tourmaline::InlineKeyboardMarkup | Tourmaline::ReplyKeyboardMarkup | Tourmaline::ReplyKeyboardRemove | Tourmaline::ForceReply | ::Nil = nil
       )
         request(Tourmaline::Message, "sendContact", {
           chat_id:                   chat_id,
@@ -743,7 +743,7 @@ module Tourmaline
         allow_paid_broadcast : Bool | ::Nil = nil,
         message_effect_id : String | ::Nil = nil,
         reply_parameters : Tourmaline::ReplyParameters | ::Nil = nil,
-        reply_markup : Tourmaline::InlineKeyboardMarkup | Tourmaline::ReplyKeyboardMarkup | Tourmaline::ReplyKeyboardRemove | Tourmaline::ForceReply | ::Nil = nil,
+        reply_markup : Tourmaline::InlineKeyboardMarkup | Tourmaline::ReplyKeyboardMarkup | Tourmaline::ReplyKeyboardRemove | Tourmaline::ForceReply | ::Nil = nil
       )
         request(Tourmaline::Message, "sendPoll", {
           chat_id:                 chat_id,
@@ -781,7 +781,7 @@ module Tourmaline
         protect_content : Bool | ::Nil = nil,
         message_effect_id : String | ::Nil = nil,
         reply_parameters : Tourmaline::ReplyParameters | ::Nil = nil,
-        reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil,
+        reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil
       )
         request(Tourmaline::Message, "sendChecklist", {
           business_connection_id: business_connection_id,
@@ -808,7 +808,7 @@ module Tourmaline
         message_effect_id : String | ::Nil = nil,
         suggested_post_parameters : Tourmaline::SuggestedPostParameters | ::Nil = nil,
         reply_parameters : Tourmaline::ReplyParameters | ::Nil = nil,
-        reply_markup : Tourmaline::InlineKeyboardMarkup | Tourmaline::ReplyKeyboardMarkup | Tourmaline::ReplyKeyboardRemove | Tourmaline::ForceReply | ::Nil = nil,
+        reply_markup : Tourmaline::InlineKeyboardMarkup | Tourmaline::ReplyKeyboardMarkup | Tourmaline::ReplyKeyboardRemove | Tourmaline::ForceReply | ::Nil = nil
       )
         request(Tourmaline::Message, "sendDice", {
           chat_id:                   chat_id,
@@ -833,7 +833,7 @@ module Tourmaline
         text : String,
         message_thread_id : Int32 | Int64 | ::Nil = nil,
         parse_mode : ParseMode = default_parse_mode,
-        entities : Array(Tourmaline::MessageEntity) | ::Nil = nil,
+        entities : Array(Tourmaline::MessageEntity) | ::Nil = nil
       )
         request(Bool, "sendMessageDraft", {
           chat_id:           chat_id,
@@ -851,7 +851,7 @@ module Tourmaline
         chat_id : Int32 | Int64 | String,
         action : String,
         business_connection_id : String | ::Nil = nil,
-        message_thread_id : Int32 | Int64 | ::Nil = nil,
+        message_thread_id : Int32 | Int64 | ::Nil = nil
       )
         request(Bool, "sendChatAction", {
           chat_id:                chat_id,
@@ -866,7 +866,7 @@ module Tourmaline
         chat_id : Int32 | Int64 | String,
         message_id : Int32 | Int64,
         reaction : Array(Tourmaline::ReactionType) | ::Nil = nil,
-        is_big : Bool | ::Nil = nil,
+        is_big : Bool | ::Nil = nil
       )
         request(Bool, "setMessageReaction", {
           chat_id:    chat_id,
@@ -880,7 +880,7 @@ module Tourmaline
       def get_user_profile_photos(
         user_id : Int32 | Int64,
         offset : Int32 | Int64 | ::Nil = nil,
-        limit : Int32 | Int64 | ::Nil = nil,
+        limit : Int32 | Int64 | ::Nil = nil
       )
         request(Tourmaline::UserProfilePhotos, "getUserProfilePhotos", {
           user_id: user_id,
@@ -893,7 +893,7 @@ module Tourmaline
       def get_user_profile_audios(
         user_id : Int32 | Int64,
         offset : Int32 | Int64 | ::Nil = nil,
-        limit : Int32 | Int64 | ::Nil = nil,
+        limit : Int32 | Int64 | ::Nil = nil
       )
         request(Tourmaline::UserProfileAudios, "getUserProfileAudios", {
           user_id: user_id,
@@ -906,7 +906,7 @@ module Tourmaline
       def set_user_emoji_status(
         user_id : Int32 | Int64,
         emoji_status_custom_emoji_id : String | ::Nil = nil,
-        emoji_status_expiration_date : Int32 | Int64 | ::Nil = nil,
+        emoji_status_expiration_date : Int32 | Int64 | ::Nil = nil
       )
         request(Bool, "setUserEmojiStatus", {
           user_id:                      user_id,
@@ -918,7 +918,7 @@ module Tourmaline
       # Use this method to get basic information about a file and prepare it for downloading. For the moment, bots can download files of up to 20MB in size. On success, a File object is returned. The file can then be downloaded via the link https://api.telegram.org/file/bot<token>/<file_path>, where <file_path> is taken from the response. It is guaranteed that the link will be valid for at least 1 hour. When the link expires, a new one can be requested by calling getFile again.
       # Note: This function may not preserve the original file name and MIME type. You should save the file's MIME type and name (if available) when the File object is received.
       def get_file(
-        file_id : String,
+        file_id : String
       )
         request(Tourmaline::File, "getFile", {
           file_id: file_id,
@@ -930,7 +930,7 @@ module Tourmaline
         chat_id : Int32 | Int64 | String,
         user_id : Int32 | Int64,
         until_date : Int32 | Int64 | ::Nil = nil,
-        revoke_messages : Bool | ::Nil = nil,
+        revoke_messages : Bool | ::Nil = nil
       )
         request(Bool, "banChatMember", {
           chat_id:         chat_id,
@@ -944,7 +944,7 @@ module Tourmaline
       def unban_chat_member(
         chat_id : Int32 | Int64 | String,
         user_id : Int32 | Int64,
-        only_if_banned : Bool | ::Nil = nil,
+        only_if_banned : Bool | ::Nil = nil
       )
         request(Bool, "unbanChatMember", {
           chat_id:        chat_id,
@@ -959,7 +959,7 @@ module Tourmaline
         user_id : Int32 | Int64,
         permissions : Tourmaline::ChatPermissions,
         use_independent_chat_permissions : Bool | ::Nil = nil,
-        until_date : Int32 | Int64 | ::Nil = nil,
+        until_date : Int32 | Int64 | ::Nil = nil
       )
         request(Bool, "restrictChatMember", {
           chat_id:                          chat_id,
@@ -1017,7 +1017,7 @@ module Tourmaline
       def set_chat_administrator_custom_title(
         chat_id : Int32 | Int64 | String,
         user_id : Int32 | Int64,
-        custom_title : String,
+        custom_title : String
       )
         request(Bool, "setChatAdministratorCustomTitle", {
           chat_id:      chat_id,
@@ -1029,7 +1029,7 @@ module Tourmaline
       # Use this method to ban a channel chat in a supergroup or a channel. Until the chat is unbanned, the owner of the banned chat won't be able to send messages on behalf of any of their channels. The bot must be an administrator in the supergroup or channel for this to work and must have the appropriate administrator rights. Returns True on success.
       def ban_chat_sender_chat(
         chat_id : Int32 | Int64 | String,
-        sender_chat_id : Int32 | Int64,
+        sender_chat_id : Int32 | Int64
       )
         request(Bool, "banChatSenderChat", {
           chat_id:        chat_id,
@@ -1040,7 +1040,7 @@ module Tourmaline
       # Use this method to unban a previously banned channel chat in a supergroup or channel. The bot must be an administrator for this to work and must have the appropriate administrator rights. Returns True on success.
       def unban_chat_sender_chat(
         chat_id : Int32 | Int64 | String,
-        sender_chat_id : Int32 | Int64,
+        sender_chat_id : Int32 | Int64
       )
         request(Bool, "unbanChatSenderChat", {
           chat_id:        chat_id,
@@ -1052,7 +1052,7 @@ module Tourmaline
       def set_chat_permissions(
         chat_id : Int32 | Int64 | String,
         permissions : Tourmaline::ChatPermissions,
-        use_independent_chat_permissions : Bool | ::Nil = nil,
+        use_independent_chat_permissions : Bool | ::Nil = nil
       )
         request(Bool, "setChatPermissions", {
           chat_id:                          chat_id,
@@ -1063,7 +1063,7 @@ module Tourmaline
 
       # Use this method to generate a new primary invite link for a chat; any previously generated primary link is revoked. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns the new invite link as String on success.
       def export_chat_invite_link(
-        chat_id : Int32 | Int64 | String,
+        chat_id : Int32 | Int64 | String
       )
         request(String, "exportChatInviteLink", {
           chat_id: chat_id,
@@ -1076,7 +1076,7 @@ module Tourmaline
         name : String | ::Nil = nil,
         expire_date : Int32 | Int64 | ::Nil = nil,
         member_limit : Int32 | Int64 | ::Nil = nil,
-        creates_join_request : Bool | ::Nil = nil,
+        creates_join_request : Bool | ::Nil = nil
       )
         request(Tourmaline::ChatInviteLink, "createChatInviteLink", {
           chat_id:              chat_id,
@@ -1094,7 +1094,7 @@ module Tourmaline
         name : String | ::Nil = nil,
         expire_date : Int32 | Int64 | ::Nil = nil,
         member_limit : Int32 | Int64 | ::Nil = nil,
-        creates_join_request : Bool | ::Nil = nil,
+        creates_join_request : Bool | ::Nil = nil
       )
         request(Tourmaline::ChatInviteLink, "editChatInviteLink", {
           chat_id:              chat_id,
@@ -1111,7 +1111,7 @@ module Tourmaline
         chat_id : Int32 | Int64 | String,
         subscription_period : Int32 | Int64,
         subscription_price : Int32 | Int64,
-        name : String | ::Nil = nil,
+        name : String | ::Nil = nil
       )
         request(Tourmaline::ChatInviteLink, "createChatSubscriptionInviteLink", {
           chat_id:             chat_id,
@@ -1125,7 +1125,7 @@ module Tourmaline
       def edit_chat_subscription_invite_link(
         chat_id : Int32 | Int64 | String,
         invite_link : String,
-        name : String | ::Nil = nil,
+        name : String | ::Nil = nil
       )
         request(Tourmaline::ChatInviteLink, "editChatSubscriptionInviteLink", {
           chat_id:     chat_id,
@@ -1137,7 +1137,7 @@ module Tourmaline
       # Use this method to revoke an invite link created by the bot. If the primary link is revoked, a new link is automatically generated. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns the revoked invite link as ChatInviteLink object.
       def revoke_chat_invite_link(
         chat_id : Int32 | Int64 | String,
-        invite_link : String,
+        invite_link : String
       )
         request(Tourmaline::ChatInviteLink, "revokeChatInviteLink", {
           chat_id:     chat_id,
@@ -1148,7 +1148,7 @@ module Tourmaline
       # Use this method to approve a chat join request. The bot must be an administrator in the chat for this to work and must have the can_invite_users administrator right. Returns True on success.
       def approve_chat_join_request(
         chat_id : Int32 | Int64 | String,
-        user_id : Int32 | Int64,
+        user_id : Int32 | Int64
       )
         request(Bool, "approveChatJoinRequest", {
           chat_id: chat_id,
@@ -1159,7 +1159,7 @@ module Tourmaline
       # Use this method to decline a chat join request. The bot must be an administrator in the chat for this to work and must have the can_invite_users administrator right. Returns True on success.
       def decline_chat_join_request(
         chat_id : Int32 | Int64 | String,
-        user_id : Int32 | Int64,
+        user_id : Int32 | Int64
       )
         request(Bool, "declineChatJoinRequest", {
           chat_id: chat_id,
@@ -1167,10 +1167,32 @@ module Tourmaline
         })
       end
 
+      # Use this method to process a received chat join request query. Returns True on success.
+      def answer_chat_join_request_query(
+        chat_join_request_query_id : String,
+        result : String
+      )
+        request(Bool, "answerChatJoinRequestQuery", {
+          chat_join_request_query_id: chat_join_request_query_id,
+          result:                     result,
+        })
+      end
+
+      # Use this method to process a received chat join request query by showing a Mini App to the user before deciding the outcome. Returns True on success.
+      def send_chat_join_request_web_app(
+        chat_join_request_query_id : String,
+        web_app_url : String
+      )
+        request(Bool, "sendChatJoinRequestWebApp", {
+          chat_join_request_query_id: chat_join_request_query_id,
+          web_app_url:                web_app_url,
+        })
+      end
+
       # Use this method to set a new profile photo for the chat. Photos can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success.
       def set_chat_photo(
         chat_id : Int32 | Int64 | String,
-        photo : ::File,
+        photo : ::File
       )
         request(Bool, "setChatPhoto", {
           chat_id: chat_id,
@@ -1180,7 +1202,7 @@ module Tourmaline
 
       # Use this method to delete a chat photo. Photos can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success.
       def delete_chat_photo(
-        chat_id : Int32 | Int64 | String,
+        chat_id : Int32 | Int64 | String
       )
         request(Bool, "deleteChatPhoto", {
           chat_id: chat_id,
@@ -1190,7 +1212,7 @@ module Tourmaline
       # Use this method to change the title of a chat. Titles can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success.
       def set_chat_title(
         chat_id : Int32 | Int64 | String,
-        title : String,
+        title : String
       )
         request(Bool, "setChatTitle", {
           chat_id: chat_id,
@@ -1201,7 +1223,7 @@ module Tourmaline
       # Use this method to change the description of a group, a supergroup or a channel. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success.
       def set_chat_description(
         chat_id : Int32 | Int64 | String,
-        description : String | ::Nil = nil,
+        description : String | ::Nil = nil
       )
         request(Bool, "setChatDescription", {
           chat_id:     chat_id,
@@ -1214,7 +1236,7 @@ module Tourmaline
         chat_id : Int32 | Int64 | String,
         message_id : Int32 | Int64,
         business_connection_id : String | ::Nil = nil,
-        disable_notification : Bool | ::Nil = nil,
+        disable_notification : Bool | ::Nil = nil
       )
         request(Bool, "pinChatMessage", {
           chat_id:                chat_id,
@@ -1228,7 +1250,7 @@ module Tourmaline
       def unpin_chat_message(
         chat_id : Int32 | Int64 | String,
         business_connection_id : String | ::Nil = nil,
-        message_id : Int32 | Int64 | ::Nil = nil,
+        message_id : Int32 | Int64 | ::Nil = nil
       )
         request(Bool, "unpinChatMessage", {
           chat_id:                chat_id,
@@ -1239,7 +1261,7 @@ module Tourmaline
 
       # Use this method to clear the list of pinned messages in a chat. In private chats and channel direct messages chats, no additional rights are required to unpin all pinned messages. Conversely, the bot must be an administrator with the 'can_pin_messages' right or the 'can_edit_messages' right to unpin all pinned messages in groups and channels respectively. Returns True on success.
       def unpin_all_chat_messages(
-        chat_id : Int32 | Int64 | String,
+        chat_id : Int32 | Int64 | String
       )
         request(Bool, "unpinAllChatMessages", {
           chat_id: chat_id,
@@ -1248,7 +1270,7 @@ module Tourmaline
 
       # Use this method for your bot to leave a group, supergroup or channel. Returns True on success.
       def leave_chat(
-        chat_id : Int32 | Int64 | String,
+        chat_id : Int32 | Int64 | String
       )
         request(Bool, "leaveChat", {
           chat_id: chat_id,
@@ -1257,7 +1279,7 @@ module Tourmaline
 
       # Use this method to get up-to-date information about the chat. Returns a ChatFullInfo object on success.
       def get_chat(
-        chat_id : Int32 | Int64 | String,
+        chat_id : Int32 | Int64 | String
       )
         request(Tourmaline::ChatFullInfo, "getChat", {
           chat_id: chat_id,
@@ -1275,7 +1297,7 @@ module Tourmaline
 
       # Use this method to get the number of members in a chat. Returns Int on success.
       def get_chat_member_count(
-        chat_id : Int32 | Int64 | String,
+        chat_id : Int32 | Int64 | String
       )
         request(Int32 | Int64, "getChatMemberCount", {
           chat_id: chat_id,
@@ -1285,7 +1307,7 @@ module Tourmaline
       # Use this method to get information about a member of a chat. The method is only guaranteed to work for other users if the bot is an administrator in the chat. Returns a ChatMember object on success.
       def get_chat_member(
         chat_id : Int32 | Int64 | String,
-        user_id : Int32 | Int64,
+        user_id : Int32 | Int64
       )
         request(Tourmaline::ChatMember, "getChatMember", {
           chat_id: chat_id,
@@ -1296,7 +1318,7 @@ module Tourmaline
       # Use this method to set a new group sticker set for a supergroup. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Use the field can_set_sticker_set optionally returned in getChat requests to check if the bot can use this method. Returns True on success.
       def set_chat_sticker_set(
         chat_id : Int32 | Int64 | String,
-        sticker_set_name : String,
+        sticker_set_name : String
       )
         request(Bool, "setChatStickerSet", {
           chat_id:          chat_id,
@@ -1306,7 +1328,7 @@ module Tourmaline
 
       # Use this method to delete a group sticker set from a supergroup. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Use the field can_set_sticker_set optionally returned in getChat requests to check if the bot can use this method. Returns True on success.
       def delete_chat_sticker_set(
-        chat_id : Int32 | Int64 | String,
+        chat_id : Int32 | Int64 | String
       )
         request(Bool, "deleteChatStickerSet", {
           chat_id: chat_id,
@@ -1323,7 +1345,7 @@ module Tourmaline
         chat_id : Int32 | Int64 | String,
         name : String,
         icon_color : Int32 | Int64 | ::Nil = nil,
-        icon_custom_emoji_id : String | ::Nil = nil,
+        icon_custom_emoji_id : String | ::Nil = nil
       )
         request(Tourmaline::ForumTopic, "createForumTopic", {
           chat_id:              chat_id,
@@ -1338,7 +1360,7 @@ module Tourmaline
         chat_id : Int32 | Int64 | String,
         message_thread_id : Int32 | Int64,
         name : String | ::Nil = nil,
-        icon_custom_emoji_id : String | ::Nil = nil,
+        icon_custom_emoji_id : String | ::Nil = nil
       )
         request(Bool, "editForumTopic", {
           chat_id:              chat_id,
@@ -1351,7 +1373,7 @@ module Tourmaline
       # Use this method to close an open topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights, unless it is the creator of the topic. Returns True on success.
       def close_forum_topic(
         chat_id : Int32 | Int64 | String,
-        message_thread_id : Int32 | Int64,
+        message_thread_id : Int32 | Int64
       )
         request(Bool, "closeForumTopic", {
           chat_id:           chat_id,
@@ -1362,7 +1384,7 @@ module Tourmaline
       # Use this method to reopen a closed topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights, unless it is the creator of the topic. Returns True on success.
       def reopen_forum_topic(
         chat_id : Int32 | Int64 | String,
-        message_thread_id : Int32 | Int64,
+        message_thread_id : Int32 | Int64
       )
         request(Bool, "reopenForumTopic", {
           chat_id:           chat_id,
@@ -1373,7 +1395,7 @@ module Tourmaline
       # Use this method to delete a forum topic along with all its messages in a forum supergroup chat or a private chat with a user. In the case of a supergroup chat the bot must be an administrator in the chat for this to work and must have the can_delete_messages administrator rights. Returns True on success.
       def delete_forum_topic(
         chat_id : Int32 | Int64 | String,
-        message_thread_id : Int32 | Int64,
+        message_thread_id : Int32 | Int64
       )
         request(Bool, "deleteForumTopic", {
           chat_id:           chat_id,
@@ -1384,7 +1406,7 @@ module Tourmaline
       # Use this method to clear the list of pinned messages in a forum topic in a forum supergroup chat or a private chat with a user. In the case of a supergroup chat the bot must be an administrator in the chat for this to work and must have the can_pin_messages administrator right in the supergroup. Returns True on success.
       def unpin_all_forum_topic_messages(
         chat_id : Int32 | Int64 | String,
-        message_thread_id : Int32 | Int64,
+        message_thread_id : Int32 | Int64
       )
         request(Bool, "unpinAllForumTopicMessages", {
           chat_id:           chat_id,
@@ -1395,7 +1417,7 @@ module Tourmaline
       # Use this method to edit the name of the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. Returns True on success.
       def edit_general_forum_topic(
         chat_id : Int32 | Int64 | String,
-        name : String,
+        name : String
       )
         request(Bool, "editGeneralForumTopic", {
           chat_id: chat_id,
@@ -1405,7 +1427,7 @@ module Tourmaline
 
       # Use this method to close an open 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. Returns True on success.
       def close_general_forum_topic(
-        chat_id : Int32 | Int64 | String,
+        chat_id : Int32 | Int64 | String
       )
         request(Bool, "closeGeneralForumTopic", {
           chat_id: chat_id,
@@ -1414,7 +1436,7 @@ module Tourmaline
 
       # Use this method to reopen a closed 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. The topic will be automatically unhidden if it was hidden. Returns True on success.
       def reopen_general_forum_topic(
-        chat_id : Int32 | Int64 | String,
+        chat_id : Int32 | Int64 | String
       )
         request(Bool, "reopenGeneralForumTopic", {
           chat_id: chat_id,
@@ -1423,7 +1445,7 @@ module Tourmaline
 
       # Use this method to hide the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. The topic will be automatically closed if it was open. Returns True on success.
       def hide_general_forum_topic(
-        chat_id : Int32 | Int64 | String,
+        chat_id : Int32 | Int64 | String
       )
         request(Bool, "hideGeneralForumTopic", {
           chat_id: chat_id,
@@ -1432,7 +1454,7 @@ module Tourmaline
 
       # Use this method to unhide the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. Returns True on success.
       def unhide_general_forum_topic(
-        chat_id : Int32 | Int64 | String,
+        chat_id : Int32 | Int64 | String
       )
         request(Bool, "unhideGeneralForumTopic", {
           chat_id: chat_id,
@@ -1441,7 +1463,7 @@ module Tourmaline
 
       # Use this method to clear the list of pinned messages in a General forum topic. The bot must be an administrator in the chat for this to work and must have the can_pin_messages administrator right in the supergroup. Returns True on success.
       def unpin_all_general_forum_topic_messages(
-        chat_id : Int32 | Int64 | String,
+        chat_id : Int32 | Int64 | String
       )
         request(Bool, "unpinAllGeneralForumTopicMessages", {
           chat_id: chat_id,
@@ -1454,7 +1476,7 @@ module Tourmaline
         text : String | ::Nil = nil,
         show_alert : Bool | ::Nil = nil,
         url : String | ::Nil = nil,
-        cache_time : Int32 | Int64 | ::Nil = nil,
+        cache_time : Int32 | Int64 | ::Nil = nil
       )
         request(Bool, "answerCallbackQuery", {
           callback_query_id: callback_query_id,
@@ -1468,7 +1490,7 @@ module Tourmaline
       # Use this method to get the list of boosts added to a chat by a user. Requires administrator rights in the chat. Returns a UserChatBoosts object.
       def get_user_chat_boosts(
         chat_id : Int32 | Int64 | String,
-        user_id : Int32 | Int64,
+        user_id : Int32 | Int64
       )
         request(Tourmaline::UserChatBoosts, "getUserChatBoosts", {
           chat_id: chat_id,
@@ -1478,7 +1500,7 @@ module Tourmaline
 
       # Use this method to get information about the connection of the bot with a business account. Returns a BusinessConnection object on success.
       def get_business_connection(
-        business_connection_id : String,
+        business_connection_id : String
       )
         request(Tourmaline::BusinessConnection, "getBusinessConnection", {
           business_connection_id: business_connection_id,
@@ -1489,7 +1511,7 @@ module Tourmaline
       def set_my_commands(
         commands : Array(Tourmaline::BotCommand),
         scope : Tourmaline::BotCommandScope | ::Nil = nil,
-        language_code : String | ::Nil = nil,
+        language_code : String | ::Nil = nil
       )
         request(Bool, "setMyCommands", {
           commands:      commands.to_json,
@@ -1501,7 +1523,7 @@ module Tourmaline
       # Use this method to delete the list of the bot's commands for the given scope and user language. After deletion, higher level commands will be shown to affected users. Returns True on success.
       def delete_my_commands(
         scope : Tourmaline::BotCommandScope | ::Nil = nil,
-        language_code : String | ::Nil = nil,
+        language_code : String | ::Nil = nil
       )
         request(Bool, "deleteMyCommands", {
           scope:         scope.try(&.to_json),
@@ -1512,7 +1534,7 @@ module Tourmaline
       # Use this method to get the current list of the bot's commands for the given scope and user language. Returns an Array of BotCommand objects. If commands aren't set, an empty list is returned.
       def get_my_commands(
         scope : Tourmaline::BotCommandScope | ::Nil = nil,
-        language_code : String | ::Nil = nil,
+        language_code : String | ::Nil = nil
       )
         request(Array(Tourmaline::BotCommand), "getMyCommands", {
           scope:         scope.try(&.to_json),
@@ -1523,7 +1545,7 @@ module Tourmaline
       # Use this method to change the bot's name. Returns True on success.
       def set_my_name(
         name : String | ::Nil = nil,
-        language_code : String | ::Nil = nil,
+        language_code : String | ::Nil = nil
       )
         request(Bool, "setMyName", {
           name:          name,
@@ -1533,7 +1555,7 @@ module Tourmaline
 
       # Use this method to get the current bot name for the given user language. Returns BotName on success.
       def get_my_name(
-        language_code : String | ::Nil = nil,
+        language_code : String | ::Nil = nil
       )
         request(Tourmaline::BotName, "getMyName", {
           language_code: language_code,
@@ -1543,7 +1565,7 @@ module Tourmaline
       # Use this method to change the bot's description, which is shown in the chat with the bot if the chat is empty. Returns True on success.
       def set_my_description(
         description : String | ::Nil = nil,
-        language_code : String | ::Nil = nil,
+        language_code : String | ::Nil = nil
       )
         request(Bool, "setMyDescription", {
           description:   description,
@@ -1553,7 +1575,7 @@ module Tourmaline
 
       # Use this method to get the current bot description for the given user language. Returns BotDescription on success.
       def get_my_description(
-        language_code : String | ::Nil = nil,
+        language_code : String | ::Nil = nil
       )
         request(Tourmaline::BotDescription, "getMyDescription", {
           language_code: language_code,
@@ -1563,7 +1585,7 @@ module Tourmaline
       # Use this method to change the bot's short description, which is shown on the bot's profile page and is sent together with the link when users share the bot. Returns True on success.
       def set_my_short_description(
         short_description : String | ::Nil = nil,
-        language_code : String | ::Nil = nil,
+        language_code : String | ::Nil = nil
       )
         request(Bool, "setMyShortDescription", {
           short_description: short_description,
@@ -1573,7 +1595,7 @@ module Tourmaline
 
       # Use this method to get the current bot short description for the given user language. Returns BotShortDescription on success.
       def get_my_short_description(
-        language_code : String | ::Nil = nil,
+        language_code : String | ::Nil = nil
       )
         request(Tourmaline::BotShortDescription, "getMyShortDescription", {
           language_code: language_code,
@@ -1582,7 +1604,7 @@ module Tourmaline
 
       # Changes the profile photo of the bot. Returns True on success.
       def set_my_profile_photo(
-        photo : Tourmaline::InputProfilePhoto,
+        photo : Tourmaline::InputProfilePhoto
       )
         request(Bool, "setMyProfilePhoto", {
           photo: photo,
@@ -1597,7 +1619,7 @@ module Tourmaline
       # Use this method to change the bot's menu button in a private chat, or the default menu button. Returns True on success.
       def set_chat_menu_button(
         chat_id : Int32 | Int64 | ::Nil = nil,
-        menu_button : Tourmaline::MenuButton | ::Nil = nil,
+        menu_button : Tourmaline::MenuButton | ::Nil = nil
       )
         request(Bool, "setChatMenuButton", {
           chat_id:     chat_id,
@@ -1607,7 +1629,7 @@ module Tourmaline
 
       # Use this method to get the current value of the bot's menu button in a private chat, or the default menu button. Returns MenuButton on success.
       def get_chat_menu_button(
-        chat_id : Int32 | Int64 | ::Nil = nil,
+        chat_id : Int32 | Int64 | ::Nil = nil
       )
         request(Tourmaline::MenuButton, "getChatMenuButton", {
           chat_id: chat_id,
@@ -1617,7 +1639,7 @@ module Tourmaline
       # Use this method to change the default administrator rights requested by the bot when it's added as an administrator to groups or channels. These rights will be suggested to users, but they are free to modify the list before adding the bot. Returns True on success.
       def set_my_default_administrator_rights(
         rights : Tourmaline::ChatAdministratorRights | ::Nil = nil,
-        for_channels : Bool | ::Nil = nil,
+        for_channels : Bool | ::Nil = nil
       )
         request(Bool, "setMyDefaultAdministratorRights", {
           rights:       rights.try(&.to_json),
@@ -1627,7 +1649,7 @@ module Tourmaline
 
       # Use this method to get the current default administrator rights of the bot. Returns ChatAdministratorRights on success.
       def get_my_default_administrator_rights(
-        for_channels : Bool | ::Nil = nil,
+        for_channels : Bool | ::Nil = nil
       )
         request(Tourmaline::ChatAdministratorRights, "getMyDefaultAdministratorRights", {
           for_channels: for_channels,
@@ -1647,7 +1669,7 @@ module Tourmaline
         pay_for_upgrade : Bool | ::Nil = nil,
         text : String | ::Nil = nil,
         text_parse_mode : String | ::Nil = nil,
-        text_entities : Array(Tourmaline::MessageEntity) | ::Nil = nil,
+        text_entities : Array(Tourmaline::MessageEntity) | ::Nil = nil
       )
         request(Bool, "sendGift", {
           gift_id:         gift_id,
@@ -1667,7 +1689,7 @@ module Tourmaline
         star_count : Int32 | Int64,
         text : String | ::Nil = nil,
         text_parse_mode : String | ::Nil = nil,
-        text_entities : Array(Tourmaline::MessageEntity) | ::Nil = nil,
+        text_entities : Array(Tourmaline::MessageEntity) | ::Nil = nil
       )
         request(Bool, "giftPremiumSubscription", {
           user_id:         user_id,
@@ -1682,7 +1704,7 @@ module Tourmaline
       # Verifies a user on behalf of the organization which is represented by the bot. Returns True on success.
       def verify_user(
         user_id : Int32 | Int64,
-        custom_description : String | ::Nil = nil,
+        custom_description : String | ::Nil = nil
       )
         request(Bool, "verifyUser", {
           user_id:            user_id,
@@ -1693,7 +1715,7 @@ module Tourmaline
       # Verifies a chat on behalf of the organization which is represented by the bot. Returns True on success.
       def verify_chat(
         chat_id : Int32 | Int64 | String,
-        custom_description : String | ::Nil = nil,
+        custom_description : String | ::Nil = nil
       )
         request(Bool, "verifyChat", {
           chat_id:            chat_id,
@@ -1703,7 +1725,7 @@ module Tourmaline
 
       # Removes verification from a user who is currently verified on behalf of the organization represented by the bot. Returns True on success.
       def remove_user_verification(
-        user_id : Int32 | Int64,
+        user_id : Int32 | Int64
       )
         request(Bool, "removeUserVerification", {
           user_id: user_id,
@@ -1712,7 +1734,7 @@ module Tourmaline
 
       # Removes verification from a chat that is currently verified on behalf of the organization represented by the bot. Returns True on success.
       def remove_chat_verification(
-        chat_id : Int32 | Int64 | String,
+        chat_id : Int32 | Int64 | String
       )
         request(Bool, "removeChatVerification", {
           chat_id: chat_id,
@@ -1723,7 +1745,7 @@ module Tourmaline
       def read_business_message(
         business_connection_id : String,
         chat_id : Int32 | Int64,
-        message_id : Int32 | Int64,
+        message_id : Int32 | Int64
       )
         request(Bool, "readBusinessMessage", {
           business_connection_id: business_connection_id,
@@ -1735,7 +1757,7 @@ module Tourmaline
       # Delete messages on behalf of a business account. Requires the can_delete_sent_messages business bot right to delete messages sent by the bot itself, or the can_delete_all_messages business bot right to delete any message. Returns True on success.
       def delete_business_messages(
         business_connection_id : String,
-        message_ids : Array(Int32 | Int64),
+        message_ids : Array(Int32 | Int64)
       )
         request(Bool, "deleteBusinessMessages", {
           business_connection_id: business_connection_id,
@@ -1747,7 +1769,7 @@ module Tourmaline
       def set_business_account_name(
         business_connection_id : String,
         first_name : String,
-        last_name : String | ::Nil = nil,
+        last_name : String | ::Nil = nil
       )
         request(Bool, "setBusinessAccountName", {
           business_connection_id: business_connection_id,
@@ -1759,7 +1781,7 @@ module Tourmaline
       # Changes the username of a managed business account. Requires the can_change_username business bot right. Returns True on success.
       def set_business_account_username(
         business_connection_id : String,
-        username : String | ::Nil = nil,
+        username : String | ::Nil = nil
       )
         request(Bool, "setBusinessAccountUsername", {
           business_connection_id: business_connection_id,
@@ -1770,7 +1792,7 @@ module Tourmaline
       # Changes the bio of a managed business account. Requires the can_change_bio business bot right. Returns True on success.
       def set_business_account_bio(
         business_connection_id : String,
-        bio : String | ::Nil = nil,
+        bio : String | ::Nil = nil
       )
         request(Bool, "setBusinessAccountBio", {
           business_connection_id: business_connection_id,
@@ -1782,7 +1804,7 @@ module Tourmaline
       def set_business_account_profile_photo(
         business_connection_id : String,
         photo : Tourmaline::InputProfilePhoto,
-        is_public : Bool | ::Nil = nil,
+        is_public : Bool | ::Nil = nil
       )
         request(Bool, "setBusinessAccountProfilePhoto", {
           business_connection_id: business_connection_id,
@@ -1794,7 +1816,7 @@ module Tourmaline
       # Removes the current profile photo of a managed business account. Requires the can_edit_profile_photo business bot right. Returns True on success.
       def remove_business_account_profile_photo(
         business_connection_id : String,
-        is_public : Bool | ::Nil = nil,
+        is_public : Bool | ::Nil = nil
       )
         request(Bool, "removeBusinessAccountProfilePhoto", {
           business_connection_id: business_connection_id,
@@ -1806,7 +1828,7 @@ module Tourmaline
       def set_business_account_gift_settings(
         business_connection_id : String,
         show_gift_button : Bool,
-        accepted_gift_types : Tourmaline::AcceptedGiftTypes,
+        accepted_gift_types : Tourmaline::AcceptedGiftTypes
       )
         request(Bool, "setBusinessAccountGiftSettings", {
           business_connection_id: business_connection_id,
@@ -1817,7 +1839,7 @@ module Tourmaline
 
       # Returns the amount of Telegram Stars owned by a managed business account. Requires the can_view_gifts_and_stars business bot right. Returns StarAmount on success.
       def get_business_account_star_balance(
-        business_connection_id : String,
+        business_connection_id : String
       )
         request(Tourmaline::StarAmount, "getBusinessAccountStarBalance", {
           business_connection_id: business_connection_id,
@@ -1827,7 +1849,7 @@ module Tourmaline
       # Transfers Telegram Stars from the business account balance to the bot's balance. Requires the can_transfer_stars business bot right. Returns True on success.
       def transfer_business_account_stars(
         business_connection_id : String,
-        star_count : Int32 | Int64,
+        star_count : Int32 | Int64
       )
         request(Bool, "transferBusinessAccountStars", {
           business_connection_id: business_connection_id,
@@ -1847,7 +1869,7 @@ module Tourmaline
         exclude_from_blockchain : Bool | ::Nil = nil,
         sort_by_price : Bool | ::Nil = nil,
         offset : String | ::Nil = nil,
-        limit : Int32 | Int64 | ::Nil = nil,
+        limit : Int32 | Int64 | ::Nil = nil
       )
         request(Tourmaline::OwnedGifts, "getBusinessAccountGifts", {
           business_connection_id:         business_connection_id,
@@ -1874,7 +1896,7 @@ module Tourmaline
         exclude_unique : Bool | ::Nil = nil,
         sort_by_price : Bool | ::Nil = nil,
         offset : String | ::Nil = nil,
-        limit : Int32 | Int64 | ::Nil = nil,
+        limit : Int32 | Int64 | ::Nil = nil
       )
         request(Tourmaline::OwnedGifts, "getUserGifts", {
           user_id:                        user_id,
@@ -1901,7 +1923,7 @@ module Tourmaline
         exclude_unique : Bool | ::Nil = nil,
         sort_by_price : Bool | ::Nil = nil,
         offset : String | ::Nil = nil,
-        limit : Int32 | Int64 | ::Nil = nil,
+        limit : Int32 | Int64 | ::Nil = nil
       )
         request(Tourmaline::OwnedGifts, "getChatGifts", {
           chat_id:                        chat_id,
@@ -1921,7 +1943,7 @@ module Tourmaline
       # Converts a given regular gift to Telegram Stars. Requires the can_convert_gifts_to_stars business bot right. Returns True on success.
       def convert_gift_to_stars(
         business_connection_id : String,
-        owned_gift_id : String,
+        owned_gift_id : String
       )
         request(Bool, "convertGiftToStars", {
           business_connection_id: business_connection_id,
@@ -1934,7 +1956,7 @@ module Tourmaline
         business_connection_id : String,
         owned_gift_id : String,
         keep_original_details : Bool | ::Nil = nil,
-        star_count : Int32 | Int64 | ::Nil = nil,
+        star_count : Int32 | Int64 | ::Nil = nil
       )
         request(Bool, "upgradeGift", {
           business_connection_id: business_connection_id,
@@ -1949,7 +1971,7 @@ module Tourmaline
         business_connection_id : String,
         owned_gift_id : String,
         new_owner_chat_id : Int32 | Int64,
-        star_count : Int32 | Int64 | ::Nil = nil,
+        star_count : Int32 | Int64 | ::Nil = nil
       )
         request(Bool, "transferGift", {
           business_connection_id: business_connection_id,
@@ -1969,7 +1991,7 @@ module Tourmaline
         caption_entities : Array(Tourmaline::MessageEntity) | ::Nil = nil,
         areas : Array(Tourmaline::StoryArea) | ::Nil = nil,
         post_to_chat_page : Bool | ::Nil = nil,
-        protect_content : Bool | ::Nil = nil,
+        protect_content : Bool | ::Nil = nil
       )
         request(Tourmaline::Story, "postStory", {
           business_connection_id: business_connection_id,
@@ -1991,7 +2013,7 @@ module Tourmaline
         from_story_id : Int32 | Int64,
         active_period : Int32 | Int64,
         post_to_chat_page : Bool | ::Nil = nil,
-        protect_content : Bool | ::Nil = nil,
+        protect_content : Bool | ::Nil = nil
       )
         request(Tourmaline::Story, "repostStory", {
           business_connection_id: business_connection_id,
@@ -2011,7 +2033,7 @@ module Tourmaline
         caption : String | ::Nil = nil,
         parse_mode : ParseMode = default_parse_mode,
         caption_entities : Array(Tourmaline::MessageEntity) | ::Nil = nil,
-        areas : Array(Tourmaline::StoryArea) | ::Nil = nil,
+        areas : Array(Tourmaline::StoryArea) | ::Nil = nil
       )
         request(Tourmaline::Story, "editStory", {
           business_connection_id: business_connection_id,
@@ -2027,7 +2049,7 @@ module Tourmaline
       # Deletes a story previously posted by the bot on behalf of a managed business account. Requires the can_manage_stories business bot right. Returns True on success.
       def delete_story(
         business_connection_id : String,
-        story_id : Int32 | Int64,
+        story_id : Int32 | Int64
       )
         request(Bool, "deleteStory", {
           business_connection_id: business_connection_id,
@@ -2035,27 +2057,70 @@ module Tourmaline
         })
       end
 
-      # Use this method to edit text and game messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+      # Use this method to set the result of an interaction with a Web App and send a corresponding message on behalf of the user to the chat from which the query originated. On success, a SentWebAppMessage object is returned.
+      def answer_web_app_query(
+        web_app_query_id : String,
+        result : Tourmaline::InlineQueryResult
+      )
+        request(Tourmaline::SentWebAppMessage, "answerWebAppQuery", {
+          web_app_query_id: web_app_query_id,
+          result:           result.to_json,
+        })
+      end
+
+      # Stores a message that can be sent by a user of a Mini App. Returns a PreparedInlineMessage object.
+      def save_prepared_inline_message(
+        user_id : Int32 | Int64,
+        result : Tourmaline::InlineQueryResult,
+        allow_user_chats : Bool | ::Nil = nil,
+        allow_bot_chats : Bool | ::Nil = nil,
+        allow_group_chats : Bool | ::Nil = nil,
+        allow_channel_chats : Bool | ::Nil = nil
+      )
+        request(Tourmaline::PreparedInlineMessage, "savePreparedInlineMessage", {
+          user_id:             user_id,
+          result:              result.to_json,
+          allow_user_chats:    allow_user_chats,
+          allow_bot_chats:     allow_bot_chats,
+          allow_group_chats:   allow_group_chats,
+          allow_channel_chats: allow_channel_chats,
+        })
+      end
+
+      # Stores a keyboard button that can be used by a user within a Mini App. Returns a PreparedKeyboardButton object.
+      def save_prepared_keyboard_button(
+        user_id : Int32 | Int64,
+        button : Tourmaline::KeyboardButton
+      )
+        request(Tourmaline::PreparedKeyboardButton, "savePreparedKeyboardButton", {
+          user_id: user_id,
+          button:  button.to_json,
+        })
+      end
+
+      # Use this method to edit text, rich and game messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
       def edit_message_text(
-        text : String,
         business_connection_id : String | ::Nil = nil,
         chat_id : Int32 | Int64 | String | ::Nil = nil,
         message_id : Int32 | Int64 | ::Nil = nil,
         inline_message_id : String | ::Nil = nil,
+        text : String | ::Nil = nil,
         parse_mode : ParseMode = default_parse_mode,
         entities : Array(Tourmaline::MessageEntity) | ::Nil = nil,
         link_preview_options : Tourmaline::LinkPreviewOptions | ::Nil = nil,
-        reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil,
+        rich_message : Tourmaline::InputRichMessage | ::Nil = nil,
+        reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil
       )
         request(Tourmaline::Message | Bool, "editMessageText", {
-          text:                   text,
           business_connection_id: business_connection_id,
           chat_id:                chat_id,
           message_id:             message_id,
           inline_message_id:      inline_message_id,
+          text:                   text,
           parse_mode:             parse_mode,
           entities:               entities.try(&.to_json),
           link_preview_options:   link_preview_options,
+          rich_message:           rich_message,
           reply_markup:           reply_markup.try(&.to_json),
         })
       end
@@ -2070,7 +2135,7 @@ module Tourmaline
         parse_mode : ParseMode = default_parse_mode,
         caption_entities : Array(Tourmaline::MessageEntity) | ::Nil = nil,
         show_caption_above_media : Bool | ::Nil = nil,
-        reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil,
+        reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil
       )
         request(Tourmaline::Message | Bool, "editMessageCaption", {
           business_connection_id:   business_connection_id,
@@ -2085,14 +2150,14 @@ module Tourmaline
         })
       end
 
-      # Use this method to edit animation, audio, document, photo, or video messages, or to add media to text messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+      # Use this method to edit animation, audio, document, live photo, photo, or video messages, or to replace a text or a rich message with a media. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo, a live photo, or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
       def edit_message_media(
         media : Tourmaline::InputMedia,
         business_connection_id : String | ::Nil = nil,
         chat_id : Int32 | Int64 | String | ::Nil = nil,
         message_id : Int32 | Int64 | ::Nil = nil,
         inline_message_id : String | ::Nil = nil,
-        reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil,
+        reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil
       )
         request(Tourmaline::Message | Bool, "editMessageMedia", {
           media:                  media.to_json,
@@ -2116,7 +2181,7 @@ module Tourmaline
         horizontal_accuracy : Float64 | ::Nil = nil,
         heading : Int32 | Int64 | ::Nil = nil,
         proximity_alert_radius : Int32 | Int64 | ::Nil = nil,
-        reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil,
+        reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil
       )
         request(Tourmaline::Message | Bool, "editMessageLiveLocation", {
           latitude:               latitude,
@@ -2139,7 +2204,7 @@ module Tourmaline
         chat_id : Int32 | Int64 | String | ::Nil = nil,
         message_id : Int32 | Int64 | ::Nil = nil,
         inline_message_id : String | ::Nil = nil,
-        reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil,
+        reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil
       )
         request(Tourmaline::Message | Bool, "stopMessageLiveLocation", {
           business_connection_id: business_connection_id,
@@ -2156,7 +2221,7 @@ module Tourmaline
         chat_id : Int32 | Int64,
         message_id : Int32 | Int64,
         checklist : Tourmaline::InputChecklist,
-        reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil,
+        reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil
       )
         request(Tourmaline::Message, "editMessageChecklist", {
           business_connection_id: business_connection_id,
@@ -2173,7 +2238,7 @@ module Tourmaline
         chat_id : Int32 | Int64 | String | ::Nil = nil,
         message_id : Int32 | Int64 | ::Nil = nil,
         inline_message_id : String | ::Nil = nil,
-        reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil,
+        reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil
       )
         request(Tourmaline::Message | Bool, "editMessageReplyMarkup", {
           business_connection_id: business_connection_id,
@@ -2189,7 +2254,7 @@ module Tourmaline
         chat_id : Int32 | Int64 | String,
         message_id : Int32 | Int64,
         business_connection_id : String | ::Nil = nil,
-        reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil,
+        reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil
       )
         request(Tourmaline::Poll, "stopPoll", {
           chat_id:                chat_id,
@@ -2203,7 +2268,7 @@ module Tourmaline
       def approve_suggested_post(
         chat_id : Int32 | Int64,
         message_id : Int32 | Int64,
-        send_date : Int32 | Int64 | ::Nil = nil,
+        send_date : Int32 | Int64 | ::Nil = nil
       )
         request(Bool, "approveSuggestedPost", {
           chat_id:    chat_id,
@@ -2216,7 +2281,7 @@ module Tourmaline
       def decline_suggested_post(
         chat_id : Int32 | Int64,
         message_id : Int32 | Int64,
-        comment : String | ::Nil = nil,
+        comment : String | ::Nil = nil
       )
         request(Bool, "declineSuggestedPost", {
           chat_id:    chat_id,
@@ -2238,7 +2303,7 @@ module Tourmaline
       # Returns True on success.
       def delete_message(
         chat_id : Int32 | Int64 | String,
-        message_id : Int32 | Int64,
+        message_id : Int32 | Int64
       )
         request(Bool, "deleteMessage", {
           chat_id:    chat_id,
@@ -2249,7 +2314,7 @@ module Tourmaline
       # Use this method to delete multiple messages simultaneously. If some of the specified messages can't be found, they are skipped. Returns True on success.
       def delete_messages(
         chat_id : Int32 | Int64 | String,
-        message_ids : Array(Int32 | Int64),
+        message_ids : Array(Int32 | Int64)
       )
         request(Bool, "deleteMessages", {
           chat_id:     chat_id,
@@ -2271,7 +2336,7 @@ module Tourmaline
         message_effect_id : String | ::Nil = nil,
         suggested_post_parameters : Tourmaline::SuggestedPostParameters | ::Nil = nil,
         reply_parameters : Tourmaline::ReplyParameters | ::Nil = nil,
-        reply_markup : Tourmaline::InlineKeyboardMarkup | Tourmaline::ReplyKeyboardMarkup | Tourmaline::ReplyKeyboardRemove | Tourmaline::ForceReply | ::Nil = nil,
+        reply_markup : Tourmaline::InlineKeyboardMarkup | Tourmaline::ReplyKeyboardMarkup | Tourmaline::ReplyKeyboardRemove | Tourmaline::ForceReply | ::Nil = nil
       )
         request(Tourmaline::Message, "sendSticker", {
           chat_id:                   chat_id,
@@ -2292,7 +2357,7 @@ module Tourmaline
 
       # Use this method to get a sticker set. On success, a StickerSet object is returned.
       def get_sticker_set(
-        name : String,
+        name : String
       )
         request(Tourmaline::StickerSet, "getStickerSet", {
           name: name,
@@ -2301,7 +2366,7 @@ module Tourmaline
 
       # Use this method to get information about custom emoji stickers by their identifiers. Returns an Array of Sticker objects.
       def get_custom_emoji_stickers(
-        custom_emoji_ids : Array(String),
+        custom_emoji_ids : Array(String)
       )
         request(Array(Tourmaline::Sticker), "getCustomEmojiStickers", {
           custom_emoji_ids: custom_emoji_ids.to_json,
@@ -2312,7 +2377,7 @@ module Tourmaline
       def upload_sticker_file(
         user_id : Int32 | Int64,
         sticker : ::File,
-        sticker_format : String,
+        sticker_format : String
       )
         request(Tourmaline::File, "uploadStickerFile", {
           user_id:        user_id,
@@ -2328,7 +2393,7 @@ module Tourmaline
         title : String,
         stickers : Array(Tourmaline::InputSticker),
         sticker_type : String | ::Nil = nil,
-        needs_repainting : Bool | ::Nil = nil,
+        needs_repainting : Bool | ::Nil = nil
       )
         request(Bool, "createNewStickerSet", {
           user_id:          user_id,
@@ -2344,7 +2409,7 @@ module Tourmaline
       def add_sticker_to_set(
         user_id : Int32 | Int64,
         name : String,
-        sticker : Tourmaline::InputSticker,
+        sticker : Tourmaline::InputSticker
       )
         request(Bool, "addStickerToSet", {
           user_id: user_id,
@@ -2356,7 +2421,7 @@ module Tourmaline
       # Use this method to move a sticker in a set created by the bot to a specific position. Returns True on success.
       def set_sticker_position_in_set(
         sticker : String,
-        position : Int32 | Int64,
+        position : Int32 | Int64
       )
         request(Bool, "setStickerPositionInSet", {
           sticker:  sticker,
@@ -2366,7 +2431,7 @@ module Tourmaline
 
       # Use this method to delete a sticker from a set created by the bot. Returns True on success.
       def delete_sticker_from_set(
-        sticker : String,
+        sticker : String
       )
         request(Bool, "deleteStickerFromSet", {
           sticker: sticker,
@@ -2378,7 +2443,7 @@ module Tourmaline
         user_id : Int32 | Int64,
         name : String,
         old_sticker : String,
-        sticker : Tourmaline::InputSticker,
+        sticker : Tourmaline::InputSticker
       )
         request(Bool, "replaceStickerInSet", {
           user_id:     user_id,
@@ -2391,7 +2456,7 @@ module Tourmaline
       # Use this method to change the list of emoji assigned to a regular or custom emoji sticker. The sticker must belong to a sticker set created by the bot. Returns True on success.
       def set_sticker_emoji_list(
         sticker : String,
-        emoji_list : Array(String),
+        emoji_list : Array(String)
       )
         request(Bool, "setStickerEmojiList", {
           sticker:    sticker,
@@ -2402,7 +2467,7 @@ module Tourmaline
       # Use this method to change search keywords assigned to a regular or custom emoji sticker. The sticker must belong to a sticker set created by the bot. Returns True on success.
       def set_sticker_keywords(
         sticker : String,
-        keywords : Array(String) | ::Nil = nil,
+        keywords : Array(String) | ::Nil = nil
       )
         request(Bool, "setStickerKeywords", {
           sticker:  sticker,
@@ -2413,7 +2478,7 @@ module Tourmaline
       # Use this method to change the mask position of a mask sticker. The sticker must belong to a sticker set that was created by the bot. Returns True on success.
       def set_sticker_mask_position(
         sticker : String,
-        mask_position : Tourmaline::MaskPosition | ::Nil = nil,
+        mask_position : Tourmaline::MaskPosition | ::Nil = nil
       )
         request(Bool, "setStickerMaskPosition", {
           sticker:       sticker,
@@ -2424,7 +2489,7 @@ module Tourmaline
       # Use this method to set the title of a created sticker set. Returns True on success.
       def set_sticker_set_title(
         name : String,
-        title : String,
+        title : String
       )
         request(Bool, "setStickerSetTitle", {
           name:  name,
@@ -2437,7 +2502,7 @@ module Tourmaline
         name : String,
         user_id : Int32 | Int64,
         format : String,
-        thumbnail : ::File | String | ::Nil = nil,
+        thumbnail : ::File | String | ::Nil = nil
       )
         request(Bool, "setStickerSetThumbnail", {
           name:      name,
@@ -2450,7 +2515,7 @@ module Tourmaline
       # Use this method to set the thumbnail of a custom emoji sticker set. Returns True on success.
       def set_custom_emoji_sticker_set_thumbnail(
         name : String,
-        custom_emoji_id : String | ::Nil = nil,
+        custom_emoji_id : String | ::Nil = nil
       )
         request(Bool, "setCustomEmojiStickerSetThumbnail", {
           name:            name,
@@ -2460,10 +2525,56 @@ module Tourmaline
 
       # Use this method to delete a sticker set that was created by the bot. Returns True on success.
       def delete_sticker_set(
-        name : String,
+        name : String
       )
         request(Bool, "deleteStickerSet", {
           name: name,
+        })
+      end
+
+      # Use this method to send rich messages. If the message contains a block with a media element, then the bot must have the right to send the media to the chat. On success, the sent Message is returned.
+      def send_rich_message(
+        chat_id : Int32 | Int64 | String,
+        rich_message : Tourmaline::InputRichMessage,
+        business_connection_id : String | ::Nil = nil,
+        message_thread_id : Int32 | Int64 | ::Nil = nil,
+        direct_messages_topic_id : Int32 | Int64 | ::Nil = nil,
+        disable_notification : Bool | ::Nil = nil,
+        protect_content : Bool | ::Nil = nil,
+        allow_paid_broadcast : Bool | ::Nil = nil,
+        message_effect_id : String | ::Nil = nil,
+        suggested_post_parameters : Tourmaline::SuggestedPostParameters | ::Nil = nil,
+        reply_parameters : Tourmaline::ReplyParameters | ::Nil = nil,
+        reply_markup : Tourmaline::InlineKeyboardMarkup | Tourmaline::ReplyKeyboardMarkup | Tourmaline::ReplyKeyboardRemove | Tourmaline::ForceReply | ::Nil = nil
+      )
+        request(Tourmaline::Message, "sendRichMessage", {
+          chat_id:                   chat_id,
+          rich_message:              rich_message,
+          business_connection_id:    business_connection_id,
+          message_thread_id:         message_thread_id,
+          direct_messages_topic_id:  direct_messages_topic_id,
+          disable_notification:      disable_notification,
+          protect_content:           protect_content,
+          allow_paid_broadcast:      allow_paid_broadcast,
+          message_effect_id:         message_effect_id,
+          suggested_post_parameters: suggested_post_parameters.try(&.to_json),
+          reply_parameters:          reply_parameters,
+          reply_markup:              reply_markup.try(&.to_json),
+        })
+      end
+
+      # Use this method to stream a partial rich message to a user while the message is being generated. Note that the streamed draft is ephemeral and acts as a temporary 30-second preview - once the output is finalized, you must call sendRichMessage with the complete message to persist it in the user's chat. Returns True on success.
+      def send_rich_message_draft(
+        chat_id : Int32 | Int64,
+        draft_id : Int32 | Int64,
+        rich_message : Tourmaline::InputRichMessage,
+        message_thread_id : Int32 | Int64 | ::Nil = nil
+      )
+        request(Bool, "sendRichMessageDraft", {
+          chat_id:           chat_id,
+          draft_id:          draft_id,
+          rich_message:      rich_message,
+          message_thread_id: message_thread_id,
         })
       end
 
@@ -2475,7 +2586,7 @@ module Tourmaline
         cache_time : Int32 | Int64 | ::Nil = nil,
         is_personal : Bool | ::Nil = nil,
         next_offset : String | ::Nil = nil,
-        button : Tourmaline::InlineQueryResultsButton | ::Nil = nil,
+        button : Tourmaline::InlineQueryResultsButton | ::Nil = nil
       )
         request(Bool, "answerInlineQuery", {
           inline_query_id: inline_query_id,
@@ -2484,36 +2595,6 @@ module Tourmaline
           is_personal:     is_personal,
           next_offset:     next_offset,
           button:          button.try(&.to_json),
-        })
-      end
-
-      # Use this method to set the result of an interaction with a Web App and send a corresponding message on behalf of the user to the chat from which the query originated. On success, a SentWebAppMessage object is returned.
-      def answer_web_app_query(
-        web_app_query_id : String,
-        result : Tourmaline::InlineQueryResult,
-      )
-        request(Tourmaline::SentWebAppMessage, "answerWebAppQuery", {
-          web_app_query_id: web_app_query_id,
-          result:           result.to_json,
-        })
-      end
-
-      # Stores a message that can be sent by a user of a Mini App. Returns a PreparedInlineMessage object.
-      def save_prepared_inline_message(
-        user_id : Int32 | Int64,
-        result : Tourmaline::InlineQueryResult,
-        allow_user_chats : Bool | ::Nil = nil,
-        allow_bot_chats : Bool | ::Nil = nil,
-        allow_group_chats : Bool | ::Nil = nil,
-        allow_channel_chats : Bool | ::Nil = nil,
-      )
-        request(Tourmaline::PreparedInlineMessage, "savePreparedInlineMessage", {
-          user_id:             user_id,
-          result:              result.to_json,
-          allow_user_chats:    allow_user_chats,
-          allow_bot_chats:     allow_bot_chats,
-          allow_group_chats:   allow_group_chats,
-          allow_channel_chats: allow_channel_chats,
         })
       end
 
@@ -2549,7 +2630,7 @@ module Tourmaline
         message_effect_id : String | ::Nil = nil,
         suggested_post_parameters : Tourmaline::SuggestedPostParameters | ::Nil = nil,
         reply_parameters : Tourmaline::ReplyParameters | ::Nil = nil,
-        reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil,
+        reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil
       )
         request(Tourmaline::Message, "sendInvoice", {
           chat_id:                       chat_id,
@@ -2609,7 +2690,7 @@ module Tourmaline
         need_shipping_address : Bool | ::Nil = nil,
         send_phone_number_to_provider : Bool | ::Nil = nil,
         send_email_to_provider : Bool | ::Nil = nil,
-        is_flexible : Bool | ::Nil = nil,
+        is_flexible : Bool | ::Nil = nil
       )
         request(String, "createInvoiceLink", {
           title:                         title,
@@ -2642,7 +2723,7 @@ module Tourmaline
         shipping_query_id : String,
         ok : Bool,
         shipping_options : Array(Tourmaline::ShippingOption) | ::Nil = nil,
-        error_message : String | ::Nil = nil,
+        error_message : String | ::Nil = nil
       )
         request(Bool, "answerShippingQuery", {
           shipping_query_id: shipping_query_id,
@@ -2656,7 +2737,7 @@ module Tourmaline
       def answer_pre_checkout_query(
         pre_checkout_query_id : String,
         ok : Bool,
-        error_message : String | ::Nil = nil,
+        error_message : String | ::Nil = nil
       )
         request(Bool, "answerPreCheckoutQuery", {
           pre_checkout_query_id: pre_checkout_query_id,
@@ -2673,7 +2754,7 @@ module Tourmaline
       # Returns the bot's Telegram Star transactions in chronological order. On success, returns a StarTransactions object.
       def get_star_transactions(
         offset : Int32 | Int64 | ::Nil = nil,
-        limit : Int32 | Int64 | ::Nil = nil,
+        limit : Int32 | Int64 | ::Nil = nil
       )
         request(Tourmaline::StarTransactions, "getStarTransactions", {
           offset: offset,
@@ -2684,7 +2765,7 @@ module Tourmaline
       # Refunds a successful payment in Telegram Stars. Returns True on success.
       def refund_star_payment(
         user_id : Int32 | Int64,
-        telegram_payment_charge_id : String,
+        telegram_payment_charge_id : String
       )
         request(Bool, "refundStarPayment", {
           user_id:                    user_id,
@@ -2696,7 +2777,7 @@ module Tourmaline
       def edit_user_star_subscription(
         user_id : Int32 | Int64,
         telegram_payment_charge_id : String,
-        is_canceled : Bool,
+        is_canceled : Bool
       )
         request(Bool, "editUserStarSubscription", {
           user_id:                    user_id,
@@ -2709,7 +2790,7 @@ module Tourmaline
       # Use this if the data submitted by the user doesn't satisfy the standards your service requires for any reason. For example, if a birthday date seems invalid, a submitted document is blurry, a scan shows evidence of tampering, etc. Supply some details in the error message to make sure the user knows how to correct the issues.
       def set_passport_data_errors(
         user_id : Int32 | Int64,
-        errors : Array(Tourmaline::PassportElementError),
+        errors : Array(Tourmaline::PassportElementError)
       )
         request(Bool, "setPassportDataErrors", {
           user_id: user_id,
@@ -2728,7 +2809,7 @@ module Tourmaline
         allow_paid_broadcast : Bool | ::Nil = nil,
         message_effect_id : String | ::Nil = nil,
         reply_parameters : Tourmaline::ReplyParameters | ::Nil = nil,
-        reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil,
+        reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil
       )
         request(Tourmaline::Message, "sendGame", {
           chat_id:                chat_id,
@@ -2752,7 +2833,7 @@ module Tourmaline
         disable_edit_message : Bool | ::Nil = nil,
         chat_id : Int32 | Int64 | ::Nil = nil,
         message_id : Int32 | Int64 | ::Nil = nil,
-        inline_message_id : String | ::Nil = nil,
+        inline_message_id : String | ::Nil = nil
       )
         request(Tourmaline::Message | Bool, "setGameScore", {
           user_id:              user_id,
@@ -2770,7 +2851,7 @@ module Tourmaline
         user_id : Int32 | Int64,
         chat_id : Int32 | Int64 | ::Nil = nil,
         message_id : Int32 | Int64 | ::Nil = nil,
-        inline_message_id : String | ::Nil = nil,
+        inline_message_id : String | ::Nil = nil
       )
         request(Array(Tourmaline::GameHighScore), "getGameHighScores", {
           user_id:           user_id,

@@ -50,16 +50,16 @@ module Tourmaline
     # Optional. New incoming callback query
     property callback_query : Tourmaline::CallbackQuery | ::Nil
 
-    # Optional. New incoming shipping query. Only for invoices with flexible price
+    # Optional. New incoming shipping query. Only for invoices with flexible price.
     property shipping_query : Tourmaline::ShippingQuery | ::Nil
 
-    # Optional. New incoming pre-checkout query. Contains full information about checkout
+    # Optional. New incoming pre-checkout query. Contains full information about checkout.
     property pre_checkout_query : Tourmaline::PreCheckoutQuery | ::Nil
 
     # Optional. A user purchased paid media with a non-empty payload sent by the bot in a non-channel chat
     property purchased_paid_media : Tourmaline::PaidMediaPurchased | ::Nil
 
-    # Optional. New poll state. Bots receive only updates about manually stopped polls and polls, which are sent by the bot
+    # Optional. New poll state. Bots receive only updates about manually stopped polls and polls, which are sent by the bot.
     property poll : Tourmaline::Poll | ::Nil
 
     # Optional. A user changed their answer in a non-anonymous poll. Bots receive new votes only in polls that were sent by the bot itself.
@@ -79,6 +79,9 @@ module Tourmaline
 
     # Optional. A boost was removed from a chat. The bot must be an administrator in the chat to receive these updates.
     property removed_chat_boost : Tourmaline::ChatBoostRemoved | ::Nil
+
+    # Optional. A new bot was created to be managed by the bot, or token or owner of a managed bot was changed
+    property managed_bot : Tourmaline::ManagedBotUpdated | ::Nil
 
     def initialize(
       @update_id,
@@ -105,6 +108,7 @@ module Tourmaline
       @chat_join_request : Tourmaline::ChatJoinRequest | ::Nil = nil,
       @chat_boost : Tourmaline::ChatBoostUpdated | ::Nil = nil,
       @removed_chat_boost : Tourmaline::ChatBoostRemoved | ::Nil = nil,
+      @managed_bot : Tourmaline::ManagedBotUpdated | ::Nil = nil
     )
     end
   end
@@ -139,7 +143,7 @@ module Tourmaline
     # Optional. The maximum allowed number of simultaneous HTTPS connections to the webhook for update delivery
     property max_connections : Int32 | Int64 | ::Nil
 
-    # Optional. A list of update types the bot is subscribed to. Defaults to all update types except chat_member
+    # Optional. A list of update types the bot is subscribed to. Defaults to all update types except chat_member, message_reaction, and message_reaction_count.
     property allowed_updates : Array(String) = [] of String
 
     def initialize(
@@ -151,7 +155,7 @@ module Tourmaline
       @last_error_message : String | ::Nil = nil,
       @last_synchronization_error_date : Int32 | Int64 | ::Nil = nil,
       @max_connections : Int32 | Int64 | ::Nil = nil,
-      @allowed_updates : Array(String) = [] of String,
+      @allowed_updates : Array(String) = [] of String
     )
     end
   end
@@ -205,6 +209,12 @@ module Tourmaline
     # Optional. True, if the bot allows users to create and delete topics in private chats. Returned only in getMe.
     property? allows_users_to_create_topics : Bool | ::Nil
 
+    # Optional. True, if other bots can be created to be controlled by the bot. Returned only in getMe.
+    property? can_manage_bots : Bool | ::Nil
+
+    # Optional. True, if the bot supports join request queries and can be assigned to process them. Returned only in getMe.
+    property? supports_join_request_queries : Bool | ::Nil
+
     def initialize(
       @id,
       @is_bot,
@@ -221,6 +231,8 @@ module Tourmaline
       @has_main_web_app : Bool | ::Nil = nil,
       @has_topics_enabled : Bool | ::Nil = nil,
       @allows_users_to_create_topics : Bool | ::Nil = nil,
+      @can_manage_bots : Bool | ::Nil = nil,
+      @supports_join_request_queries : Bool | ::Nil = nil
     )
     end
   end
@@ -261,7 +273,7 @@ module Tourmaline
       @first_name : String | ::Nil = nil,
       @last_name : String | ::Nil = nil,
       @is_forum : Bool | ::Nil = nil,
-      @is_direct_messages : Bool | ::Nil = nil,
+      @is_direct_messages : Bool | ::Nil = nil
     )
     end
   end
@@ -422,8 +434,11 @@ module Tourmaline
     # Optional. The color scheme based on a unique gift that must be used for the chat's name, message replies and link previews
     property unique_gift_colors : Tourmaline::UniqueGiftColors | ::Nil
 
-    # Optional. The number of Telegram Stars a general user have to pay to send a message to the chat
+    # Optional. The number of Telegram Stars a general user has to pay to send a message to the chat
     property paid_message_star_count : Int32 | Int64 | ::Nil
+
+    # Optional. The bot that processes join request queries in the chat. The field is only available to chat administrators.
+    property guard_bot : Tourmaline::User | ::Nil
 
     def initialize(
       @id,
@@ -477,6 +492,7 @@ module Tourmaline
       @first_profile_audio : Tourmaline::Audio | ::Nil = nil,
       @unique_gift_colors : Tourmaline::UniqueGiftColors | ::Nil = nil,
       @paid_message_star_count : Int32 | Int64 | ::Nil = nil,
+      @guard_bot : Tourmaline::User | ::Nil = nil
     )
     end
   end
@@ -485,7 +501,7 @@ module Tourmaline
   class Message
     include JSON::Serializable
 
-    # Unique message identifier inside this chat. In specific instances (e.g., message containing a video sent to a big chat), the server might automatically schedule a message instead of sending it immediately. In such cases, this field will be 0 and the relevant message will be unusable until it is actually sent
+    # Unique message identifier inside this chat. In specific instances (e.g., message containing a video sent to a big chat), the server might automatically schedule a message instead of sending it immediately. In such cases, this field will be 0 and the relevant message will be unusable until it is actually sent.
     property message_id : Int32 | Int64
 
     # Date the message was sent in Unix time. It is always a positive number, representing a valid date.
@@ -501,7 +517,7 @@ module Tourmaline
     # Optional. Information about the direct messages chat topic that contains the message
     property direct_messages_topic : Tourmaline::DirectMessagesTopic | ::Nil
 
-    # Optional. Sender of the message; may be empty for messages sent to channels. For backward compatibility, if the message was sent on behalf of a chat, the field contains a fake sender user in non-channel chats
+    # Optional. Sender of the message; may be empty for messages sent to channels. For backward compatibility, if the message was sent on behalf of a chat, the field contains a fake sender user in non-channel chats.
     property from : Tourmaline::User | ::Nil
 
     # Optional. Sender of the message when sent on behalf of a chat. For example, the supergroup itself for messages sent by its anonymous administrators or a linked channel for messages automatically forwarded to the channel's discussion group. For backward compatibility, if the message was sent on behalf of a chat, the field from contains a fake sender user in non-channel chats.
@@ -539,6 +555,9 @@ module Tourmaline
 
     # Optional. Identifier of the specific checklist task that is being replied to
     property reply_to_checklist_task_id : Int32 | Int64 | ::Nil
+
+    # Optional. Persistent identifier of the specific poll option that is being replied to
+    property reply_to_poll_option_id : String | ::Nil
 
     # Optional. Bot through which the message was sent
     property via_bot : Tourmaline::User | ::Nil
@@ -580,7 +599,10 @@ module Tourmaline
     # Optional. Unique identifier of the message effect added to the message
     property effect_id : String | ::Nil
 
-    # Optional. Message is an animation, information about the animation. For backward compatibility, when this field is set, the document field will also be set
+    # Optional. Message is a rich formatted message
+    property rich_message : Tourmaline::RichMessage | ::Nil
+
+    # Optional. Message is an animation, information about the animation. For backward compatibility, when this field is set, the document field will also be set.
     property animation : Tourmaline::Animation | ::Nil
 
     # Optional. Message is an audio file, information about the file
@@ -588,6 +610,9 @@ module Tourmaline
 
     # Optional. Message is a general file, information about the file
     property document : Tourmaline::Document | ::Nil
+
+    # Optional. Message is a live photo, information about the live photo. For backward compatibility, when this field is set, the photo field will also be set.
+    property live_photo : Tourmaline::LivePhoto | ::Nil
 
     # Optional. Message contains paid media; information about the paid media
     property paid_media : Tourmaline::PaidMediaInfo | ::Nil
@@ -637,7 +662,7 @@ module Tourmaline
     # Optional. Message is a native poll, information about the poll
     property poll : Tourmaline::Poll | ::Nil
 
-    # Optional. Message is a venue, information about the venue. For backward compatibility, when this field is set, the location field will also be set
+    # Optional. Message is a venue, information about the venue. For backward compatibility, when this field is set, the location field will also be set.
     property venue : Tourmaline::Venue | ::Nil
 
     # Optional. Message is a shared location, information about the location
@@ -766,8 +791,17 @@ module Tourmaline
     # Optional. Service message: a giveaway without public winners was completed
     property giveaway_completed : Tourmaline::GiveawayCompleted | ::Nil
 
+    # Optional. Service message: user created a bot that will be managed by the current bot
+    property managed_bot_created : Tourmaline::ManagedBotCreated | ::Nil
+
     # Optional. Service message: the price for paid messages has changed in the chat
     property paid_message_price_changed : Tourmaline::PaidMessagePriceChanged | ::Nil
+
+    # Optional. Service message: answer option was added to a poll
+    property poll_option_added : Tourmaline::PollOptionAdded | ::Nil
+
+    # Optional. Service message: answer option was deleted from a poll
+    property poll_option_deleted : Tourmaline::PollOptionDeleted | ::Nil
 
     # Optional. Service message: a suggested post was approved
     property suggested_post_approved : Tourmaline::SuggestedPostApproved | ::Nil
@@ -821,6 +855,7 @@ module Tourmaline
       @quote : Tourmaline::TextQuote | ::Nil = nil,
       @reply_to_story : Tourmaline::Story | ::Nil = nil,
       @reply_to_checklist_task_id : Int32 | Int64 | ::Nil = nil,
+      @reply_to_poll_option_id : String | ::Nil = nil,
       @via_bot : Tourmaline::User | ::Nil = nil,
       @edit_date : Int32 | Int64 | ::Nil = nil,
       @has_protected_content : Bool | ::Nil = nil,
@@ -834,6 +869,7 @@ module Tourmaline
       @link_preview_options : Tourmaline::LinkPreviewOptions | ::Nil = nil,
       @suggested_post_info : Tourmaline::SuggestedPostInfo | ::Nil = nil,
       @effect_id : String | ::Nil = nil,
+      @rich_message : Tourmaline::RichMessage | ::Nil = nil,
       @animation : Tourmaline::Animation | ::Nil = nil,
       @audio : Tourmaline::Audio | ::Nil = nil,
       @document : Tourmaline::Document | ::Nil = nil,
@@ -896,7 +932,10 @@ module Tourmaline
       @giveaway : Tourmaline::Giveaway | ::Nil = nil,
       @giveaway_winners : Tourmaline::GiveawayWinners | ::Nil = nil,
       @giveaway_completed : Tourmaline::GiveawayCompleted | ::Nil = nil,
+      @managed_bot_created : Tourmaline::ManagedBotCreated | ::Nil = nil,
       @paid_message_price_changed : Tourmaline::PaidMessagePriceChanged | ::Nil = nil,
+      @poll_option_added : Tourmaline::PollOptionAdded | ::Nil = nil,
+      @poll_option_deleted : Tourmaline::PollOptionDeleted | ::Nil = nil,
       @suggested_post_approved : Tourmaline::SuggestedPostApproved | ::Nil = nil,
       @suggested_post_approval_failed : Tourmaline::SuggestedPostApprovalFailed | ::Nil = nil,
       @suggested_post_declined : Tourmaline::SuggestedPostDeclined | ::Nil = nil,
@@ -907,7 +946,7 @@ module Tourmaline
       @video_chat_ended : Tourmaline::VideoChatEnded | ::Nil = nil,
       @video_chat_participants_invited : Tourmaline::VideoChatParticipantsInvited | ::Nil = nil,
       @web_app_data : Tourmaline::WebAppData | ::Nil = nil,
-      @reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil,
+      @reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil
     )
     end
   end
@@ -916,11 +955,11 @@ module Tourmaline
   class MessageId
     include JSON::Serializable
 
-    # Unique message identifier. In specific instances (e.g., message containing a video sent to a big chat), the server might automatically schedule a message instead of sending it immediately. In such cases, this field will be 0 and the relevant message will be unusable until it is actually sent
+    # Unique message identifier. In specific instances (e.g., message containing a video sent to a big chat), the server might automatically schedule a message instead of sending it immediately. In such cases, this field will be 0 and the relevant message will be unusable until it is actually sent.
     property message_id : Int32 | Int64
 
     def initialize(
-      @message_id,
+      @message_id
     )
     end
   end
@@ -942,7 +981,7 @@ module Tourmaline
     def initialize(
       @chat,
       @message_id,
-      @date,
+      @date
     )
     end
   end
@@ -956,7 +995,7 @@ module Tourmaline
   class MessageEntity
     include JSON::Serializable
 
-    # Type of the entity. Currently, can be "mention" (@username), "hashtag" (#hashtag or #hashtag@chatusername), "cashtag" ($USD or $USD@chatusername), "bot_command" (/start@jobs_bot), "url" (https://telegram.org), "email" (do-not-reply@telegram.org), "phone_number" (+1-212-555-0123), "bold" (bold text), "italic" (italic text), "underline" (underlined text), "strikethrough" (strikethrough text), "spoiler" (spoiler message), "blockquote" (block quotation), "expandable_blockquote" (collapsed-by-default block quotation), "code" (monowidth string), "pre" (monowidth block), "text_link" (for clickable text URLs), "text_mention" (for users without usernames), "custom_emoji" (for inline custom emoji stickers)
+    # Type of the entity. Currently, can be "mention" (@username), "hashtag" (#hashtag or #hashtag@chatusername), "cashtag" ($USD or $USD@chatusername), "bot_command" (/start@jobs_bot), "url" (https://telegram.org), "email" (do-not-reply@telegram.org), "phone_number" (+1-212-555-0123), "bold" (bold text), "italic" (italic text), "underline" (underlined text), "strikethrough" (strikethrough text), "spoiler" (spoiler message), "blockquote" (block quotation), "expandable_blockquote" (collapsed-by-default block quotation), "code" (monowidth string), "pre" (monowidth block), "text_link" (for clickable text URLs), "text_mention" (for users without usernames), "custom_emoji" (for inline custom emoji stickers), or "date_time" (for formatted date and time).
     property type : String
 
     # Offset in UTF-16 code units to the start of the entity
@@ -974,7 +1013,7 @@ module Tourmaline
     # Optional. For "pre" only, the programming language of the entity text
     property language : String | ::Nil
 
-    # Optional. For "custom_emoji" only, unique identifier of the custom emoji. Use getCustomEmojiStickers to get full information about the sticker
+    # Optional. For "custom_emoji" only, unique identifier of the custom emoji. Use getCustomEmojiStickers to get full information about the sticker.
     property custom_emoji_id : String | ::Nil
 
     def initialize(
@@ -999,7 +1038,7 @@ module Tourmaline
     # Approximate quote position in the original message in UTF-16 code units as specified by the sender
     property position : Int32 | Int64
 
-    # Optional. Special entities that appear in the quote. Currently, only bold, italic, underline, strikethrough, spoiler, and custom_emoji entities are kept in quotes.
+    # Optional. Special entities that appear in the quote. Currently, only bold, italic, underline, strikethrough, spoiler, custom_emoji, and date_time entities are kept in quotes.
     property entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity
 
     # Optional. True, if the quote was chosen manually by the message sender. Otherwise, the quote was added automatically by the server.
@@ -1009,7 +1048,7 @@ module Tourmaline
       @text,
       @position,
       @entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity,
-      @is_manual : Bool | ::Nil = nil,
+      @is_manual : Bool | ::Nil = nil
     )
     end
   end
@@ -1118,7 +1157,7 @@ module Tourmaline
       @invoice : Tourmaline::Invoice | ::Nil = nil,
       @location : Tourmaline::Location | ::Nil = nil,
       @poll : Tourmaline::Poll | ::Nil = nil,
-      @venue : Tourmaline::Venue | ::Nil = nil,
+      @venue : Tourmaline::Venue | ::Nil = nil
     )
     end
   end
@@ -1136,7 +1175,7 @@ module Tourmaline
     # Optional. Pass True if the message should be sent even if the specified message to be replied to is not found. Always False for replies in another chat or forum topic. Always True for messages sent on behalf of a business account.
     property? allow_sending_without_reply : Bool | ::Nil
 
-    # Optional. Quoted part of the message to be replied to; 0-1024 characters after entities parsing. The quote must be an exact substring of the message to be replied to, including bold, italic, underline, strikethrough, spoiler, and custom_emoji entities. The message will fail to send if the quote isn't found in the original message.
+    # Optional. Quoted part of the message to be replied to; 0-1024 characters after entities parsing. The quote must be an exact substring of the message to be replied to, including bold, italic, underline, strikethrough, spoiler, custom_emoji, and date_time entities. The message will fail to send if the quote isn't found in the original message.
     property quote : String | ::Nil
 
     # Optional. Mode for parsing entities in the quote. See formatting options for more details.
@@ -1151,6 +1190,9 @@ module Tourmaline
     # Optional. Identifier of the specific checklist task to be replied to
     property checklist_task_id : Int32 | Int64 | ::Nil
 
+    # Optional. Persistent identifier of the specific poll option to be replied to
+    property poll_option_id : String | ::Nil
+
     def initialize(
       @message_id,
       @chat_id : Int32 | Int64 | String | ::Nil = nil,
@@ -1160,6 +1202,7 @@ module Tourmaline
       @quote_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity,
       @quote_position : Int32 | Int64 | ::Nil = nil,
       @checklist_task_id : Int32 | Int64 | ::Nil = nil,
+      @poll_option_id : String | ::Nil = nil
     )
     end
   end
@@ -1188,7 +1231,7 @@ module Tourmaline
     def initialize(
       @type,
       @date,
-      @sender_user,
+      @sender_user
     )
     end
   end
@@ -1210,7 +1253,7 @@ module Tourmaline
     def initialize(
       @type,
       @date,
-      @sender_user_name,
+      @sender_user_name
     )
     end
   end
@@ -1236,7 +1279,7 @@ module Tourmaline
       @type,
       @date,
       @sender_chat,
-      @author_signature : String | ::Nil = nil,
+      @author_signature : String | ::Nil = nil
     )
     end
   end
@@ -1266,7 +1309,7 @@ module Tourmaline
       @date,
       @chat,
       @message_id,
-      @author_signature : String | ::Nil = nil,
+      @author_signature : String | ::Nil = nil
     )
     end
   end
@@ -1295,7 +1338,7 @@ module Tourmaline
       @file_unique_id,
       @width,
       @height,
-      @file_size : Int32 | Int64 | ::Nil = nil,
+      @file_size : Int32 | Int64 | ::Nil = nil
     )
     end
   end
@@ -1340,7 +1383,7 @@ module Tourmaline
       @thumbnail : Tourmaline::PhotoSize | ::Nil = nil,
       @file_name : String | ::Nil = nil,
       @mime_type : String | ::Nil = nil,
-      @file_size : Int32 | Int64 | ::Nil = nil,
+      @file_size : Int32 | Int64 | ::Nil = nil
     )
     end
   end
@@ -1385,7 +1428,7 @@ module Tourmaline
       @file_name : String | ::Nil = nil,
       @mime_type : String | ::Nil = nil,
       @file_size : Int32 | Int64 | ::Nil = nil,
-      @thumbnail : Tourmaline::PhotoSize | ::Nil = nil,
+      @thumbnail : Tourmaline::PhotoSize | ::Nil = nil
     )
     end
   end
@@ -1418,7 +1461,7 @@ module Tourmaline
       @thumbnail : Tourmaline::PhotoSize | ::Nil = nil,
       @file_name : String | ::Nil = nil,
       @mime_type : String | ::Nil = nil,
-      @file_size : Int32 | Int64 | ::Nil = nil,
+      @file_size : Int32 | Int64 | ::Nil = nil
     )
     end
   end
@@ -1435,7 +1478,7 @@ module Tourmaline
 
     def initialize(
       @chat,
-      @id,
+      @id
     )
     end
   end
@@ -1468,7 +1511,7 @@ module Tourmaline
       @width,
       @height,
       @codec,
-      @file_size : Int32 | Int64 | ::Nil = nil,
+      @file_size : Int32 | Int64 | ::Nil = nil
     )
     end
   end
@@ -1525,7 +1568,7 @@ module Tourmaline
       @qualities : Array(Tourmaline::VideoQuality) = [] of Tourmaline::VideoQuality,
       @file_name : String | ::Nil = nil,
       @mime_type : String | ::Nil = nil,
-      @file_size : Int32 | Int64 | ::Nil = nil,
+      @file_size : Int32 | Int64 | ::Nil = nil
     )
     end
   end
@@ -1558,7 +1601,7 @@ module Tourmaline
       @length,
       @duration,
       @thumbnail : Tourmaline::PhotoSize | ::Nil = nil,
-      @file_size : Int32 | Int64 | ::Nil = nil,
+      @file_size : Int32 | Int64 | ::Nil = nil
     )
     end
   end
@@ -1587,7 +1630,7 @@ module Tourmaline
       @file_unique_id,
       @duration,
       @mime_type : String | ::Nil = nil,
-      @file_size : Int32 | Int64 | ::Nil = nil,
+      @file_size : Int32 | Int64 | ::Nil = nil
     )
     end
   end
@@ -1604,7 +1647,7 @@ module Tourmaline
 
     def initialize(
       @star_count,
-      @paid_media : Array(Tourmaline::PaidMedia) = [] of Tourmaline::PaidMedia,
+      @paid_media : Array(Tourmaline::PaidMedia) = [] of Tourmaline::PaidMedia
     )
     end
   end
@@ -1635,7 +1678,7 @@ module Tourmaline
       @type,
       @width : Int32 | Int64 | ::Nil = nil,
       @height : Int32 | Int64 | ::Nil = nil,
-      @duration : Int32 | Int64 | ::Nil = nil,
+      @duration : Int32 | Int64 | ::Nil = nil
     )
     end
   end
@@ -1669,7 +1712,7 @@ module Tourmaline
 
     def initialize(
       @type,
-      @video,
+      @video
     )
     end
   end
@@ -1698,7 +1741,7 @@ module Tourmaline
       @first_name,
       @last_name : String | ::Nil = nil,
       @user_id : Int32 | Int64 | ::Nil = nil,
-      @vcard : String | ::Nil = nil,
+      @vcard : String | ::Nil = nil
     )
     end
   end
@@ -1715,25 +1758,113 @@ module Tourmaline
 
     def initialize(
       @emoji,
-      @value,
+      @value
     )
     end
   end
+
+  # Represents an HTTP link.
+  class Link
+    include JSON::Serializable
+
+    # URL of the link
+    property url : String
+
+    def initialize(
+      @url
+    )
+    end
+  end
+
+  # At most one of the optional fields can be present in any given object.
+  class PollMedia
+    include JSON::Serializable
+
+    # Optional. Media is an animation, information about the animation
+    property animation : Tourmaline::Animation | ::Nil
+
+    # Optional. Media is an audio file, information about the file; currently, can't be received in a poll option
+    property audio : Tourmaline::Audio | ::Nil
+
+    # Optional. Media is a general file, information about the file; currently, can't be received in a poll option
+    property document : Tourmaline::Document | ::Nil
+
+    # Optional. The HTTP link attached to the poll option
+    property link : Tourmaline::Link | ::Nil
+
+    # Optional. Media is a live photo, information about the live photo
+    property live_photo : Tourmaline::LivePhoto | ::Nil
+
+    # Optional. Media is a shared location, information about the location
+    property location : Tourmaline::Location | ::Nil
+
+    # Optional. Media is a photo, available sizes of the photo
+    property photo : Array(Tourmaline::PhotoSize) = [] of Tourmaline::PhotoSize
+
+    # Optional. Media is a sticker, information about the sticker; currently, for poll options only
+    property sticker : Tourmaline::Sticker | ::Nil
+
+    # Optional. Media is a venue, information about the venue
+    property venue : Tourmaline::Venue | ::Nil
+
+    # Optional. Media is a video, information about the video
+    property video : Tourmaline::Video | ::Nil
+
+    def initialize(
+      @animation : Tourmaline::Animation | ::Nil = nil,
+      @audio : Tourmaline::Audio | ::Nil = nil,
+      @document : Tourmaline::Document | ::Nil = nil,
+      @link : Tourmaline::Link | ::Nil = nil,
+      @live_photo : Tourmaline::LivePhoto | ::Nil = nil,
+      @location : Tourmaline::Location | ::Nil = nil,
+      @photo : Array(Tourmaline::PhotoSize) = [] of Tourmaline::PhotoSize,
+      @sticker : Tourmaline::Sticker | ::Nil = nil,
+      @venue : Tourmaline::Venue | ::Nil = nil,
+      @video : Tourmaline::Video | ::Nil = nil
+    )
+    end
+  end
+
+  # This object represents the content of a poll description or a quiz explanation to be sent. It should be one of
+  # - InputMediaAnimation
+  # - InputMediaAudio
+  # - InputMediaDocument
+  # - InputMediaLivePhoto
+  # - InputMediaLocation
+  # - InputMediaPhoto
+  # - InputMediaVenue
+  # - InputMediaVideo
+  alias InputPollMedia = Tourmaline::InputMediaAnimation | Tourmaline::InputMediaAudio | Tourmaline::InputMediaDocument | Tourmaline::InputMediaLivePhoto | Tourmaline::InputMediaLocation | Tourmaline::InputMediaPhoto | Tourmaline::InputMediaVenue | Tourmaline::InputMediaVideo
+
+  # This object represents the content of a poll option to be sent. It should be one of
+  # - InputMediaAnimation
+  # - InputMediaLink
+  # - InputMediaLivePhoto
+  # - InputMediaLocation
+  # - InputMediaPhoto
+  # - InputMediaSticker
+  # - InputMediaVenue
+  # - InputMediaVideo
+  alias InputPollOptionMedia = Tourmaline::InputMediaAnimation | Tourmaline::InputMediaLink | Tourmaline::InputMediaLivePhoto | Tourmaline::InputMediaLocation | Tourmaline::InputMediaPhoto | Tourmaline::InputMediaSticker | Tourmaline::InputMediaVenue | Tourmaline::InputMediaVideo
 
   # This object contains information about one answer option in a poll.
   class PollOption
     include JSON::Serializable
 
+    # Unique identifier of the option, persistent on option addition and deletion
+    property persistent_id : String
+
     # Option text, 1-100 characters
     property text : String
 
-    # Number of users that voted for this option
+    # Number of users who voted for this option; may be 0 if unknown
     property voter_count : Int32 | Int64
 
     # Optional. Special entities that appear in the option text. Currently, only custom emoji entities are allowed in poll option texts
     property text_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity
 
     def initialize(
+      @persistent_id,
       @text,
       @voter_count,
       @text_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity,
@@ -1748,10 +1879,10 @@ module Tourmaline
     # Option text, 1-100 characters
     property text : String
 
-    # Optional. Mode for parsing entities in the text. See formatting options for more details. Currently, only custom emoji entities are allowed
+    # Optional. Mode for parsing entities in the text. See formatting options for more details. Currently, only custom emoji entities are allowed.
     property text_parse_mode : String | ::Nil
 
-    # Optional. A JSON-serialized list of special entities that appear in the poll option text. It can be specified instead of text_parse_mode
+    # Optional. A JSON-serialized list of special entities that appear in the poll option text. It can be specified instead of text_parse_mode.
     property text_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity
 
     def initialize(
@@ -1772,6 +1903,9 @@ module Tourmaline
     # 0-based identifiers of chosen answer options. May be empty if the vote was retracted.
     property option_ids : Array(Int32 | Int64) = [] of Int32 | Int64
 
+    # Persistent identifiers of the chosen answer options. May be empty if the vote was retracted.
+    property option_persistent_ids : Array(String) = [] of String
+
     # Optional. The chat that changed the answer to the poll, if the voter is anonymous
     property voter_chat : Tourmaline::Chat | ::Nil
 
@@ -1781,8 +1915,9 @@ module Tourmaline
     def initialize(
       @poll_id,
       @option_ids : Array(Int32 | Int64) = [] of Int32 | Int64,
+      @option_persistent_ids : Array(String) = [] of String,
       @voter_chat : Tourmaline::Chat | ::Nil = nil,
-      @user : Tourmaline::User | ::Nil = nil,
+      @user : Tourmaline::User | ::Nil = nil
     )
     end
   end
@@ -1818,8 +1953,11 @@ module Tourmaline
     # Optional. Special entities that appear in the question. Currently, only custom emoji entities are allowed in poll questions
     property question_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity
 
-    # Optional. 0-based identifier of the correct answer option. Available only for polls in the quiz mode, which are closed, or was sent (not forwarded) by the bot or to the private chat with the bot.
-    property correct_option_id : Int32 | Int64 | ::Nil
+    # Optional. A list of two-letter ISO 3166-1 alpha-2 country codes indicating the countries from which users can vote in the poll. The country code "FT" is used for users with anonymous numbers. If omitted, then users from any country can participate in the poll.
+    property country_codes : Array(String) = [] of String
+
+    # Optional. Array of 0-based identifiers of the correct answer options. Available only for polls in quiz mode which are closed or were sent (not forwarded) by the bot or to the private chat with the bot.
+    property correct_option_ids : Array(Int32 | Int64) = [] of Int32 | Int64
 
     # Optional. Text that is shown when a user chooses an incorrect answer or taps on the lamp icon in a quiz-style poll, 0-200 characters
     property explanation : String | ::Nil
@@ -1882,7 +2020,7 @@ module Tourmaline
       @text_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity,
       @completed_by_user : Tourmaline::User | ::Nil = nil,
       @completed_by_chat : Tourmaline::Chat | ::Nil = nil,
-      @completion_date : Int32 | Int64 | ::Nil = nil,
+      @completion_date : Int32 | Int64 | ::Nil = nil
     )
     end
   end
@@ -1911,7 +2049,7 @@ module Tourmaline
       @tasks : Array(Tourmaline::ChecklistTask) = [] of Tourmaline::ChecklistTask,
       @title_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity,
       @others_can_add_tasks : Bool | ::Nil = nil,
-      @others_can_mark_tasks_as_done : Bool | ::Nil = nil,
+      @others_can_mark_tasks_as_done : Bool | ::Nil = nil
     )
     end
   end
@@ -1929,14 +2067,14 @@ module Tourmaline
     # Optional. Mode for parsing entities in the text. See formatting options for more details.
     property parse_mode : ParseMode = ParseMode::Markdown
 
-    # Optional. List of special entities that appear in the text, which can be specified instead of parse_mode. Currently, only bold, italic, underline, strikethrough, spoiler, and custom_emoji entities are allowed.
+    # Optional. List of special entities that appear in the text, which can be specified instead of parse_mode. Currently, only bold, italic, underline, strikethrough, spoiler, custom_emoji, and date_time entities are allowed.
     property text_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity
 
     def initialize(
       @id,
       @text,
       @parse_mode : ParseMode = ParseMode::Markdown,
-      @text_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity,
+      @text_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity
     )
     end
   end
@@ -1954,7 +2092,7 @@ module Tourmaline
     # Optional. Mode for parsing entities in the title. See formatting options for more details.
     property parse_mode : ParseMode = ParseMode::Markdown
 
-    # Optional. List of special entities that appear in the title, which can be specified instead of parse_mode. Currently, only bold, italic, underline, strikethrough, spoiler, and custom_emoji entities are allowed.
+    # Optional. List of special entities that appear in the title, which can be specified instead of parse_mode. Currently, only bold, italic, underline, strikethrough, spoiler, custom_emoji, and date_time entities are allowed.
     property title_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity
 
     # Optional. Pass True if other users can add tasks to the checklist
@@ -1969,7 +2107,7 @@ module Tourmaline
       @parse_mode : ParseMode = ParseMode::Markdown,
       @title_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity,
       @others_can_add_tasks : Bool | ::Nil = nil,
-      @others_can_mark_tasks_as_done : Bool | ::Nil = nil,
+      @others_can_mark_tasks_as_done : Bool | ::Nil = nil
     )
     end
   end
@@ -1990,7 +2128,7 @@ module Tourmaline
     def initialize(
       @checklist_message : Tourmaline::Message | ::Nil = nil,
       @marked_as_done_task_ids : Array(Int32 | Int64) = [] of Int32 | Int64,
-      @marked_as_not_done_task_ids : Array(Int32 | Int64) = [] of Int32 | Int64,
+      @marked_as_not_done_task_ids : Array(Int32 | Int64) = [] of Int32 | Int64
     )
     end
   end
@@ -2007,7 +2145,7 @@ module Tourmaline
 
     def initialize(
       @tasks : Array(Tourmaline::ChecklistTask) = [] of Tourmaline::ChecklistTask,
-      @checklist_message : Tourmaline::Message | ::Nil = nil,
+      @checklist_message : Tourmaline::Message | ::Nil = nil
     )
     end
   end
@@ -2040,7 +2178,7 @@ module Tourmaline
       @horizontal_accuracy : Float64 | ::Nil = nil,
       @live_period : Int32 | Int64 | ::Nil = nil,
       @heading : Int32 | Int64 | ::Nil = nil,
-      @proximity_alert_radius : Int32 | Int64 | ::Nil = nil,
+      @proximity_alert_radius : Int32 | Int64 | ::Nil = nil
     )
     end
   end
@@ -2049,7 +2187,7 @@ module Tourmaline
   class Venue
     include JSON::Serializable
 
-    # Venue location. Can't be a live location
+    # Venue location. Can't be a live location.
     property location : Tourmaline::Location
 
     # Name of the venue
@@ -2077,7 +2215,7 @@ module Tourmaline
       @foursquare_id : String | ::Nil = nil,
       @foursquare_type : String | ::Nil = nil,
       @google_place_id : String | ::Nil = nil,
-      @google_place_type : String | ::Nil = nil,
+      @google_place_type : String | ::Nil = nil
     )
     end
   end
@@ -2094,7 +2232,7 @@ module Tourmaline
 
     def initialize(
       @data,
-      @button_text,
+      @button_text
     )
     end
   end
@@ -2115,7 +2253,7 @@ module Tourmaline
     def initialize(
       @traveler,
       @watcher,
-      @distance,
+      @distance
     )
     end
   end
@@ -2129,7 +2267,87 @@ module Tourmaline
     property message_auto_delete_time : Time
 
     def initialize(
-      @message_auto_delete_time,
+      @message_auto_delete_time
+    )
+    end
+  end
+
+  # This object contains information about the bot that was created to be managed by the current bot.
+  class ManagedBotCreated
+    include JSON::Serializable
+
+    # Information about the bot. The bot's token can be fetched using the method getManagedBotToken.
+    property bot : Tourmaline::User
+
+    def initialize(
+      @bot
+    )
+    end
+  end
+
+  # This object contains information about the creation, token update, or owner update of a bot that is managed by the current bot.
+  class ManagedBotUpdated
+    include JSON::Serializable
+
+    # User that created the bot
+    property user : Tourmaline::User
+
+    # Information about the bot. Token of the bot can be fetched using the method getManagedBotToken.
+    property bot : Tourmaline::User
+
+    def initialize(
+      @user,
+      @bot
+    )
+    end
+  end
+
+  # Describes a service message about an option added to a poll.
+  class PollOptionAdded
+    include JSON::Serializable
+
+    # Unique identifier of the added option
+    property option_persistent_id : String
+
+    # Option text
+    property option_text : String
+
+    # Optional. Message containing the poll to which the option was added, if known. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.
+    property poll_message : Tourmaline::MaybeInaccessibleMessage | ::Nil
+
+    # Optional. Special entities that appear in the option_text
+    property option_text_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity
+
+    def initialize(
+      @option_persistent_id,
+      @option_text,
+      @poll_message : Tourmaline::MaybeInaccessibleMessage | ::Nil = nil,
+      @option_text_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity
+    )
+    end
+  end
+
+  # Describes a service message about an option deleted from a poll.
+  class PollOptionDeleted
+    include JSON::Serializable
+
+    # Unique identifier of the deleted option
+    property option_persistent_id : String
+
+    # Option text
+    property option_text : String
+
+    # Optional. Message containing the poll from which the option was deleted, if known. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.
+    property poll_message : Tourmaline::MaybeInaccessibleMessage | ::Nil
+
+    # Optional. Special entities that appear in the option_text
+    property option_text_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity
+
+    def initialize(
+      @option_persistent_id,
+      @option_text,
+      @poll_message : Tourmaline::MaybeInaccessibleMessage | ::Nil = nil,
+      @option_text_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity
     )
     end
   end
@@ -2142,7 +2360,7 @@ module Tourmaline
     property boost_count : Int32 | Int64
 
     def initialize(
-      @boost_count,
+      @boost_count
     )
     end
   end
@@ -2165,7 +2383,7 @@ module Tourmaline
 
     def initialize(
       @type,
-      @color,
+      @color
     )
     end
   end
@@ -2190,7 +2408,7 @@ module Tourmaline
       @type,
       @top_color,
       @bottom_color,
-      @rotation_angle,
+      @rotation_angle
     )
     end
   end
@@ -2207,7 +2425,7 @@ module Tourmaline
 
     def initialize(
       @type,
-      @colors : Array(Int32 | Int64) = [] of Int32 | Int64,
+      @colors : Array(Int32 | Int64) = [] of Int32 | Int64
     )
     end
   end
@@ -2235,7 +2453,7 @@ module Tourmaline
     def initialize(
       @type,
       @fill,
-      @dark_theme_dimming,
+      @dark_theme_dimming
     )
     end
   end
@@ -2264,7 +2482,7 @@ module Tourmaline
       @document,
       @dark_theme_dimming,
       @is_blurred : Bool | ::Nil = nil,
-      @is_moving : Bool | ::Nil = nil,
+      @is_moving : Bool | ::Nil = nil
     )
     end
   end
@@ -2285,7 +2503,7 @@ module Tourmaline
     # Intensity of the pattern when it is shown above the filled background; 0-100
     property intensity : Int32 | Int64
 
-    # Optional. True, if the background fill must be applied only to the pattern itself. All other pixels are black in this case. For dark themes only
+    # Optional. True, if the background fill must be applied only to the pattern itself. All other pixels are black in this case. For dark themes only.
     property? is_inverted : Bool | ::Nil
 
     # Optional. True, if the background moves slightly when the device is tilted
@@ -2297,7 +2515,7 @@ module Tourmaline
       @fill,
       @intensity,
       @is_inverted : Bool | ::Nil = nil,
-      @is_moving : Bool | ::Nil = nil,
+      @is_moving : Bool | ::Nil = nil
     )
     end
   end
@@ -2314,7 +2532,7 @@ module Tourmaline
 
     def initialize(
       @type,
-      @theme_name,
+      @theme_name
     )
     end
   end
@@ -2327,7 +2545,7 @@ module Tourmaline
     property type : Tourmaline::BackgroundType
 
     def initialize(
-      @type,
+      @type
     )
     end
   end
@@ -2352,7 +2570,7 @@ module Tourmaline
       @name,
       @icon_color,
       @icon_custom_emoji_id : String | ::Nil = nil,
-      @is_name_implicit : Bool | ::Nil = nil,
+      @is_name_implicit : Bool | ::Nil = nil
     )
     end
   end
@@ -2374,7 +2592,7 @@ module Tourmaline
 
     def initialize(
       @name : String | ::Nil = nil,
-      @icon_custom_emoji_id : String | ::Nil = nil,
+      @icon_custom_emoji_id : String | ::Nil = nil
     )
     end
   end
@@ -2418,7 +2636,7 @@ module Tourmaline
       @first_name : String | ::Nil = nil,
       @last_name : String | ::Nil = nil,
       @username : String | ::Nil = nil,
-      @photo : Array(Tourmaline::PhotoSize) = [] of Tourmaline::PhotoSize,
+      @photo : Array(Tourmaline::PhotoSize) = [] of Tourmaline::PhotoSize
     )
     end
   end
@@ -2430,12 +2648,12 @@ module Tourmaline
     # Identifier of the request
     property request_id : Int32 | Int64
 
-    # Information about users shared with the bot.
+    # Information about users shared with the bot
     property users : Array(Tourmaline::SharedUser) = [] of Tourmaline::SharedUser
 
     def initialize(
       @request_id,
-      @users : Array(Tourmaline::SharedUser) = [] of Tourmaline::SharedUser,
+      @users : Array(Tourmaline::SharedUser) = [] of Tourmaline::SharedUser
     )
     end
   end
@@ -2450,10 +2668,10 @@ module Tourmaline
     # Identifier of the shared chat. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier. The bot may not have access to the chat and could be unable to use this identifier, unless the chat is already known to the bot by some other means.
     property chat_id : Int32 | Int64
 
-    # Optional. Title of the chat, if the title was requested by the bot.
+    # Optional. Title of the chat, if the title was requested by the bot
     property title : String | ::Nil
 
-    # Optional. Username of the chat, if the username was requested by the bot and available.
+    # Optional. Username of the chat, if the username was requested by the bot and available
     property username : String | ::Nil
 
     # Optional. Available sizes of the chat photo, if the photo was requested by the bot
@@ -2464,7 +2682,7 @@ module Tourmaline
       @chat_id,
       @title : String | ::Nil = nil,
       @username : String | ::Nil = nil,
-      @photo : Array(Tourmaline::PhotoSize) = [] of Tourmaline::PhotoSize,
+      @photo : Array(Tourmaline::PhotoSize) = [] of Tourmaline::PhotoSize
     )
     end
   end
@@ -2485,7 +2703,7 @@ module Tourmaline
     def initialize(
       @from_request : Bool | ::Nil = nil,
       @web_app_name : String | ::Nil = nil,
-      @from_attachment_menu : Bool | ::Nil = nil,
+      @from_attachment_menu : Bool | ::Nil = nil
     )
     end
   end
@@ -2499,7 +2717,7 @@ module Tourmaline
     property start_date : Time
 
     def initialize(
-      @start_date,
+      @start_date
     )
     end
   end
@@ -2517,7 +2735,7 @@ module Tourmaline
     property duration : Int32 | Int64
 
     def initialize(
-      @duration,
+      @duration
     )
     end
   end
@@ -2530,7 +2748,7 @@ module Tourmaline
     property users : Array(Tourmaline::User) = [] of Tourmaline::User
 
     def initialize(
-      @users : Array(Tourmaline::User) = [] of Tourmaline::User,
+      @users : Array(Tourmaline::User) = [] of Tourmaline::User
     )
     end
   end
@@ -2543,7 +2761,7 @@ module Tourmaline
     property paid_message_star_count : Int32 | Int64
 
     def initialize(
-      @paid_message_star_count,
+      @paid_message_star_count
     )
     end
   end
@@ -2560,7 +2778,7 @@ module Tourmaline
 
     def initialize(
       @are_direct_messages_enabled,
-      @direct_message_star_count : Int32 | Int64 | ::Nil = nil,
+      @direct_message_star_count : Int32 | Int64 | ::Nil = nil
     )
     end
   end
@@ -2582,7 +2800,7 @@ module Tourmaline
     def initialize(
       @send_date,
       @suggested_post_message : Tourmaline::Message | ::Nil = nil,
-      @price : Tourmaline::SuggestedPostPrice | ::Nil = nil,
+      @price : Tourmaline::SuggestedPostPrice | ::Nil = nil
     )
     end
   end
@@ -2599,7 +2817,7 @@ module Tourmaline
 
     def initialize(
       @price,
-      @suggested_post_message : Tourmaline::Message | ::Nil = nil,
+      @suggested_post_message : Tourmaline::Message | ::Nil = nil
     )
     end
   end
@@ -2616,7 +2834,7 @@ module Tourmaline
 
     def initialize(
       @suggested_post_message : Tourmaline::Message | ::Nil = nil,
-      @comment : String | ::Nil = nil,
+      @comment : String | ::Nil = nil
     )
     end
   end
@@ -2625,7 +2843,7 @@ module Tourmaline
   class SuggestedPostPaid
     include JSON::Serializable
 
-    # Currency in which the payment was made. Currently, one of "XTR" for Telegram Stars or "TON" for toncoins
+    # Currency in which the payment was made. Currently, one of "XTR" for Telegram Stars or "TON" for toncoins.
     property currency : String
 
     # Optional. Message containing the suggested post. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.
@@ -2641,7 +2859,7 @@ module Tourmaline
       @currency,
       @suggested_post_message : Tourmaline::Message | ::Nil = nil,
       @amount : Int32 | Int64 | ::Nil = nil,
-      @star_amount : Tourmaline::StarAmount | ::Nil = nil,
+      @star_amount : Tourmaline::StarAmount | ::Nil = nil
     )
     end
   end
@@ -2658,7 +2876,7 @@ module Tourmaline
 
     def initialize(
       @reason,
-      @suggested_post_message : Tourmaline::Message | ::Nil = nil,
+      @suggested_post_message : Tourmaline::Message | ::Nil = nil
     )
     end
   end
@@ -2671,7 +2889,7 @@ module Tourmaline
     property prize_star_count : Int32 | Int64 | ::Nil
 
     def initialize(
-      @prize_star_count : Int32 | Int64 | ::Nil = nil,
+      @prize_star_count : Int32 | Int64 | ::Nil = nil
     )
     end
   end
@@ -2717,7 +2935,7 @@ module Tourmaline
       @prize_description : String | ::Nil = nil,
       @country_codes : Array(String) = [] of String,
       @prize_star_count : Int32 | Int64 | ::Nil = nil,
-      @premium_subscription_month_count : Int32 | Int64 | ::Nil = nil,
+      @premium_subscription_month_count : Int32 | Int64 | ::Nil = nil
     )
     end
   end
@@ -2775,7 +2993,7 @@ module Tourmaline
       @unclaimed_prize_count : Int32 | Int64 | ::Nil = nil,
       @only_new_members : Bool | ::Nil = nil,
       @was_refunded : Bool | ::Nil = nil,
-      @prize_description : String | ::Nil = nil,
+      @prize_description : String | ::Nil = nil
     )
     end
   end
@@ -2800,7 +3018,7 @@ module Tourmaline
       @winner_count,
       @unclaimed_prize_count : Int32 | Int64 | ::Nil = nil,
       @giveaway_message : Tourmaline::Message | ::Nil = nil,
-      @is_star_giveaway : Bool | ::Nil = nil,
+      @is_star_giveaway : Bool | ::Nil = nil
     )
     end
   end
@@ -2812,7 +3030,7 @@ module Tourmaline
     # Optional. True, if the link preview is disabled
     property? is_disabled : Bool | ::Nil
 
-    # Optional. URL to use for the link preview. If empty, then the first URL found in the message text will be used
+    # Optional. URL to use for the link preview. If empty, then the first URL found in the message text will be used.
     property url : String | ::Nil
 
     # Optional. True, if the media in the link preview is supposed to be shrunk; ignored if the URL isn't explicitly specified or media size change isn't supported for the preview
@@ -2829,7 +3047,7 @@ module Tourmaline
       @url : String | ::Nil = nil,
       @prefer_small_media : Bool | ::Nil = nil,
       @prefer_large_media : Bool | ::Nil = nil,
-      @show_above_text : Bool | ::Nil = nil,
+      @show_above_text : Bool | ::Nil = nil
     )
     end
   end
@@ -2838,7 +3056,7 @@ module Tourmaline
   class SuggestedPostPrice
     include JSON::Serializable
 
-    # Currency in which the post will be paid. Currently, must be one of "XTR" for Telegram Stars or "TON" for toncoins
+    # Currency in which the post will be paid. Currently, must be one of "XTR" for Telegram Stars or "TON" for toncoins.
     property currency : String
 
     # The amount of the currency that will be paid for the post in the smallest units of the currency, i.e. Telegram Stars or nanotoncoins. Currently, price in Telegram Stars must be between 5 and 100000, and price in nanotoncoins must be between 10000000 and 10000000000000.
@@ -2846,7 +3064,7 @@ module Tourmaline
 
     def initialize(
       @currency,
-      @amount,
+      @amount
     )
     end
   end
@@ -2868,7 +3086,7 @@ module Tourmaline
     def initialize(
       @state,
       @price : Tourmaline::SuggestedPostPrice | ::Nil = nil,
-      @send_date : Int32 | Int64 | ::Nil = nil,
+      @send_date : Int32 | Int64 | ::Nil = nil
     )
     end
   end
@@ -2886,7 +3104,7 @@ module Tourmaline
 
     def initialize(
       @price : Tourmaline::SuggestedPostPrice | ::Nil = nil,
-      @send_date : Int32 | Int64 | ::Nil = nil,
+      @send_date : Int32 | Int64 | ::Nil = nil
     )
     end
   end
@@ -2898,12 +3116,12 @@ module Tourmaline
     # Unique identifier of the topic. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier.
     property topic_id : Int32 | Int64
 
-    # Optional. Information about the user that created the topic. Currently, it is always present
+    # Optional. Information about the user that created the topic. Currently, it is always present.
     property user : Tourmaline::User | ::Nil
 
     def initialize(
       @topic_id,
-      @user : Tourmaline::User | ::Nil = nil,
+      @user : Tourmaline::User | ::Nil = nil
     )
     end
   end
@@ -2920,7 +3138,7 @@ module Tourmaline
 
     def initialize(
       @total_count,
-      @photos : Array(Array(Tourmaline::PhotoSize)) = [] of Array(Tourmaline::PhotoSize),
+      @photos : Array(Array(Tourmaline::PhotoSize)) = [] of Array(Tourmaline::PhotoSize)
     )
     end
   end
@@ -2937,7 +3155,7 @@ module Tourmaline
 
     def initialize(
       @total_count,
-      @audios : Array(Tourmaline::Audio) = [] of Tourmaline::Audio,
+      @audios : Array(Tourmaline::Audio) = [] of Tourmaline::Audio
     )
     end
   end
@@ -2962,7 +3180,7 @@ module Tourmaline
       @file_id,
       @file_unique_id,
       @file_size : Int32 | Int64 | ::Nil = nil,
-      @file_path : String | ::Nil = nil,
+      @file_path : String | ::Nil = nil
     )
     end
   end
@@ -2975,7 +3193,7 @@ module Tourmaline
     property url : String
 
     def initialize(
-      @url,
+      @url
     )
     end
   end
@@ -3008,7 +3226,7 @@ module Tourmaline
       @resize_keyboard : Bool | ::Nil = nil,
       @one_time_keyboard : Bool | ::Nil = nil,
       @input_field_placeholder : String | ::Nil = nil,
-      @selective : Bool | ::Nil = nil,
+      @selective : Bool | ::Nil = nil
     )
     end
   end
@@ -3017,7 +3235,7 @@ module Tourmaline
   class KeyboardButton
     include JSON::Serializable
 
-    # Text of the button. If none of the fields other than text, icon_custom_emoji_id, and style are used, it will be sent as a message when the button is pressed
+    # Text of the button. If none of the fields other than text, icon_custom_emoji_id, and style are used, it will be sent as a message when the button is pressed.
     property text : String
 
     # Optional. Unique identifier of the custom emoji shown before the text of the button. Can only be used by bots that purchased additional usernames on Fragment or in the messages directly sent by the bot to private, group and supergroup chats if the owner of the bot has a Telegram Premium subscription.
@@ -3031,6 +3249,9 @@ module Tourmaline
 
     # Optional. If specified, pressing the button will open a list of suitable chats. Tapping on a chat will send its identifier to the bot in a "chat_shared" service message. Available in private chats only.
     property request_chat : Tourmaline::KeyboardButtonRequestChat | ::Nil
+
+    # Optional. If specified, pressing the button will ask the user to create and share a bot that will be managed by the current bot. Available for bots that enabled management of other bots in the @BotFather Mini App. Available in private chats only.
+    property request_managed_bot : Tourmaline::KeyboardButtonRequestManagedBot | ::Nil
 
     # Optional. If True, the user's phone number will be sent as a contact when the button is pressed. Available in private chats only.
     property? request_contact : Bool | ::Nil
@@ -3050,10 +3271,11 @@ module Tourmaline
       @style : String | ::Nil = nil,
       @request_users : Tourmaline::KeyboardButtonRequestUsers | ::Nil = nil,
       @request_chat : Tourmaline::KeyboardButtonRequestChat | ::Nil = nil,
+      @request_managed_bot : Tourmaline::KeyboardButtonRequestManagedBot | ::Nil = nil,
       @request_contact : Bool | ::Nil = nil,
       @request_location : Bool | ::Nil = nil,
       @request_poll : Tourmaline::KeyboardButtonPollType | ::Nil = nil,
-      @web_app : Tourmaline::WebAppInfo | ::Nil = nil,
+      @web_app : Tourmaline::WebAppInfo | ::Nil = nil
     )
     end
   end
@@ -3062,7 +3284,7 @@ module Tourmaline
   class KeyboardButtonRequestUsers
     include JSON::Serializable
 
-    # Signed 32-bit identifier of the request that will be received back in the UsersShared object. Must be unique within the message
+    # Signed 32-bit identifier of the request that will be received back in the UsersShared object. Must be unique within the message.
     property request_id : Int32 | Int64
 
     # Optional. Pass True to request bots, pass False to request regular users. If not specified, no additional restrictions are applied.
@@ -3090,7 +3312,7 @@ module Tourmaline
       @max_quantity : Int32 | Int64 | ::Nil = nil,
       @request_name : Bool | ::Nil = nil,
       @request_username : Bool | ::Nil = nil,
-      @request_photo : Bool | ::Nil = nil,
+      @request_photo : Bool | ::Nil = nil
     )
     end
   end
@@ -3099,10 +3321,10 @@ module Tourmaline
   class KeyboardButtonRequestChat
     include JSON::Serializable
 
-    # Signed 32-bit identifier of the request, which will be received back in the ChatShared object. Must be unique within the message
+    # Signed 32-bit identifier of the request, which will be received back in the ChatShared object. Must be unique within the message.
     property request_id : Int32 | Int64
 
-    # Pass True to request a channel chat, pass False to request a group or a supergroup chat.
+    # Pass True to request a channel chat, pass False to request a group or a supergroup chat
     property? chat_is_channel : Bool
 
     # Optional. Pass True to request a forum supergroup, pass False to request a non-forum chat. If not specified, no additional restrictions are applied.
@@ -3143,7 +3365,28 @@ module Tourmaline
       @bot_is_member : Bool | ::Nil = nil,
       @request_title : Bool | ::Nil = nil,
       @request_username : Bool | ::Nil = nil,
-      @request_photo : Bool | ::Nil = nil,
+      @request_photo : Bool | ::Nil = nil
+    )
+    end
+  end
+
+  # This object defines the parameters for the creation of a managed bot. Information about the created bot will be shared with the bot using the update managed_bot and a Message with the field managed_bot_created.
+  class KeyboardButtonRequestManagedBot
+    include JSON::Serializable
+
+    # Signed 32-bit identifier of the request. Must be unique within the message.
+    property request_id : Int32 | Int64
+
+    # Optional. Suggested name for the bot
+    property suggested_name : String | ::Nil
+
+    # Optional. Suggested username for the bot
+    property suggested_username : String | ::Nil
+
+    def initialize(
+      @request_id,
+      @suggested_name : String | ::Nil = nil,
+      @suggested_username : String | ::Nil = nil
     )
     end
   end
@@ -3156,7 +3399,7 @@ module Tourmaline
     property type : String | ::Nil
 
     def initialize(
-      @type : String | ::Nil = nil,
+      @type : String | ::Nil = nil
     )
     end
   end
@@ -3173,7 +3416,7 @@ module Tourmaline
 
     def initialize(
       @remove_keyboard,
-      @selective : Bool | ::Nil = nil,
+      @selective : Bool | ::Nil = nil
     )
     end
   end
@@ -3186,7 +3429,7 @@ module Tourmaline
     property inline_keyboard : Array(Array(Tourmaline::InlineKeyboardButton)) = [] of Array(Tourmaline::InlineKeyboardButton)
 
     def initialize(
-      @inline_keyboard : Array(Array(Tourmaline::InlineKeyboardButton)) = [] of Array(Tourmaline::InlineKeyboardButton),
+      @inline_keyboard : Array(Array(Tourmaline::InlineKeyboardButton)) = [] of Array(Tourmaline::InlineKeyboardButton)
     )
     end
   end
@@ -3225,7 +3468,7 @@ module Tourmaline
     # Optional. If set, pressing the button will prompt the user to select one of their chats of the specified type, open that chat and insert the bot's username and the specified inline query in the input field. Not supported for messages sent in channel direct messages chats and on behalf of a Telegram Business account.
     property switch_inline_query_chosen_chat : Tourmaline::SwitchInlineQueryChosenChat | ::Nil
 
-    # Optional. Description of the button that copies the specified text to the clipboard.
+    # Optional. Description of the button that copies the specified text to the clipboard
     property copy_text : Tourmaline::CopyTextButton | ::Nil
 
     # Optional. Description of the game that will be launched when the user presses the button. NOTE: This type of button must always be the first button in the first row.
@@ -3247,7 +3490,7 @@ module Tourmaline
       @switch_inline_query_chosen_chat : Tourmaline::SwitchInlineQueryChosenChat | ::Nil = nil,
       @copy_text : Tourmaline::CopyTextButton | ::Nil = nil,
       @callback_game : Tourmaline::CallbackGame | ::Nil = nil,
-      @pay : Bool | ::Nil = nil,
+      @pay : Bool | ::Nil = nil
     )
     end
   end
@@ -3260,20 +3503,20 @@ module Tourmaline
     # An HTTPS URL to be opened with user authorization data added to the query string when the button is pressed. If the user refuses to provide authorization data, the original URL without information about the user will be opened. The data added is the same as described in Receiving authorization data. NOTE: You must always check the hash of the received data to verify the authentication and the integrity of the data as described in Checking authorization.
     property url : String
 
-    # Optional. New text of the button in forwarded messages.
+    # Optional. New text of the button in forwarded messages
     property forward_text : String | ::Nil
 
     # Optional. Username of a bot, which will be used for user authorization. See Setting up a bot for more details. If not specified, the current bot's username will be assumed. The url's domain must be the same as the domain linked with the bot. See Linking your domain to the bot for more details.
     property bot_username : String | ::Nil
 
-    # Optional. Pass True to request the permission for your bot to send messages to the user.
+    # Optional. Pass True to request the permission for your bot to send messages to the user
     property? request_write_access : Bool | ::Nil
 
     def initialize(
       @url,
       @forward_text : String | ::Nil = nil,
       @bot_username : String | ::Nil = nil,
-      @request_write_access : Bool | ::Nil = nil,
+      @request_write_access : Bool | ::Nil = nil
     )
     end
   end
@@ -3282,7 +3525,7 @@ module Tourmaline
   class SwitchInlineQueryChosenChat
     include JSON::Serializable
 
-    # Optional. The default inline query to be inserted in the input field. If left empty, only the bot's username will be inserted
+    # Optional. The default inline query to be inserted in the input field. If left empty, only the bot's username will be inserted.
     property query : String | ::Nil
 
     # Optional. True, if private chats with users can be chosen
@@ -3302,7 +3545,7 @@ module Tourmaline
       @allow_user_chats : Bool | ::Nil = nil,
       @allow_bot_chats : Bool | ::Nil = nil,
       @allow_group_chats : Bool | ::Nil = nil,
-      @allow_channel_chats : Bool | ::Nil = nil,
+      @allow_channel_chats : Bool | ::Nil = nil
     )
     end
   end
@@ -3315,7 +3558,7 @@ module Tourmaline
     property text : String
 
     def initialize(
-      @text,
+      @text
     )
     end
   end
@@ -3336,7 +3579,7 @@ module Tourmaline
     # Optional. Message sent by the bot with the callback button that originated the query
     property message : Tourmaline::MaybeInaccessibleMessage | ::Nil
 
-    # Optional. Identifier of the message sent via the bot in inline mode, that originated the query.
+    # Optional. Identifier of the message sent via the bot in inline mode, that originated the query
     property inline_message_id : String | ::Nil
 
     # Optional. Data associated with the callback button. Be aware that the message originated the query can contain no callback buttons with this data.
@@ -3352,7 +3595,7 @@ module Tourmaline
       @message : Tourmaline::MaybeInaccessibleMessage | ::Nil = nil,
       @inline_message_id : String | ::Nil = nil,
       @data : String | ::Nil = nil,
-      @game_short_name : String | ::Nil = nil,
+      @game_short_name : String | ::Nil = nil
     )
     end
   end
@@ -3373,7 +3616,7 @@ module Tourmaline
     def initialize(
       @force_reply,
       @input_field_placeholder : String | ::Nil = nil,
-      @selective : Bool | ::Nil = nil,
+      @selective : Bool | ::Nil = nil
     )
     end
   end
@@ -3398,7 +3641,7 @@ module Tourmaline
       @small_file_id,
       @small_file_unique_id,
       @big_file_id,
-      @big_file_unique_id,
+      @big_file_unique_id
     )
     end
   end
@@ -3452,7 +3695,7 @@ module Tourmaline
       @member_limit : Int32 | Int64 | ::Nil = nil,
       @pending_join_request_count : Int32 | Int64 | ::Nil = nil,
       @subscription_period : Int32 | Int64 | ::Nil = nil,
-      @subscription_price : Int32 | Int64 | ::Nil = nil,
+      @subscription_price : Int32 | Int64 | ::Nil = nil
     )
     end
   end
@@ -3550,7 +3793,7 @@ module Tourmaline
     # New information about the chat member
     property new_chat_member : Tourmaline::ChatMember
 
-    # Optional. Chat invite link, which was used by the user to join the chat; for joining by invite link events only.
+    # Optional. Chat invite link, which was used by the user to join the chat; for joining by invite link events only
     property invite_link : Tourmaline::ChatInviteLink | ::Nil
 
     # Optional. True, if the user joined the chat after sending a direct join request without using an invite link and being approved by an administrator
@@ -3567,7 +3810,7 @@ module Tourmaline
       @new_chat_member,
       @invite_link : Tourmaline::ChatInviteLink | ::Nil = nil,
       @via_join_request : Bool | ::Nil = nil,
-      @via_chat_folder_invite_link : Bool | ::Nil = nil,
+      @via_chat_folder_invite_link : Bool | ::Nil = nil
     )
     end
   end
@@ -3601,7 +3844,7 @@ module Tourmaline
       @status,
       @user,
       @is_anonymous,
-      @custom_title : String | ::Nil = nil,
+      @custom_title : String | ::Nil = nil
     )
     end
   end
@@ -3730,7 +3973,7 @@ module Tourmaline
     # True, if the user is a member of the chat at the moment of the request
     property? is_member : Bool
 
-    # True, if the user is allowed to send text messages, contacts, giveaways, giveaway winners, invoices, locations and venues
+    # True, if the user is allowed to send text messages, rich messages, contacts, giveaways, giveaway winners, invoices, locations and venues
     property? can_send_messages : Bool
 
     # True, if the user is allowed to send audios
@@ -3772,7 +4015,7 @@ module Tourmaline
     # True, if the user is allowed to create forum topics
     property? can_manage_topics : Bool
 
-    # Date when restrictions will be lifted for this user; Unix time. If 0, then the user is restricted forever
+    # Date when restrictions will be lifted for this user; Unix time. If 0, then the user is restricted forever.
     @[JSON::Field(converter: Time::EpochConverter)]
     property until_date : Time
 
@@ -3811,7 +4054,7 @@ module Tourmaline
 
     def initialize(
       @status,
-      @user,
+      @user
     )
     end
   end
@@ -3826,14 +4069,14 @@ module Tourmaline
     # Information about the user
     property user : Tourmaline::User
 
-    # Date when restrictions will be lifted for this user; Unix time. If 0, then the user is banned forever
+    # Date when restrictions will be lifted for this user; Unix time. If 0, then the user is banned forever.
     @[JSON::Field(converter: Time::EpochConverter)]
     property until_date : Time
 
     def initialize(
       @status,
       @user,
-      @until_date,
+      @until_date
     )
     end
   end
@@ -3855,11 +4098,14 @@ module Tourmaline
     @[JSON::Field(converter: Time::EpochConverter)]
     property date : Time
 
-    # Optional. Bio of the user.
+    # Optional. Bio of the user
     property bio : String | ::Nil
 
     # Optional. Chat invite link that was used by the user to send the join request
     property invite_link : Tourmaline::ChatInviteLink | ::Nil
+
+    # Optional. Identifier of the join request query. If present, then the bot must call sendChatJoinRequestWebApp or directly call answerChatJoinRequestQuery within 10 seconds.
+    property query_id : String | ::Nil
 
     def initialize(
       @chat,
@@ -3868,6 +4114,7 @@ module Tourmaline
       @date,
       @bio : String | ::Nil = nil,
       @invite_link : Tourmaline::ChatInviteLink | ::Nil = nil,
+      @query_id : String | ::Nil = nil
     )
     end
   end
@@ -3876,7 +4123,7 @@ module Tourmaline
   class ChatPermissions
     include JSON::Serializable
 
-    # Optional. True, if the user is allowed to send text messages, contacts, giveaways, giveaway winners, invoices, locations and venues
+    # Optional. True, if the user is allowed to send text messages, rich messages, contacts, giveaways, giveaway winners, invoices, locations and venues
     property? can_send_messages : Bool | ::Nil
 
     # Optional. True, if the user is allowed to send audios
@@ -3906,16 +4153,22 @@ module Tourmaline
     # Optional. True, if the user is allowed to add web page previews to their messages
     property? can_add_web_page_previews : Bool | ::Nil
 
-    # Optional. True, if the user is allowed to change the chat title, photo and other settings. Ignored in public supergroups
+    # Optional. True, if the user is allowed to react to messages. If omitted, defaults to the value of can_send_messages.
+    property? can_react_to_messages : Bool | ::Nil
+
+    # Optional. True, if the user is allowed to edit their own tag. If omitted, defaults to the value of can_pin_messages.
+    property? can_edit_tag : Bool | ::Nil
+
+    # Optional. True, if the user is allowed to change the chat title, photo and other settings. Ignored in public supergroups.
     property? can_change_info : Bool | ::Nil
 
     # Optional. True, if the user is allowed to invite new users to the chat
     property? can_invite_users : Bool | ::Nil
 
-    # Optional. True, if the user is allowed to pin messages. Ignored in public supergroups
+    # Optional. True, if the user is allowed to pin messages. Ignored in public supergroups.
     property? can_pin_messages : Bool | ::Nil
 
-    # Optional. True, if the user is allowed to create forum topics. If omitted defaults to the value of can_pin_messages
+    # Optional. True, if the user is allowed to create forum topics. If omitted defaults to the value of can_pin_messages.
     property? can_manage_topics : Bool | ::Nil
 
     def initialize(
@@ -3932,7 +4185,7 @@ module Tourmaline
       @can_change_info : Bool | ::Nil = nil,
       @can_invite_users : Bool | ::Nil = nil,
       @can_pin_messages : Bool | ::Nil = nil,
-      @can_manage_topics : Bool | ::Nil = nil,
+      @can_manage_topics : Bool | ::Nil = nil
     )
     end
   end
@@ -3953,7 +4206,7 @@ module Tourmaline
     def initialize(
       @day,
       @month,
-      @year : Int32 | Int64 | ::Nil = nil,
+      @year : Int32 | Int64 | ::Nil = nil
     )
     end
   end
@@ -3974,7 +4227,7 @@ module Tourmaline
     def initialize(
       @title : String | ::Nil = nil,
       @message : String | ::Nil = nil,
-      @sticker : Tourmaline::Sticker | ::Nil = nil,
+      @sticker : Tourmaline::Sticker | ::Nil = nil
     )
     end
   end
@@ -3991,7 +4244,7 @@ module Tourmaline
 
     def initialize(
       @address,
-      @location : Tourmaline::Location | ::Nil = nil,
+      @location : Tourmaline::Location | ::Nil = nil
     )
     end
   end
@@ -4008,7 +4261,7 @@ module Tourmaline
 
     def initialize(
       @opening_minute,
-      @closing_minute,
+      @closing_minute
     )
     end
   end
@@ -4025,7 +4278,7 @@ module Tourmaline
 
     def initialize(
       @time_zone_name,
-      @opening_hours : Array(Tourmaline::BusinessOpeningHoursInterval) = [] of Tourmaline::BusinessOpeningHoursInterval,
+      @opening_hours : Array(Tourmaline::BusinessOpeningHoursInterval) = [] of Tourmaline::BusinessOpeningHoursInterval
     )
     end
   end
@@ -4050,7 +4303,7 @@ module Tourmaline
       @level,
       @rating,
       @current_level_rating,
-      @next_level_rating : Int32 | Int64 | ::Nil = nil,
+      @next_level_rating : Int32 | Int64 | ::Nil = nil
     )
     end
   end
@@ -4083,7 +4336,7 @@ module Tourmaline
       @width_percentage,
       @height_percentage,
       @rotation_angle,
-      @corner_radius_percentage,
+      @corner_radius_percentage
     )
     end
   end
@@ -4108,7 +4361,7 @@ module Tourmaline
       @country_code,
       @state : String | ::Nil = nil,
       @city : String | ::Nil = nil,
-      @street : String | ::Nil = nil,
+      @street : String | ::Nil = nil
     )
     end
   end
@@ -4141,7 +4394,7 @@ module Tourmaline
       @type,
       @latitude,
       @longitude,
-      @address : Tourmaline::LocationAddress | ::Nil = nil,
+      @address : Tourmaline::LocationAddress | ::Nil = nil
     )
     end
   end
@@ -4166,7 +4419,7 @@ module Tourmaline
       @type,
       @reaction_type,
       @is_dark : Bool | ::Nil = nil,
-      @is_flipped : Bool | ::Nil = nil,
+      @is_flipped : Bool | ::Nil = nil
     )
     end
   end
@@ -4183,7 +4436,7 @@ module Tourmaline
 
     def initialize(
       @type,
-      @url,
+      @url
     )
     end
   end
@@ -4208,7 +4461,7 @@ module Tourmaline
       @type,
       @temperature,
       @emoji,
-      @background_color,
+      @background_color
     )
     end
   end
@@ -4225,7 +4478,7 @@ module Tourmaline
 
     def initialize(
       @type,
-      @name,
+      @name
     )
     end
   end
@@ -4242,7 +4495,7 @@ module Tourmaline
 
     def initialize(
       @position,
-      @type,
+      @type
     )
     end
   end
@@ -4259,7 +4512,7 @@ module Tourmaline
 
     def initialize(
       @location,
-      @address,
+      @address
     )
     end
   end
@@ -4277,12 +4530,12 @@ module Tourmaline
     # Type of the reaction, always "emoji"
     property type : String
 
-    # Reaction emoji. Currently, it can be one of "❤", "👍", "👎", "🔥", "🥰", "👏", "😁", "🤔", "🤯", "😱", "🤬", "😢", "🎉", "🤩", "🤮", "💩", "🙏", "👌", "🕊", "🤡", "🥱", "🥴", "😍", "🐳", "❤‍🔥", "🌚", "🌭", "💯", "🤣", "⚡", "🍌", "🏆", "💔", "🤨", "😐", "🍓", "🍾", "💋", "🖕", "😈", "😴", "😭", "🤓", "👻", "👨‍💻", "👀", "🎃", "🙈", "😇", "😨", "🤝", "✍", "🤗", "🫡", "🎅", "🎄", "☃", "💅", "🤪", "🗿", "🆒", "💘", "🙉", "🦄", "😘", "💊", "🙊", "😎", "👾", "🤷‍♂", "🤷", "🤷‍♀", "😡"
+    # Reaction emoji. Currently, it can be one of "❤", "👍", "👎", "🔥", "🥰", "👏", "😁", "🤔", "🤯", "😱", "🤬", "😢", "🎉", "🤩", "🤮", "💩", "🙏", "👌", "🕊", "🤡", "🥱", "🥴", "😍", "🐳", "❤‍🔥", "🌚", "🌭", "💯", "🤣", "⚡", "🍌", "🏆", "💔", "🤨", "😐", "🍓", "🍾", "💋", "🖕", "😈", "😴", "😭", "🤓", "👻", "👨‍💻", "👀", "🎃", "🙈", "😇", "😨", "🤝", "✍", "🤗", "🫡", "🎅", "🎄", "☃", "💅", "🤪", "🗿", "🆒", "💘", "🙉", "🦄", "😘", "💊", "🙊", "😎", "👾", "🤷‍♂", "🤷", "🤷‍♀", "😡".
     property emoji : String
 
     def initialize(
       @type,
-      @emoji,
+      @emoji
     )
     end
   end
@@ -4299,7 +4552,7 @@ module Tourmaline
 
     def initialize(
       @type,
-      @custom_emoji_id,
+      @custom_emoji_id
     )
     end
   end
@@ -4312,7 +4565,7 @@ module Tourmaline
     property type : String
 
     def initialize(
-      @type,
+      @type
     )
     end
   end
@@ -4329,7 +4582,7 @@ module Tourmaline
 
     def initialize(
       @type,
-      @total_count,
+      @total_count
     )
     end
   end
@@ -4367,7 +4620,7 @@ module Tourmaline
       @old_reaction : Array(Tourmaline::ReactionType) = [] of Tourmaline::ReactionType,
       @new_reaction : Array(Tourmaline::ReactionType) = [] of Tourmaline::ReactionType,
       @user : Tourmaline::User | ::Nil = nil,
-      @actor_chat : Tourmaline::Chat | ::Nil = nil,
+      @actor_chat : Tourmaline::Chat | ::Nil = nil
     )
     end
   end
@@ -4393,7 +4646,7 @@ module Tourmaline
       @chat,
       @message_id,
       @date,
-      @reactions : Array(Tourmaline::ReactionCount) = [] of Tourmaline::ReactionCount,
+      @reactions : Array(Tourmaline::ReactionCount) = [] of Tourmaline::ReactionCount
     )
     end
   end
@@ -4422,7 +4675,7 @@ module Tourmaline
       @name,
       @icon_color,
       @icon_custom_emoji_id : String | ::Nil = nil,
-      @is_name_implicit : Bool | ::Nil = nil,
+      @is_name_implicit : Bool | ::Nil = nil
     )
     end
   end
@@ -4443,7 +4696,7 @@ module Tourmaline
     def initialize(
       @center_color,
       @edge_color,
-      @text_color,
+      @text_color
     )
     end
   end
@@ -4504,7 +4757,7 @@ module Tourmaline
       @personal_remaining_count : Int32 | Int64 | ::Nil = nil,
       @background : Tourmaline::GiftBackground | ::Nil = nil,
       @unique_gift_variant_count : Int32 | Int64 | ::Nil = nil,
-      @publisher_chat : Tourmaline::Chat | ::Nil = nil,
+      @publisher_chat : Tourmaline::Chat | ::Nil = nil
     )
     end
   end
@@ -4517,7 +4770,7 @@ module Tourmaline
     property gifts : Array(Tourmaline::Gift) = [] of Tourmaline::Gift
 
     def initialize(
-      @gifts : Array(Tourmaline::Gift) = [] of Tourmaline::Gift,
+      @gifts : Array(Tourmaline::Gift) = [] of Tourmaline::Gift
     )
     end
   end
@@ -4542,7 +4795,7 @@ module Tourmaline
       @name,
       @sticker,
       @rarity_per_mille,
-      @rarity : String | ::Nil = nil,
+      @rarity : String | ::Nil = nil
     )
     end
   end
@@ -4563,7 +4816,7 @@ module Tourmaline
     def initialize(
       @name,
       @sticker,
-      @rarity_per_mille,
+      @rarity_per_mille
     )
     end
   end
@@ -4588,7 +4841,7 @@ module Tourmaline
       @center_color,
       @edge_color,
       @symbol_color,
-      @text_color,
+      @text_color
     )
     end
   end
@@ -4609,7 +4862,7 @@ module Tourmaline
     def initialize(
       @name,
       @colors,
-      @rarity_per_mille,
+      @rarity_per_mille
     )
     end
   end
@@ -4642,7 +4895,7 @@ module Tourmaline
       @light_theme_main_color,
       @dark_theme_main_color,
       @light_theme_other_colors : Array(Int32 | Int64) = [] of Int32 | Int64,
-      @dark_theme_other_colors : Array(Int32 | Int64) = [] of Int32 | Int64,
+      @dark_theme_other_colors : Array(Int32 | Int64) = [] of Int32 | Int64
     )
     end
   end
@@ -4657,7 +4910,7 @@ module Tourmaline
     # Human-readable name of the regular gift from which this unique gift was upgraded
     property base_name : String
 
-    # Unique name of the gift. This name can be used in https://t.me/nft/... links and story areas
+    # Unique name of the gift. This name can be used in https://t.me/nft/... links and story areas.
     property name : String
 
     # Unique number of the upgraded gift among gifts upgraded from the same regular gift
@@ -4699,7 +4952,7 @@ module Tourmaline
       @is_burned : Bool | ::Nil = nil,
       @is_from_blockchain : Bool | ::Nil = nil,
       @colors : Tourmaline::UniqueGiftColors | ::Nil = nil,
-      @publisher_chat : Tourmaline::Chat | ::Nil = nil,
+      @publisher_chat : Tourmaline::Chat | ::Nil = nil
     )
     end
   end
@@ -4735,7 +4988,7 @@ module Tourmaline
     # Optional. True, if the sender and gift text are shown only to the gift receiver; otherwise, everyone will be able to see them
     property? is_private : Bool | ::Nil
 
-    # Optional. Unique number reserved for this gift when upgraded. See the number field in UniqueGift
+    # Optional. Unique number reserved for this gift when upgraded. See the number field in UniqueGift.
     property unique_gift_number : Int32 | Int64 | ::Nil
 
     def initialize(
@@ -4748,7 +5001,7 @@ module Tourmaline
       @text : String | ::Nil = nil,
       @entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity,
       @is_private : Bool | ::Nil = nil,
-      @unique_gift_number : Int32 | Int64 | ::Nil = nil,
+      @unique_gift_number : Int32 | Int64 | ::Nil = nil
     )
     end
   end
@@ -4760,7 +5013,7 @@ module Tourmaline
     # Information about the gift
     property gift : Tourmaline::UniqueGift
 
-    # Origin of the gift. Currently, either "upgrade" for gifts upgraded from regular gifts, "transfer" for gifts transferred from other users or channels, "resale" for gifts bought from other users, "gifted_upgrade" for upgrades purchased after the gift was sent, or "offer" for gifts bought or sold through gift purchase offers
+    # Origin of the gift. Currently, either "upgrade" for gifts upgraded from regular gifts, "transfer" for gifts transferred from other users or channels, "resale" for gifts bought from other users, "gifted_upgrade" for upgrades purchased after the gift was sent, or "offer" for gifts bought or sold through gift purchase offers.
     property origin : String
 
     # Optional. For gifts bought from other users, the currency in which the payment for the gift was done. Currently, one of "XTR" for Telegram Stars or "TON" for toncoins.
@@ -4775,7 +5028,7 @@ module Tourmaline
     # Optional. Number of Telegram Stars that must be paid to transfer the gift; omitted if the bot cannot transfer the gift
     property transfer_star_count : Int32 | Int64 | ::Nil
 
-    # Optional. Point in time (Unix timestamp) when the gift can be transferred. If it is in the past, then the gift can be transferred now
+    # Optional. Point in time (Unix timestamp) when the gift can be transferred. If it is in the past, then the gift can be transferred now.
     @[JSON::Field(converter: Time::EpochConverter)]
     property next_transfer_date : Time | ::Nil
 
@@ -4786,7 +5039,7 @@ module Tourmaline
       @last_resale_amount : Int32 | Int64 | ::Nil = nil,
       @owned_gift_id : String | ::Nil = nil,
       @transfer_star_count : Int32 | Int64 | ::Nil = nil,
-      @next_transfer_date : Int32 | Int64 | ::Nil = nil,
+      @next_transfer_date : Int32 | Int64 | ::Nil = nil
     )
     end
   end
@@ -4843,7 +5096,7 @@ module Tourmaline
     # Optional. True, if the gift's upgrade was purchased after the gift was sent; for gifts received on behalf of business accounts only
     property? is_upgrade_separate : Bool | ::Nil
 
-    # Optional. Unique number reserved for this gift when upgraded. See the number field in UniqueGift
+    # Optional. Unique number reserved for this gift when upgraded. See the number field in UniqueGift.
     property unique_gift_number : Int32 | Int64 | ::Nil
 
     def initialize(
@@ -4861,7 +5114,7 @@ module Tourmaline
       @convert_star_count : Int32 | Int64 | ::Nil = nil,
       @prepaid_upgrade_star_count : Int32 | Int64 | ::Nil = nil,
       @is_upgrade_separate : Bool | ::Nil = nil,
-      @unique_gift_number : Int32 | Int64 | ::Nil = nil,
+      @unique_gift_number : Int32 | Int64 | ::Nil = nil
     )
     end
   end
@@ -4895,7 +5148,7 @@ module Tourmaline
     # Optional. Number of Telegram Stars that must be paid to transfer the gift; omitted if the bot cannot transfer the gift
     property transfer_star_count : Int32 | Int64 | ::Nil
 
-    # Optional. Point in time (Unix timestamp) when the gift can be transferred. If it is in the past, then the gift can be transferred now
+    # Optional. Point in time (Unix timestamp) when the gift can be transferred. If it is in the past, then the gift can be transferred now.
     @[JSON::Field(converter: Time::EpochConverter)]
     property next_transfer_date : Time | ::Nil
 
@@ -4908,7 +5161,7 @@ module Tourmaline
       @is_saved : Bool | ::Nil = nil,
       @can_be_transferred : Bool | ::Nil = nil,
       @transfer_star_count : Int32 | Int64 | ::Nil = nil,
-      @next_transfer_date : Int32 | Int64 | ::Nil = nil,
+      @next_transfer_date : Int32 | Int64 | ::Nil = nil
     )
     end
   end
@@ -4923,13 +5176,13 @@ module Tourmaline
     # The list of gifts
     property gifts : Array(Tourmaline::OwnedGift) = [] of Tourmaline::OwnedGift
 
-    # Optional. Offset for the next request. If empty, then there are no more results
+    # Optional. Offset for the next request. If empty, then there are no more results.
     property next_offset : String | ::Nil
 
     def initialize(
       @total_count,
       @gifts : Array(Tourmaline::OwnedGift) = [] of Tourmaline::OwnedGift,
-      @next_offset : String | ::Nil = nil,
+      @next_offset : String | ::Nil = nil
     )
     end
   end
@@ -4958,7 +5211,7 @@ module Tourmaline
       @limited_gifts,
       @unique_gifts,
       @premium_subscription,
-      @gifts_from_channels,
+      @gifts_from_channels
     )
     end
   end
@@ -4975,7 +5228,7 @@ module Tourmaline
 
     def initialize(
       @amount,
-      @nanostar_amount : Int32 | Int64 | ::Nil = nil,
+      @nanostar_amount : Int32 | Int64 | ::Nil = nil
     )
     end
   end
@@ -4987,12 +5240,12 @@ module Tourmaline
     # Text of the command; 1-32 characters. Can contain only lowercase English letters, digits and underscores.
     property command : String
 
-    # Description of the command; 1-256 characters.
+    # Description of the command; 1-256 characters
     property description : String
 
     def initialize(
       @command,
-      @description,
+      @description
     )
     end
   end
@@ -5015,7 +5268,7 @@ module Tourmaline
     property type : String
 
     def initialize(
-      @type,
+      @type
     )
     end
   end
@@ -5028,7 +5281,7 @@ module Tourmaline
     property type : String
 
     def initialize(
-      @type,
+      @type
     )
     end
   end
@@ -5041,7 +5294,7 @@ module Tourmaline
     property type : String
 
     def initialize(
-      @type,
+      @type
     )
     end
   end
@@ -5054,7 +5307,7 @@ module Tourmaline
     property type : String
 
     def initialize(
-      @type,
+      @type
     )
     end
   end
@@ -5071,7 +5324,7 @@ module Tourmaline
 
     def initialize(
       @type,
-      @chat_id,
+      @chat_id
     )
     end
   end
@@ -5088,7 +5341,7 @@ module Tourmaline
 
     def initialize(
       @type,
-      @chat_id,
+      @chat_id
     )
     end
   end
@@ -5109,7 +5362,7 @@ module Tourmaline
     def initialize(
       @type,
       @chat_id,
-      @user_id,
+      @user_id
     )
     end
   end
@@ -5122,7 +5375,7 @@ module Tourmaline
     property name : String
 
     def initialize(
-      @name,
+      @name
     )
     end
   end
@@ -5135,7 +5388,7 @@ module Tourmaline
     property description : String
 
     def initialize(
-      @description,
+      @description
     )
     end
   end
@@ -5148,7 +5401,7 @@ module Tourmaline
     property short_description : String
 
     def initialize(
-      @short_description,
+      @short_description
     )
     end
   end
@@ -5168,7 +5421,7 @@ module Tourmaline
     property type : String
 
     def initialize(
-      @type,
+      @type
     )
     end
   end
@@ -5189,7 +5442,7 @@ module Tourmaline
     def initialize(
       @type,
       @text,
-      @web_app,
+      @web_app
     )
     end
   end
@@ -5202,7 +5455,7 @@ module Tourmaline
     property type : String
 
     def initialize(
-      @type,
+      @type
     )
     end
   end
@@ -5225,7 +5478,7 @@ module Tourmaline
 
     def initialize(
       @source,
-      @user,
+      @user
     )
     end
   end
@@ -5242,7 +5495,7 @@ module Tourmaline
 
     def initialize(
       @source,
-      @user,
+      @user
     )
     end
   end
@@ -5271,7 +5524,7 @@ module Tourmaline
       @giveaway_message_id,
       @user : Tourmaline::User | ::Nil = nil,
       @prize_star_count : Int32 | Int64 | ::Nil = nil,
-      @is_unclaimed : Bool | ::Nil = nil,
+      @is_unclaimed : Bool | ::Nil = nil
     )
     end
   end
@@ -5298,7 +5551,7 @@ module Tourmaline
       @boost_id,
       @add_date,
       @expiration_date,
-      @source,
+      @source
     )
     end
   end
@@ -5315,7 +5568,7 @@ module Tourmaline
 
     def initialize(
       @chat,
-      @boost,
+      @boost
     )
     end
   end
@@ -5341,7 +5594,7 @@ module Tourmaline
       @chat,
       @boost_id,
       @remove_date,
-      @source,
+      @source
     )
     end
   end
@@ -5354,7 +5607,7 @@ module Tourmaline
     property new_owner : Tourmaline::User | ::Nil
 
     def initialize(
-      @new_owner : Tourmaline::User | ::Nil = nil,
+      @new_owner : Tourmaline::User | ::Nil = nil
     )
     end
   end
@@ -5367,7 +5620,7 @@ module Tourmaline
     property new_owner : Tourmaline::User
 
     def initialize(
-      @new_owner,
+      @new_owner
     )
     end
   end
@@ -5380,7 +5633,7 @@ module Tourmaline
     property boosts : Array(Tourmaline::ChatBoost) = [] of Tourmaline::ChatBoost
 
     def initialize(
-      @boosts : Array(Tourmaline::ChatBoost) = [] of Tourmaline::ChatBoost,
+      @boosts : Array(Tourmaline::ChatBoost) = [] of Tourmaline::ChatBoost
     )
     end
   end
@@ -5445,7 +5698,7 @@ module Tourmaline
       @can_convert_gifts_to_stars : Bool | ::Nil = nil,
       @can_transfer_and_upgrade_gifts : Bool | ::Nil = nil,
       @can_transfer_stars : Bool | ::Nil = nil,
-      @can_manage_stories : Bool | ::Nil = nil,
+      @can_manage_stories : Bool | ::Nil = nil
     )
     end
   end
@@ -5479,7 +5732,7 @@ module Tourmaline
       @user_chat_id,
       @date,
       @is_enabled,
-      @rights : Tourmaline::BusinessBotRights | ::Nil = nil,
+      @rights : Tourmaline::BusinessBotRights | ::Nil = nil
     )
     end
   end
@@ -5500,7 +5753,64 @@ module Tourmaline
     def initialize(
       @business_connection_id,
       @chat,
-      @message_ids : Array(Int32 | Int64) = [] of Int32 | Int64,
+      @message_ids : Array(Int32 | Int64) = [] of Int32 | Int64
+    )
+    end
+  end
+
+  # Describes an inline message sent by a Web App on behalf of a user.
+  class SentWebAppMessage
+    include JSON::Serializable
+
+    # Optional. Identifier of the sent inline message. Available only if there is an inline keyboard attached to the message.
+    property inline_message_id : String | ::Nil
+
+    def initialize(
+      @inline_message_id : String | ::Nil = nil
+    )
+    end
+  end
+
+  # Describes an inline message sent by a guest bot.
+  class SentGuestMessage
+    include JSON::Serializable
+
+    # Identifier of the sent inline message
+    property inline_message_id : String
+
+    def initialize(
+      @inline_message_id
+    )
+    end
+  end
+
+  # Describes an inline message to be sent by a user of a Mini App.
+  class PreparedInlineMessage
+    include JSON::Serializable
+
+    # Unique identifier of the prepared message
+    property id : String
+
+    # Expiration date of the prepared message, in Unix time. Expired prepared messages can no longer be used.
+    @[JSON::Field(converter: Time::EpochConverter)]
+    property expiration_date : Time
+
+    def initialize(
+      @id,
+      @expiration_date
+    )
+    end
+  end
+
+  # Describes a keyboard button to be used by a user of a Mini App.
+  class PreparedKeyboardButton
+    include JSON::Serializable
+
+    # Unique identifier of the keyboard button
+    property id : String
+
+    def initialize(
+      @id
     )
     end
   end
@@ -5517,7 +5827,7 @@ module Tourmaline
 
     def initialize(
       @migrate_to_chat_id : Int32 | Int64 | ::Nil = nil,
-      @retry_after : Int32 | Int64 | ::Nil = nil,
+      @retry_after : Int32 | Int64 | ::Nil = nil
     )
     end
   end
@@ -5680,7 +5990,7 @@ module Tourmaline
       @width : Int32 | Int64 | ::Nil = nil,
       @height : Int32 | Int64 | ::Nil = nil,
       @duration : Int32 | Int64 | ::Nil = nil,
-      @has_spoiler : Bool | ::Nil = nil,
+      @has_spoiler : Bool | ::Nil = nil
     )
     end
   end
@@ -5725,7 +6035,7 @@ module Tourmaline
       @caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity,
       @duration : Int32 | Int64 | ::Nil = nil,
       @performer : String | ::Nil = nil,
-      @title : String | ::Nil = nil,
+      @title : String | ::Nil = nil
     )
     end
   end
@@ -5762,7 +6072,24 @@ module Tourmaline
       @caption : String | ::Nil = nil,
       @parse_mode : ParseMode = ParseMode::Markdown,
       @caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity,
-      @disable_content_type_detection : Bool | ::Nil = nil,
+      @disable_content_type_detection : Bool | ::Nil = nil
+    )
+    end
+  end
+
+  # Represents an HTTP link to be sent.
+  class InputMediaLink
+    include JSON::Serializable
+
+    # Type of the result, must be link
+    property type : String
+
+    # HTTP URL of the link
+    property url : String
+
+    def initialize(
+      @type,
+      @url
     )
     end
   end
@@ -5789,7 +6116,7 @@ module Tourmaline
 
     def initialize(
       @type,
-      @media,
+      @media
     )
     end
   end
@@ -5834,7 +6161,7 @@ module Tourmaline
       @width : Int32 | Int64 | ::Nil = nil,
       @height : Int32 | Int64 | ::Nil = nil,
       @duration : Int32 | Int64 | ::Nil = nil,
-      @supports_streaming : Bool | ::Nil = nil,
+      @supports_streaming : Bool | ::Nil = nil
     )
     end
   end
@@ -5856,7 +6183,7 @@ module Tourmaline
 
     def initialize(
       @type,
-      @photo,
+      @photo
     )
     end
   end
@@ -5877,7 +6204,7 @@ module Tourmaline
     def initialize(
       @type,
       @animation,
-      @main_frame_timestamp : Float64 | ::Nil = nil,
+      @main_frame_timestamp : Float64 | ::Nil = nil
     )
     end
   end
@@ -5899,7 +6226,7 @@ module Tourmaline
 
     def initialize(
       @type,
-      @photo,
+      @photo
     )
     end
   end
@@ -5928,7 +6255,7 @@ module Tourmaline
       @video,
       @duration : Float64 | ::Nil = nil,
       @cover_frame_timestamp : Float64 | ::Nil = nil,
-      @is_animation : Bool | ::Nil = nil,
+      @is_animation : Bool | ::Nil = nil
     )
     end
   end
@@ -5997,7 +6324,7 @@ module Tourmaline
       @mask_position : Tourmaline::MaskPosition | ::Nil = nil,
       @custom_emoji_id : String | ::Nil = nil,
       @needs_repainting : Bool | ::Nil = nil,
-      @file_size : Int32 | Int64 | ::Nil = nil,
+      @file_size : Int32 | Int64 | ::Nil = nil
     )
     end
   end
@@ -6026,7 +6353,7 @@ module Tourmaline
       @title,
       @sticker_type,
       @stickers : Array(Tourmaline::Sticker) = [] of Tourmaline::Sticker,
-      @thumbnail : Tourmaline::PhotoSize | ::Nil = nil,
+      @thumbnail : Tourmaline::PhotoSize | ::Nil = nil
     )
     end
   end
@@ -6051,7 +6378,7 @@ module Tourmaline
       @point,
       @x_shift,
       @y_shift,
-      @scale,
+      @scale
     )
     end
   end
@@ -6080,7 +6407,1115 @@ module Tourmaline
       @format,
       @emoji_list : Array(String) = [] of String,
       @mask_position : Tourmaline::MaskPosition | ::Nil = nil,
-      @keywords : Array(String) = [] of String,
+      @keywords : Array(String) = [] of String
+    )
+    end
+  end
+
+  # Rich formatted message.
+  class RichMessage
+    include JSON::Serializable
+
+    # Content of the message
+    property blocks : Array(Tourmaline::RichBlock) = [] of Tourmaline::RichBlock
+
+    # Optional. True, if the rich message must be shown right-to-left
+    property? is_rtl : Bool | ::Nil
+
+    def initialize(
+      @blocks : Array(Tourmaline::RichBlock) = [] of Tourmaline::RichBlock,
+      @is_rtl : Bool | ::Nil = nil
+    )
+    end
+  end
+
+  # Describes a rich message to be sent. Exactly one of the fields html or markdown must be used.
+  class InputRichMessage
+    include JSON::Serializable
+
+    # Optional. Content of the rich message to send described using HTML formatting. See rich message formatting options for more details.
+    property html : String | ::Nil
+
+    # Optional. Content of the rich message to send described using Markdown formatting. See rich message formatting options for more details.
+    property markdown : String | ::Nil
+
+    # Optional. Pass True if the rich message must be shown right-to-left
+    property? is_rtl : Bool | ::Nil
+
+    # Optional. Pass True to skip automatic detection of entities (e.g., URLs, email addresses, username mentions, hashtags, cashtags, bot commands, or phone numbers) in the text
+    property? skip_entity_detection : Bool | ::Nil
+
+    def initialize(
+      @html : String | ::Nil = nil,
+      @markdown : String | ::Nil = nil,
+      @is_rtl : Bool | ::Nil = nil,
+      @skip_entity_detection : Bool | ::Nil = nil
+    )
+    end
+  end
+
+  # This object represents a rich formatted text. Currently, it can be either a String for plain text, an Array of RichText, or any of the following types:
+  # - RichTextBold
+  # - RichTextItalic
+  # - RichTextUnderline
+  # - RichTextStrikethrough
+  # - RichTextSpoiler
+  # - RichTextDateTime
+  # - RichTextTextMention
+  # - RichTextSubscript
+  # - RichTextSuperscript
+  # - RichTextMarked
+  # - RichTextCode
+  # - RichTextCustomEmoji
+  # - RichTextMathematicalExpression
+  # - RichTextUrl
+  # - RichTextEmailAddress
+  # - RichTextPhoneNumber
+  # - RichTextBankCardNumber
+  # - RichTextMention
+  # - RichTextHashtag
+  # - RichTextCashtag
+  # - RichTextBotCommand
+  # - RichTextAnchor
+  # - RichTextAnchorLink
+  # - RichTextReference
+  # - RichTextReferenceLink
+  alias RichText = Tourmaline::RichTextBold | Tourmaline::RichTextItalic | Tourmaline::RichTextUnderline | Tourmaline::RichTextStrikethrough | Tourmaline::RichTextSpoiler | Tourmaline::RichTextDateTime | Tourmaline::RichTextTextMention | Tourmaline::RichTextSubscript | Tourmaline::RichTextSuperscript | Tourmaline::RichTextMarked | Tourmaline::RichTextCode | Tourmaline::RichTextCustomEmoji | Tourmaline::RichTextMathematicalExpression | Tourmaline::RichTextUrl | Tourmaline::RichTextEmailAddress | Tourmaline::RichTextPhoneNumber | Tourmaline::RichTextBankCardNumber | Tourmaline::RichTextMention | Tourmaline::RichTextHashtag | Tourmaline::RichTextCashtag | Tourmaline::RichTextBotCommand | Tourmaline::RichTextAnchor | Tourmaline::RichTextAnchorLink | Tourmaline::RichTextReference | Tourmaline::RichTextReferenceLink
+
+  # A bold text.
+  class RichTextBold
+    include JSON::Serializable
+
+    # Type of the rich text, always "bold"
+    property type : String
+
+    # The text
+    property text : Tourmaline::RichText
+
+    def initialize(
+      @type,
+      @text
+    )
+    end
+  end
+
+  # An italicized text.
+  class RichTextItalic
+    include JSON::Serializable
+
+    # Type of the rich text, always "italic"
+    property type : String
+
+    # The text
+    property text : Tourmaline::RichText
+
+    def initialize(
+      @type,
+      @text
+    )
+    end
+  end
+
+  # An underlined text.
+  class RichTextUnderline
+    include JSON::Serializable
+
+    # Type of the rich text, always "underline"
+    property type : String
+
+    # The text
+    property text : Tourmaline::RichText
+
+    def initialize(
+      @type,
+      @text
+    )
+    end
+  end
+
+  # A strikethrough text.
+  class RichTextStrikethrough
+    include JSON::Serializable
+
+    # Type of the rich text, always "strikethrough"
+    property type : String
+
+    # The text
+    property text : Tourmaline::RichText
+
+    def initialize(
+      @type,
+      @text
+    )
+    end
+  end
+
+  # A text covered by a spoiler.
+  class RichTextSpoiler
+    include JSON::Serializable
+
+    # Type of the rich text, always "spoiler"
+    property type : String
+
+    # The text
+    property text : Tourmaline::RichText
+
+    def initialize(
+      @type,
+      @text
+    )
+    end
+  end
+
+  # Formatted date and time.
+  class RichTextDateTime
+    include JSON::Serializable
+
+    # Type of the rich text, always "date_time"
+    property type : String
+
+    # The text
+    property text : Tourmaline::RichText
+
+    # The Unix time associated with the entity
+    @[JSON::Field(converter: Time::EpochConverter)]
+    property unix_time : Time
+
+    # The string that defines the formatting of the date and time. See date-time entity formatting for more details.
+    property date_time_format : String
+
+    def initialize(
+      @type,
+      @text,
+      @unix_time,
+      @date_time_format
+    )
+    end
+  end
+
+  # A mention of a Telegram user by their identifier.
+  class RichTextTextMention
+    include JSON::Serializable
+
+    # Type of the rich text, always "text_mention"
+    property type : String
+
+    # The text
+    property text : Tourmaline::RichText
+
+    # The mentioned user
+    property user : Tourmaline::User
+
+    def initialize(
+      @type,
+      @text,
+      @user
+    )
+    end
+  end
+
+  # A subscript text.
+  class RichTextSubscript
+    include JSON::Serializable
+
+    # Type of the rich text, always "subscript"
+    property type : String
+
+    # The text
+    property text : Tourmaline::RichText
+
+    def initialize(
+      @type,
+      @text
+    )
+    end
+  end
+
+  # A superscript text.
+  class RichTextSuperscript
+    include JSON::Serializable
+
+    # Type of the rich text, always "superscript"
+    property type : String
+
+    # The text
+    property text : Tourmaline::RichText
+
+    def initialize(
+      @type,
+      @text
+    )
+    end
+  end
+
+  # A marked text.
+  class RichTextMarked
+    include JSON::Serializable
+
+    # Type of the rich text, always "marked"
+    property type : String
+
+    # The text
+    property text : Tourmaline::RichText
+
+    def initialize(
+      @type,
+      @text
+    )
+    end
+  end
+
+  # A monowidth text.
+  class RichTextCode
+    include JSON::Serializable
+
+    # Type of the rich text, always "code"
+    property type : String
+
+    # The text
+    property text : Tourmaline::RichText
+
+    def initialize(
+      @type,
+      @text
+    )
+    end
+  end
+
+  # A custom emoji.
+  class RichTextCustomEmoji
+    include JSON::Serializable
+
+    # Type of the rich text, always "custom_emoji"
+    property type : String
+
+    # Unique identifier of the custom emoji. Use getCustomEmojiStickers to get full information about the sticker.
+    property custom_emoji_id : String
+
+    # Alternative emoji for the custom emoji
+    property alternative_text : String
+
+    def initialize(
+      @type,
+      @custom_emoji_id,
+      @alternative_text
+    )
+    end
+  end
+
+  # A mathematical expression.
+  class RichTextMathematicalExpression
+    include JSON::Serializable
+
+    # Type of the rich text, always "mathematical_expression"
+    property type : String
+
+    # The expression in LaTeX format
+    property expression : String
+
+    def initialize(
+      @type,
+      @expression
+    )
+    end
+  end
+
+  # A text with a link.
+  class RichTextUrl
+    include JSON::Serializable
+
+    # Type of the rich text, always "url"
+    property type : String
+
+    # The text
+    property text : Tourmaline::RichText
+
+    # URL of the link
+    property url : String
+
+    def initialize(
+      @type,
+      @text,
+      @url
+    )
+    end
+  end
+
+  # A text with an email address.
+  class RichTextEmailAddress
+    include JSON::Serializable
+
+    # Type of the rich text, always "email_address"
+    property type : String
+
+    # The text
+    property text : Tourmaline::RichText
+
+    # The email address
+    property email_address : String
+
+    def initialize(
+      @type,
+      @text,
+      @email_address
+    )
+    end
+  end
+
+  # A text with a phone number.
+  class RichTextPhoneNumber
+    include JSON::Serializable
+
+    # Type of the rich text, always "phone_number"
+    property type : String
+
+    # The text
+    property text : Tourmaline::RichText
+
+    # The phone number
+    property phone_number : String
+
+    def initialize(
+      @type,
+      @text,
+      @phone_number
+    )
+    end
+  end
+
+  # A text with a bank card number.
+  class RichTextBankCardNumber
+    include JSON::Serializable
+
+    # Type of the rich text, always "bank_card_number"
+    property type : String
+
+    # The text
+    property text : Tourmaline::RichText
+
+    # The bank card number
+    property bank_card_number : String
+
+    def initialize(
+      @type,
+      @text,
+      @bank_card_number
+    )
+    end
+  end
+
+  # A mention by a username.
+  class RichTextMention
+    include JSON::Serializable
+
+    # Type of the rich text, always "mention"
+    property type : String
+
+    # The text
+    property text : Tourmaline::RichText
+
+    # The username
+    property username : String
+
+    def initialize(
+      @type,
+      @text,
+      @username
+    )
+    end
+  end
+
+  # A hashtag.
+  class RichTextHashtag
+    include JSON::Serializable
+
+    # Type of the rich text, always "hashtag"
+    property type : String
+
+    # The text
+    property text : Tourmaline::RichText
+
+    # The hashtag
+    property hashtag : String
+
+    def initialize(
+      @type,
+      @text,
+      @hashtag
+    )
+    end
+  end
+
+  # A cashtag.
+  class RichTextCashtag
+    include JSON::Serializable
+
+    # Type of the rich text, always "cashtag"
+    property type : String
+
+    # The text
+    property text : Tourmaline::RichText
+
+    # The cashtag
+    property cashtag : String
+
+    def initialize(
+      @type,
+      @text,
+      @cashtag
+    )
+    end
+  end
+
+  # A bot command.
+  class RichTextBotCommand
+    include JSON::Serializable
+
+    # Type of the rich text, always "bot_command"
+    property type : String
+
+    # The text
+    property text : Tourmaline::RichText
+
+    # The bot command
+    property bot_command : String
+
+    def initialize(
+      @type,
+      @text,
+      @bot_command
+    )
+    end
+  end
+
+  # An anchor.
+  class RichTextAnchor
+    include JSON::Serializable
+
+    # Type of the rich text, always "anchor"
+    property type : String
+
+    # The name of the anchor
+    property name : String
+
+    def initialize(
+      @type,
+      @name
+    )
+    end
+  end
+
+  # A link to an anchor.
+  class RichTextAnchorLink
+    include JSON::Serializable
+
+    # Type of the rich text, always "anchor_link"
+    property type : String
+
+    # The link text
+    property text : Tourmaline::RichText
+
+    # The name of the anchor. If the name is empty, then the link brings back to the top of the message.
+    property anchor_name : String
+
+    def initialize(
+      @type,
+      @text,
+      @anchor_name
+    )
+    end
+  end
+
+  # A reference.
+  class RichTextReference
+    include JSON::Serializable
+
+    # Type of the rich text, always "reference"
+    property type : String
+
+    # Text of the reference
+    property text : Tourmaline::RichText
+
+    # The name of the reference
+    property name : String
+
+    def initialize(
+      @type,
+      @text,
+      @name
+    )
+    end
+  end
+
+  # A link to a reference.
+  class RichTextReferenceLink
+    include JSON::Serializable
+
+    # Type of the rich text, always "reference_link"
+    property type : String
+
+    # The link text
+    property text : Tourmaline::RichText
+
+    # The name of the reference
+    property reference_name : String
+
+    def initialize(
+      @type,
+      @text,
+      @reference_name
+    )
+    end
+  end
+
+  # Caption of a rich formatted block.
+  class RichBlockCaption
+    include JSON::Serializable
+
+    # Block caption
+    property text : Tourmaline::RichText
+
+    # Optional. Block credit which corresponds to the HTML tag <cite>
+    property credit : Tourmaline::RichText | ::Nil
+
+    def initialize(
+      @text,
+      @credit : Tourmaline::RichText | ::Nil = nil
+    )
+    end
+  end
+
+  # Cell in a table.
+  class RichBlockTableCell
+    include JSON::Serializable
+
+    # Horizontal cell content alignment. Currently, must be one of "left", "center", or "right".
+    property align : String
+
+    # Vertical cell content alignment. Currently, must be one of "top", "middle", or "bottom".
+    property valign : String
+
+    # Optional. Text in the cell. If omitted, then the cell is invisible.
+    property text : Tourmaline::RichText | ::Nil
+
+    # Optional. True, if the cell is a header cell
+    property? is_header : Bool | ::Nil
+
+    # Optional. The number of columns the cell spans if it is bigger than 1
+    property colspan : Int32 | Int64 | ::Nil
+
+    # Optional. The number of rows the cell spans if it is bigger than 1
+    property rowspan : Int32 | Int64 | ::Nil
+
+    def initialize(
+      @align,
+      @valign,
+      @text : Tourmaline::RichText | ::Nil = nil,
+      @is_header : Bool | ::Nil = nil,
+      @colspan : Int32 | Int64 | ::Nil = nil,
+      @rowspan : Int32 | Int64 | ::Nil = nil
+    )
+    end
+  end
+
+  # An item of a list.
+  class RichBlockListItem
+    include JSON::Serializable
+
+    # Label of the item
+    property label : String
+
+    # The content of the item
+    property blocks : Array(Tourmaline::RichBlock) = [] of Tourmaline::RichBlock
+
+    # Optional. True, if the item has a checkbox
+    property? has_checkbox : Bool | ::Nil
+
+    # Optional. True, if the item has a checked checkbox
+    property? is_checked : Bool | ::Nil
+
+    # Optional. For ordered lists, the numeric value of the item label
+    property value : Int32 | Int64 | ::Nil
+
+    # Optional. For ordered lists, the type of the item label; must be one of "a" for lowercase letters, "A" for uppercase letters, "i" for lowercase Roman numerals, "I" for uppercase Roman numerals, or "1" for decimal numbers
+    property type : String | ::Nil
+
+    def initialize(
+      @label,
+      @blocks : Array(Tourmaline::RichBlock) = [] of Tourmaline::RichBlock,
+      @has_checkbox : Bool | ::Nil = nil,
+      @is_checked : Bool | ::Nil = nil,
+      @value : Int32 | Int64 | ::Nil = nil,
+      @type : String | ::Nil = nil
+    )
+    end
+  end
+
+  # This object represents a block in a rich formatted message. Currently, it can be any of the following types:
+  # - RichBlockParagraph
+  # - RichBlockSectionHeading
+  # - RichBlockPreformatted
+  # - RichBlockFooter
+  # - RichBlockDivider
+  # - RichBlockMathematicalExpression
+  # - RichBlockAnchor
+  # - RichBlockList
+  # - RichBlockBlockQuotation
+  # - RichBlockPullQuotation
+  # - RichBlockCollage
+  # - RichBlockSlideshow
+  # - RichBlockTable
+  # - RichBlockDetails
+  # - RichBlockMap
+  # - RichBlockAnimation
+  # - RichBlockAudio
+  # - RichBlockPhoto
+  # - RichBlockVideo
+  # - RichBlockVoiceNote
+  # - RichBlockThinking
+  alias RichBlock = Tourmaline::RichBlockParagraph | Tourmaline::RichBlockSectionHeading | Tourmaline::RichBlockPreformatted | Tourmaline::RichBlockFooter | Tourmaline::RichBlockDivider | Tourmaline::RichBlockMathematicalExpression | Tourmaline::RichBlockAnchor | Tourmaline::RichBlockList | Tourmaline::RichBlockBlockQuotation | Tourmaline::RichBlockPullQuotation | Tourmaline::RichBlockCollage | Tourmaline::RichBlockSlideshow | Tourmaline::RichBlockTable | Tourmaline::RichBlockDetails | Tourmaline::RichBlockMap | Tourmaline::RichBlockAnimation | Tourmaline::RichBlockAudio | Tourmaline::RichBlockPhoto | Tourmaline::RichBlockVideo | Tourmaline::RichBlockVoiceNote | Tourmaline::RichBlockThinking
+
+  # A text paragraph, corresponding to the HTML tag <p>.
+  class RichBlockParagraph
+    include JSON::Serializable
+
+    # Type of the block, always "paragraph"
+    property type : String
+
+    # Text of the block
+    property text : Tourmaline::RichText
+
+    def initialize(
+      @type,
+      @text
+    )
+    end
+  end
+
+  # A section heading, corresponding to the HTML tags <h1>, <h2>, <h3>, <h4>, <h5>, or <h6>.
+  class RichBlockSectionHeading
+    include JSON::Serializable
+
+    # Type of the block, always "heading"
+    property type : String
+
+    # Text of the block
+    property text : Tourmaline::RichText
+
+    # Relative size of the text font; 1-6, 1 is the largest, 6 is the smallest
+    property size : Int32 | Int64
+
+    def initialize(
+      @type,
+      @text,
+      @size
+    )
+    end
+  end
+
+  # A preformatted text block, corresponding to the nested HTML tags <pre> and <code>.
+  class RichBlockPreformatted
+    include JSON::Serializable
+
+    # Type of the block, always "pre"
+    property type : String
+
+    # Text of the block
+    property text : Tourmaline::RichText
+
+    # Optional. The programming language of the text
+    property language : String | ::Nil
+
+    def initialize(
+      @type,
+      @text,
+      @language : String | ::Nil = nil
+    )
+    end
+  end
+
+  # A footer, corresponding to the HTML tag <footer>.
+  class RichBlockFooter
+    include JSON::Serializable
+
+    # Type of the block, always "footer"
+    property type : String
+
+    # Text of the block
+    property text : Tourmaline::RichText
+
+    def initialize(
+      @type,
+      @text
+    )
+    end
+  end
+
+  # A divider, corresponding to the HTML tag <hr/>.
+  class RichBlockDivider
+    include JSON::Serializable
+
+    # Type of the block, always "divider"
+    property type : String
+
+    def initialize(
+      @type
+    )
+    end
+  end
+
+  # A block with a mathematical expression in LaTeX format, corresponding to the custom HTML tag <tg-math-block>.
+  class RichBlockMathematicalExpression
+    include JSON::Serializable
+
+    # Type of the block, always "mathematical_expression"
+    property type : String
+
+    # The mathematical expression in LaTeX format
+    property expression : String
+
+    def initialize(
+      @type,
+      @expression
+    )
+    end
+  end
+
+  # A block with an anchor, corresponding to the HTML tag <a> with the attribute name.
+  class RichBlockAnchor
+    include JSON::Serializable
+
+    # Type of the block, always "anchor"
+    property type : String
+
+    # The name of the anchor
+    property name : String
+
+    def initialize(
+      @type,
+      @name
+    )
+    end
+  end
+
+  # A list of blocks, corresponding to the HTML tag <ul> or <ol> with multiple nested tags <li>.
+  class RichBlockList
+    include JSON::Serializable
+
+    # Type of the block, always "list"
+    property type : String
+
+    # Items of the list
+    property items : Array(Tourmaline::RichBlockListItem) = [] of Tourmaline::RichBlockListItem
+
+    def initialize(
+      @type,
+      @items : Array(Tourmaline::RichBlockListItem) = [] of Tourmaline::RichBlockListItem
+    )
+    end
+  end
+
+  # A block quotation, corresponding to the HTML tag <blockquote>.
+  class RichBlockBlockQuotation
+    include JSON::Serializable
+
+    # Type of the block, always "blockquote"
+    property type : String
+
+    # Content of the block
+    property blocks : Array(Tourmaline::RichBlock) = [] of Tourmaline::RichBlock
+
+    # Optional. Credit of the block
+    property credit : Tourmaline::RichText | ::Nil
+
+    def initialize(
+      @type,
+      @blocks : Array(Tourmaline::RichBlock) = [] of Tourmaline::RichBlock,
+      @credit : Tourmaline::RichText | ::Nil = nil
+    )
+    end
+  end
+
+  # A quotation with centered text, loosely corresponding to the HTML tag <aside>.
+  class RichBlockPullQuotation
+    include JSON::Serializable
+
+    # Type of the block, always "pullquote"
+    property type : String
+
+    # Text of the block
+    property text : Tourmaline::RichText
+
+    # Optional. Credit of the block
+    property credit : Tourmaline::RichText | ::Nil
+
+    def initialize(
+      @type,
+      @text,
+      @credit : Tourmaline::RichText | ::Nil = nil
+    )
+    end
+  end
+
+  # A collage, corresponding to the custom HTML tag <tg-collage>.
+  class RichBlockCollage
+    include JSON::Serializable
+
+    # Type of the block, always "collage"
+    property type : String
+
+    # Elements of the collage
+    property blocks : Array(Tourmaline::RichBlock) = [] of Tourmaline::RichBlock
+
+    # Optional. Caption of the block
+    property caption : Tourmaline::RichBlockCaption | ::Nil
+
+    def initialize(
+      @type,
+      @blocks : Array(Tourmaline::RichBlock) = [] of Tourmaline::RichBlock,
+      @caption : Tourmaline::RichBlockCaption | ::Nil = nil
+    )
+    end
+  end
+
+  # A slideshow, corresponding to the custom HTML tag <tg-slideshow>.
+  class RichBlockSlideshow
+    include JSON::Serializable
+
+    # Type of the block, always "slideshow"
+    property type : String
+
+    # Elements of the slideshow
+    property blocks : Array(Tourmaline::RichBlock) = [] of Tourmaline::RichBlock
+
+    # Optional. Caption of the block
+    property caption : Tourmaline::RichBlockCaption | ::Nil
+
+    def initialize(
+      @type,
+      @blocks : Array(Tourmaline::RichBlock) = [] of Tourmaline::RichBlock,
+      @caption : Tourmaline::RichBlockCaption | ::Nil = nil
+    )
+    end
+  end
+
+  # A table, corresponding to the HTML tag <table>.
+  class RichBlockTable
+    include JSON::Serializable
+
+    # Type of the block, always "table"
+    property type : String
+
+    # Cells of the table
+    property cells : Array(Array(Tourmaline::RichBlockTableCell)) = [] of Array(Tourmaline::RichBlockTableCell)
+
+    # Optional. True, if the table has borders
+    property? is_bordered : Bool | ::Nil
+
+    # Optional. True, if the table is striped
+    property? is_striped : Bool | ::Nil
+
+    # Optional. Caption of the table
+    property caption : Tourmaline::RichText | ::Nil
+
+    def initialize(
+      @type,
+      @cells : Array(Array(Tourmaline::RichBlockTableCell)) = [] of Array(Tourmaline::RichBlockTableCell),
+      @is_bordered : Bool | ::Nil = nil,
+      @is_striped : Bool | ::Nil = nil,
+      @caption : Tourmaline::RichText | ::Nil = nil
+    )
+    end
+  end
+
+  # An expandable block for details disclosure, corresponding to the HTML tag <details>.
+  class RichBlockDetails
+    include JSON::Serializable
+
+    # Type of the block, always "details"
+    property type : String
+
+    # Always shown summary of the block
+    property summary : Tourmaline::RichText
+
+    # Content of the block
+    property blocks : Array(Tourmaline::RichBlock) = [] of Tourmaline::RichBlock
+
+    # Optional. True, if the content of the block is visible by default
+    property? is_open : Bool | ::Nil
+
+    def initialize(
+      @type,
+      @summary,
+      @blocks : Array(Tourmaline::RichBlock) = [] of Tourmaline::RichBlock,
+      @is_open : Bool | ::Nil = nil
+    )
+    end
+  end
+
+  # A block with a map, corresponding to the custom HTML tag <tg-map>.
+  class RichBlockMap
+    include JSON::Serializable
+
+    # Type of the block, always "map"
+    property type : String
+
+    # Location of the center of the map
+    property location : Tourmaline::Location
+
+    # Map zoom level; 13-20
+    property zoom : Int32 | Int64
+
+    # Expected width of the map
+    property width : Int32 | Int64
+
+    # Expected height of the map
+    property height : Int32 | Int64
+
+    # Optional. Caption of the block
+    property caption : Tourmaline::RichBlockCaption | ::Nil
+
+    def initialize(
+      @type,
+      @location,
+      @zoom,
+      @width,
+      @height,
+      @caption : Tourmaline::RichBlockCaption | ::Nil = nil
+    )
+    end
+  end
+
+  # A block with an animation, corresponding to the HTML tag <video>.
+  class RichBlockAnimation
+    include JSON::Serializable
+
+    # Type of the block, always "animation"
+    property type : String
+
+    # The animation
+    property animation : Tourmaline::Animation
+
+    # Optional. True, if the media preview is covered by a spoiler animation
+    property? has_spoiler : Bool | ::Nil
+
+    # Optional. Caption of the block
+    property caption : Tourmaline::RichBlockCaption | ::Nil
+
+    def initialize(
+      @type,
+      @animation,
+      @has_spoiler : Bool | ::Nil = nil,
+      @caption : Tourmaline::RichBlockCaption | ::Nil = nil
+    )
+    end
+  end
+
+  # A block with a music file, corresponding to the HTML tag <audio>.
+  class RichBlockAudio
+    include JSON::Serializable
+
+    # Type of the block, always "audio"
+    property type : String
+
+    # The audio
+    property audio : Tourmaline::Audio
+
+    # Optional. Caption of the block
+    property caption : Tourmaline::RichBlockCaption | ::Nil
+
+    def initialize(
+      @type,
+      @audio,
+      @caption : Tourmaline::RichBlockCaption | ::Nil = nil
+    )
+    end
+  end
+
+  # A block with a photo, corresponding to the HTML tag <photo>.
+  class RichBlockPhoto
+    include JSON::Serializable
+
+    # Type of the block, always "photo"
+    property type : String
+
+    # Available sizes of the photo
+    property photo : Array(Tourmaline::PhotoSize) = [] of Tourmaline::PhotoSize
+
+    # Optional. True, if the media preview is covered by a spoiler animation
+    property? has_spoiler : Bool | ::Nil
+
+    # Optional. Caption of the block
+    property caption : Tourmaline::RichBlockCaption | ::Nil
+
+    def initialize(
+      @type,
+      @photo : Array(Tourmaline::PhotoSize) = [] of Tourmaline::PhotoSize,
+      @has_spoiler : Bool | ::Nil = nil,
+      @caption : Tourmaline::RichBlockCaption | ::Nil = nil
+    )
+    end
+  end
+
+  # A block with a video, corresponding to the HTML tag <video>.
+  class RichBlockVideo
+    include JSON::Serializable
+
+    # Type of the block, always "video"
+    property type : String
+
+    # The video
+    property video : Tourmaline::Video
+
+    # Optional. True, if the media preview is covered by a spoiler animation
+    property? has_spoiler : Bool | ::Nil
+
+    # Optional. Caption of the block
+    property caption : Tourmaline::RichBlockCaption | ::Nil
+
+    def initialize(
+      @type,
+      @video,
+      @has_spoiler : Bool | ::Nil = nil,
+      @caption : Tourmaline::RichBlockCaption | ::Nil = nil
+    )
+    end
+  end
+
+  # A block with a voice note, corresponding to the HTML tag <audio>.
+  class RichBlockVoiceNote
+    include JSON::Serializable
+
+    # Type of the block, always "voice_note"
+    property type : String
+
+    # The voice note
+    property voice_note : Tourmaline::Voice
+
+    # Optional. Caption of the block
+    property caption : Tourmaline::RichBlockCaption | ::Nil
+
+    def initialize(
+      @type,
+      @voice_note,
+      @caption : Tourmaline::RichBlockCaption | ::Nil = nil
+    )
+    end
+  end
+
+  # A block with a "Thinking..." placeholder, corresponding to the custom HTML tag <tg-thinking>. The block may be used only in sendRichMessageDraft, therefore it can't be received in messages. See https://t.me/addemoji/AIActions for examples of custom emoji, which are recommended for usage in the block.
+  class RichBlockThinking
+    include JSON::Serializable
+
+    # Type of the block, always "thinking"
+    property type : String
+
+    # Text of the block. See https://t.me/addemoji/AIActions for examples of custom emoji, which are recommended for usage in the block.
+    property text : Tourmaline::RichText
+
+    def initialize(
+      @type,
+      @text
     )
     end
   end
@@ -6101,7 +7536,7 @@ module Tourmaline
     # Offset of the results to be returned, can be controlled by the bot
     property offset : String
 
-    # Optional. Type of the chat from which the inline query was sent. Can be either "sender" for a private chat with the inline query sender, "private", "group", "supergroup", or "channel". The chat type should be always known for requests sent from official clients and most third-party clients, unless the request was sent from a secret chat
+    # Optional. Type of the chat from which the inline query was sent. Can be either "sender" for a private chat with the inline query sender, "private", "group", "supergroup", or "channel". The chat type should be always known for requests sent from official clients and most third-party clients, unless the request was sent from a secret chat.
     property chat_type : String | ::Nil
 
     # Optional. Sender location, only for bots that request user location
@@ -6113,7 +7548,7 @@ module Tourmaline
       @query,
       @offset,
       @chat_type : String | ::Nil = nil,
-      @location : Tourmaline::Location | ::Nil = nil,
+      @location : Tourmaline::Location | ::Nil = nil
     )
     end
   end
@@ -6134,7 +7569,7 @@ module Tourmaline
     def initialize(
       @text,
       @web_app : Tourmaline::WebAppInfo | ::Nil = nil,
-      @start_parameter : String | ::Nil = nil,
+      @start_parameter : String | ::Nil = nil
     )
     end
   end
@@ -6207,7 +7642,7 @@ module Tourmaline
       @description : String | ::Nil = nil,
       @thumbnail_url : String | ::Nil = nil,
       @thumbnail_width : Int32 | Int64 | ::Nil = nil,
-      @thumbnail_height : Int32 | Int64 | ::Nil = nil,
+      @thumbnail_height : Int32 | Int64 | ::Nil = nil
     )
     end
   end
@@ -6219,7 +7654,7 @@ module Tourmaline
     # Unique identifier for this result, 1-64 bytes
     property id : String
 
-    # A valid URL of the photo. Photo must be in JPEG format. Photo size must not exceed 5MB
+    # A valid URL of the photo. Photo must be in JPEG format. Photo size must not exceed 5MB.
     property photo_url : String
 
     # URL of the thumbnail for the photo
@@ -6272,7 +7707,7 @@ module Tourmaline
       @caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity,
       @show_caption_above_media : Bool | ::Nil = nil,
       @reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil,
-      @input_message_content : Tourmaline::InputMessageContent | ::Nil = nil,
+      @input_message_content : Tourmaline::InputMessageContent | ::Nil = nil
     )
     end
   end
@@ -6302,7 +7737,7 @@ module Tourmaline
     # Optional. Duration of the GIF in seconds
     property gif_duration : Int32 | Int64 | ::Nil
 
-    # Optional. MIME type of the thumbnail, must be one of "image/jpeg", "image/gif", or "video/mp4". Defaults to "image/jpeg"
+    # Optional. MIME type of the thumbnail, must be one of "image/jpeg", "image/gif", or "video/mp4". Defaults to "image/jpeg".
     property thumbnail_mime_type : String | ::Nil
 
     # Optional. Title for the result
@@ -6341,7 +7776,7 @@ module Tourmaline
       @caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity,
       @show_caption_above_media : Bool | ::Nil = nil,
       @reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil,
-      @input_message_content : Tourmaline::InputMessageContent | ::Nil = nil,
+      @input_message_content : Tourmaline::InputMessageContent | ::Nil = nil
     )
     end
   end
@@ -6371,7 +7806,7 @@ module Tourmaline
     # Optional. Video duration in seconds
     property mpeg4_duration : Int32 | Int64 | ::Nil
 
-    # Optional. MIME type of the thumbnail, must be one of "image/jpeg", "image/gif", or "video/mp4". Defaults to "image/jpeg"
+    # Optional. MIME type of the thumbnail, must be one of "image/jpeg", "image/gif", or "video/mp4". Defaults to "image/jpeg".
     property thumbnail_mime_type : String | ::Nil
 
     # Optional. Title for the result
@@ -6410,7 +7845,7 @@ module Tourmaline
       @caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity,
       @show_caption_above_media : Bool | ::Nil = nil,
       @reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil,
-      @input_message_content : Tourmaline::InputMessageContent | ::Nil = nil,
+      @input_message_content : Tourmaline::InputMessageContent | ::Nil = nil
     )
     end
   end
@@ -6483,7 +7918,7 @@ module Tourmaline
       @video_duration : Int32 | Int64 | ::Nil = nil,
       @description : String | ::Nil = nil,
       @reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil,
-      @input_message_content : Tourmaline::InputMessageContent | ::Nil = nil,
+      @input_message_content : Tourmaline::InputMessageContent | ::Nil = nil
     )
     end
   end
@@ -6536,7 +7971,7 @@ module Tourmaline
       @performer : String | ::Nil = nil,
       @audio_duration : Int32 | Int64 | ::Nil = nil,
       @reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil,
-      @input_message_content : Tourmaline::InputMessageContent | ::Nil = nil,
+      @input_message_content : Tourmaline::InputMessageContent | ::Nil = nil
     )
     end
   end
@@ -6585,7 +8020,7 @@ module Tourmaline
       @caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity,
       @voice_duration : Int32 | Int64 | ::Nil = nil,
       @reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil,
-      @input_message_content : Tourmaline::InputMessageContent | ::Nil = nil,
+      @input_message_content : Tourmaline::InputMessageContent | ::Nil = nil
     )
     end
   end
@@ -6650,7 +8085,7 @@ module Tourmaline
       @input_message_content : Tourmaline::InputMessageContent | ::Nil = nil,
       @thumbnail_url : String | ::Nil = nil,
       @thumbnail_width : Int32 | Int64 | ::Nil = nil,
-      @thumbnail_height : Int32 | Int64 | ::Nil = nil,
+      @thumbnail_height : Int32 | Int64 | ::Nil = nil
     )
     end
   end
@@ -6677,7 +8112,7 @@ module Tourmaline
     # Optional. The radius of uncertainty for the location, measured in meters; 0-1500
     property horizontal_accuracy : Float64 | ::Nil
 
-    # Optional. Period in seconds during which the location can be updated, should be between 60 and 86400, or 0x7FFFFFFF for live locations that can be edited indefinitely.
+    # Optional. Period in seconds during which the location can be updated, must be between 60 and 86400, or 0x7FFFFFFF for live locations that can be edited indefinitely
     property live_period : Int32 | Int64 | ::Nil
 
     # Optional. For live locations, a direction in which the user is moving, in degrees. Must be between 1 and 360 if specified.
@@ -6715,7 +8150,7 @@ module Tourmaline
       @input_message_content : Tourmaline::InputMessageContent | ::Nil = nil,
       @thumbnail_url : String | ::Nil = nil,
       @thumbnail_width : Int32 | Int64 | ::Nil = nil,
-      @thumbnail_height : Int32 | Int64 | ::Nil = nil,
+      @thumbnail_height : Int32 | Int64 | ::Nil = nil
     )
     end
   end
@@ -6784,7 +8219,7 @@ module Tourmaline
       @input_message_content : Tourmaline::InputMessageContent | ::Nil = nil,
       @thumbnail_url : String | ::Nil = nil,
       @thumbnail_width : Int32 | Int64 | ::Nil = nil,
-      @thumbnail_height : Int32 | Int64 | ::Nil = nil,
+      @thumbnail_height : Int32 | Int64 | ::Nil = nil
     )
     end
   end
@@ -6837,7 +8272,7 @@ module Tourmaline
       @input_message_content : Tourmaline::InputMessageContent | ::Nil = nil,
       @thumbnail_url : String | ::Nil = nil,
       @thumbnail_width : Int32 | Int64 | ::Nil = nil,
-      @thumbnail_height : Int32 | Int64 | ::Nil = nil,
+      @thumbnail_height : Int32 | Int64 | ::Nil = nil
     )
     end
   end
@@ -6862,7 +8297,7 @@ module Tourmaline
       @id,
       @game_short_name,
       @type = "game",
-      @reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil,
+      @reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil
     )
     end
   end
@@ -6915,7 +8350,7 @@ module Tourmaline
       @caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity,
       @show_caption_above_media : Bool | ::Nil = nil,
       @reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil,
-      @input_message_content : Tourmaline::InputMessageContent | ::Nil = nil,
+      @input_message_content : Tourmaline::InputMessageContent | ::Nil = nil
     )
     end
   end
@@ -6964,7 +8399,7 @@ module Tourmaline
       @caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity,
       @show_caption_above_media : Bool | ::Nil = nil,
       @reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil,
-      @input_message_content : Tourmaline::InputMessageContent | ::Nil = nil,
+      @input_message_content : Tourmaline::InputMessageContent | ::Nil = nil
     )
     end
   end
@@ -7013,7 +8448,7 @@ module Tourmaline
       @caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity,
       @show_caption_above_media : Bool | ::Nil = nil,
       @reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil,
-      @input_message_content : Tourmaline::InputMessageContent | ::Nil = nil,
+      @input_message_content : Tourmaline::InputMessageContent | ::Nil = nil
     )
     end
   end
@@ -7042,7 +8477,7 @@ module Tourmaline
       @sticker_file_id,
       @type = "sticker",
       @reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil,
-      @input_message_content : Tourmaline::InputMessageContent | ::Nil = nil,
+      @input_message_content : Tourmaline::InputMessageContent | ::Nil = nil
     )
     end
   end
@@ -7091,7 +8526,7 @@ module Tourmaline
       @parse_mode : ParseMode = ParseMode::Markdown,
       @caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity,
       @reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil,
-      @input_message_content : Tourmaline::InputMessageContent | ::Nil = nil,
+      @input_message_content : Tourmaline::InputMessageContent | ::Nil = nil
     )
     end
   end
@@ -7144,7 +8579,7 @@ module Tourmaline
       @caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity,
       @show_caption_above_media : Bool | ::Nil = nil,
       @reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil,
-      @input_message_content : Tourmaline::InputMessageContent | ::Nil = nil,
+      @input_message_content : Tourmaline::InputMessageContent | ::Nil = nil
     )
     end
   end
@@ -7189,7 +8624,7 @@ module Tourmaline
       @parse_mode : ParseMode = ParseMode::Markdown,
       @caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity,
       @reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil,
-      @input_message_content : Tourmaline::InputMessageContent | ::Nil = nil,
+      @input_message_content : Tourmaline::InputMessageContent | ::Nil = nil
     )
     end
   end
@@ -7230,18 +8665,19 @@ module Tourmaline
       @parse_mode : ParseMode = ParseMode::Markdown,
       @caption_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity,
       @reply_markup : Tourmaline::InlineKeyboardMarkup | ::Nil = nil,
-      @input_message_content : Tourmaline::InputMessageContent | ::Nil = nil,
+      @input_message_content : Tourmaline::InputMessageContent | ::Nil = nil
     )
     end
   end
 
-  # This object represents the content of a message to be sent as a result of an inline query. Telegram clients currently support the following 5 types:
+  # This object represents the content of a message to be sent as a result of an inline query. Telegram clients currently support the following types:
   # - InputTextMessageContent
+  # - InputRichMessageContent
   # - InputLocationMessageContent
   # - InputVenueMessageContent
   # - InputContactMessageContent
   # - InputInvoiceMessageContent
-  alias InputMessageContent = Tourmaline::InputTextMessageContent | Tourmaline::InputLocationMessageContent | Tourmaline::InputVenueMessageContent | Tourmaline::InputContactMessageContent | Tourmaline::InputInvoiceMessageContent
+  alias InputMessageContent = Tourmaline::InputTextMessageContent | Tourmaline::InputRichMessageContent | Tourmaline::InputLocationMessageContent | Tourmaline::InputVenueMessageContent | Tourmaline::InputContactMessageContent | Tourmaline::InputInvoiceMessageContent
 
   # Represents the content of a text message to be sent as the result of an inline query.
   class InputTextMessageContent
@@ -7263,7 +8699,20 @@ module Tourmaline
       @message_text,
       @parse_mode : ParseMode = ParseMode::Markdown,
       @entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity,
-      @link_preview_options : Tourmaline::LinkPreviewOptions | ::Nil = nil,
+      @link_preview_options : Tourmaline::LinkPreviewOptions | ::Nil = nil
+    )
+    end
+  end
+
+  # Represents the content of a rich message to be sent as the result of an inline query.
+  class InputRichMessageContent
+    include JSON::Serializable
+
+    # The message to be sent
+    property rich_message : Tourmaline::InputRichMessage
+
+    def initialize(
+      @rich_message
     )
     end
   end
@@ -7281,7 +8730,7 @@ module Tourmaline
     # Optional. The radius of uncertainty for the location, measured in meters; 0-1500
     property horizontal_accuracy : Float64 | ::Nil
 
-    # Optional. Period in seconds during which the location can be updated, should be between 60 and 86400, or 0x7FFFFFFF for live locations that can be edited indefinitely.
+    # Optional. Period in seconds during which the location can be updated, must be between 60 and 86400, or 0x7FFFFFFF for live locations that can be edited indefinitely
     property live_period : Int32 | Int64 | ::Nil
 
     # Optional. For live locations, a direction in which the user is moving, in degrees. Must be between 1 and 360 if specified.
@@ -7296,7 +8745,7 @@ module Tourmaline
       @horizontal_accuracy : Float64 | ::Nil = nil,
       @live_period : Int32 | Int64 | ::Nil = nil,
       @heading : Int32 | Int64 | ::Nil = nil,
-      @proximity_alert_radius : Int32 | Int64 | ::Nil = nil,
+      @proximity_alert_radius : Int32 | Int64 | ::Nil = nil
     )
     end
   end
@@ -7337,7 +8786,7 @@ module Tourmaline
       @foursquare_id : String | ::Nil = nil,
       @foursquare_type : String | ::Nil = nil,
       @google_place_id : String | ::Nil = nil,
-      @google_place_type : String | ::Nil = nil,
+      @google_place_type : String | ::Nil = nil
     )
     end
   end
@@ -7362,7 +8811,7 @@ module Tourmaline
       @phone_number,
       @first_name,
       @last_name : String | ::Nil = nil,
-      @vcard : String | ::Nil = nil,
+      @vcard : String | ::Nil = nil
     )
     end
   end
@@ -7451,7 +8900,7 @@ module Tourmaline
       @need_shipping_address : Bool | ::Nil = nil,
       @send_phone_number_to_provider : Bool | ::Nil = nil,
       @send_email_to_provider : Bool | ::Nil = nil,
-      @is_flexible : Bool | ::Nil = nil,
+      @is_flexible : Bool | ::Nil = nil
     )
     end
   end
@@ -7481,38 +8930,7 @@ module Tourmaline
       @from,
       @query,
       @location : Tourmaline::Location | ::Nil = nil,
-      @inline_message_id : String | ::Nil = nil,
-    )
-    end
-  end
-
-  # Describes an inline message sent by a Web App on behalf of a user.
-  class SentWebAppMessage
-    include JSON::Serializable
-
-    # Optional. Identifier of the sent inline message. Available only if there is an inline keyboard attached to the message.
-    property inline_message_id : String | ::Nil
-
-    def initialize(
-      @inline_message_id : String | ::Nil = nil,
-    )
-    end
-  end
-
-  # Describes an inline message to be sent by a user of a Mini App.
-  class PreparedInlineMessage
-    include JSON::Serializable
-
-    # Unique identifier of the prepared message
-    property id : String
-
-    # Expiration date of the prepared message, in Unix time. Expired prepared messages can no longer be used
-    @[JSON::Field(converter: Time::EpochConverter)]
-    property expiration_date : Time
-
-    def initialize(
-      @id,
-      @expiration_date,
+      @inline_message_id : String | ::Nil = nil
     )
     end
   end
@@ -7529,7 +8947,7 @@ module Tourmaline
 
     def initialize(
       @label,
-      @amount,
+      @amount
     )
     end
   end
@@ -7558,7 +8976,7 @@ module Tourmaline
       @description,
       @start_parameter,
       @currency,
-      @total_amount,
+      @total_amount
     )
     end
   end
@@ -7591,7 +9009,7 @@ module Tourmaline
       @city,
       @street_line1,
       @street_line2,
-      @post_code,
+      @post_code
     )
     end
   end
@@ -7616,7 +9034,7 @@ module Tourmaline
       @name : String | ::Nil = nil,
       @phone_number : String | ::Nil = nil,
       @email : String | ::Nil = nil,
-      @shipping_address : Tourmaline::ShippingAddress | ::Nil = nil,
+      @shipping_address : Tourmaline::ShippingAddress | ::Nil = nil
     )
     end
   end
@@ -7637,7 +9055,7 @@ module Tourmaline
     def initialize(
       @id,
       @title,
-      @prices : Array(Tourmaline::LabeledPrice) = [] of Tourmaline::LabeledPrice,
+      @prices : Array(Tourmaline::LabeledPrice) = [] of Tourmaline::LabeledPrice
     )
     end
   end
@@ -7687,7 +9105,7 @@ module Tourmaline
       @is_recurring : Bool | ::Nil = nil,
       @is_first_recurring : Bool | ::Nil = nil,
       @shipping_option_id : String | ::Nil = nil,
-      @order_info : Tourmaline::OrderInfo | ::Nil = nil,
+      @order_info : Tourmaline::OrderInfo | ::Nil = nil
     )
     end
   end
@@ -7696,7 +9114,7 @@ module Tourmaline
   class RefundedPayment
     include JSON::Serializable
 
-    # Three-letter ISO 4217 currency code, or "XTR" for payments in Telegram Stars. Currently, always "XTR"
+    # Three-letter ISO 4217 currency code, or "XTR" for payments in Telegram Stars. Currently, always "XTR".
     property currency : String
 
     # Total refunded price in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45, total_amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).
@@ -7716,7 +9134,7 @@ module Tourmaline
       @total_amount,
       @invoice_payload,
       @telegram_payment_charge_id,
-      @provider_payment_charge_id : String | ::Nil = nil,
+      @provider_payment_charge_id : String | ::Nil = nil
     )
     end
   end
@@ -7741,7 +9159,7 @@ module Tourmaline
       @id,
       @from,
       @invoice_payload,
-      @shipping_address,
+      @shipping_address
     )
     end
   end
@@ -7778,7 +9196,7 @@ module Tourmaline
       @total_amount,
       @invoice_payload,
       @shipping_option_id : String | ::Nil = nil,
-      @order_info : Tourmaline::OrderInfo | ::Nil = nil,
+      @order_info : Tourmaline::OrderInfo | ::Nil = nil
     )
     end
   end
@@ -7795,7 +9213,7 @@ module Tourmaline
 
     def initialize(
       @from,
-      @paid_media_payload,
+      @paid_media_payload
     )
     end
   end
@@ -7814,7 +9232,7 @@ module Tourmaline
     property type : String
 
     def initialize(
-      @type,
+      @type
     )
     end
   end
@@ -7836,7 +9254,7 @@ module Tourmaline
     def initialize(
       @type,
       @date,
-      @url,
+      @url
     )
     end
   end
@@ -7849,7 +9267,7 @@ module Tourmaline
     property type : String
 
     def initialize(
-      @type,
+      @type
     )
     end
   end
@@ -7878,7 +9296,7 @@ module Tourmaline
       @amount,
       @affiliate_user : Tourmaline::User | ::Nil = nil,
       @affiliate_chat : Tourmaline::Chat | ::Nil = nil,
-      @nanostar_amount : Int32 | Int64 | ::Nil = nil,
+      @nanostar_amount : Int32 | Int64 | ::Nil = nil
     )
     end
   end
@@ -7937,7 +9355,7 @@ module Tourmaline
       @paid_media : Array(Tourmaline::PaidMedia) = [] of Tourmaline::PaidMedia,
       @paid_media_payload : String | ::Nil = nil,
       @gift : Tourmaline::Gift | ::Nil = nil,
-      @premium_subscription_duration : Int32 | Int64 | ::Nil = nil,
+      @premium_subscription_duration : Int32 | Int64 | ::Nil = nil
     )
     end
   end
@@ -7958,7 +9376,7 @@ module Tourmaline
     def initialize(
       @type,
       @chat,
-      @gift : Tourmaline::Gift | ::Nil = nil,
+      @gift : Tourmaline::Gift | ::Nil = nil
     )
     end
   end
@@ -7979,7 +9397,7 @@ module Tourmaline
     def initialize(
       @type,
       @commission_per_mille,
-      @sponsor_user : Tourmaline::User | ::Nil = nil,
+      @sponsor_user : Tourmaline::User | ::Nil = nil
     )
     end
   end
@@ -7996,7 +9414,7 @@ module Tourmaline
 
     def initialize(
       @type,
-      @withdrawal_state : Tourmaline::RevenueWithdrawalState | ::Nil = nil,
+      @withdrawal_state : Tourmaline::RevenueWithdrawalState | ::Nil = nil
     )
     end
   end
@@ -8009,7 +9427,7 @@ module Tourmaline
     property type : String
 
     def initialize(
-      @type,
+      @type
     )
     end
   end
@@ -8026,7 +9444,7 @@ module Tourmaline
 
     def initialize(
       @type,
-      @request_count,
+      @request_count
     )
     end
   end
@@ -8039,7 +9457,7 @@ module Tourmaline
     property type : String
 
     def initialize(
-      @type,
+      @type
     )
     end
   end
@@ -8061,10 +9479,10 @@ module Tourmaline
     # Optional. The number of 1/1000000000 shares of Telegram Stars transferred by the transaction; from 0 to 999999999
     property nanostar_amount : Int32 | Int64 | ::Nil
 
-    # Optional. Source of an incoming transaction (e.g., a user purchasing goods or services, Fragment refunding a failed withdrawal). Only for incoming transactions
+    # Optional. Source of an incoming transaction (e.g., a user purchasing goods or services, Fragment refunding a failed withdrawal). Only for incoming transactions.
     property source : Tourmaline::TransactionPartner | ::Nil
 
-    # Optional. Receiver of an outgoing transaction (e.g., a user for a purchase refund, Fragment for a withdrawal). Only for outgoing transactions
+    # Optional. Receiver of an outgoing transaction (e.g., a user for a purchase refund, Fragment for a withdrawal). Only for outgoing transactions.
     property receiver : Tourmaline::TransactionPartner | ::Nil
 
     def initialize(
@@ -8073,7 +9491,7 @@ module Tourmaline
       @date,
       @nanostar_amount : Int32 | Int64 | ::Nil = nil,
       @source : Tourmaline::TransactionPartner | ::Nil = nil,
-      @receiver : Tourmaline::TransactionPartner | ::Nil = nil,
+      @receiver : Tourmaline::TransactionPartner | ::Nil = nil
     )
     end
   end
@@ -8086,7 +9504,7 @@ module Tourmaline
     property transactions : Array(Tourmaline::StarTransaction) = [] of Tourmaline::StarTransaction
 
     def initialize(
-      @transactions : Array(Tourmaline::StarTransaction) = [] of Tourmaline::StarTransaction,
+      @transactions : Array(Tourmaline::StarTransaction) = [] of Tourmaline::StarTransaction
     )
     end
   end
@@ -8103,7 +9521,7 @@ module Tourmaline
 
     def initialize(
       @credentials,
-      @data : Array(Tourmaline::EncryptedPassportElement) = [] of Tourmaline::EncryptedPassportElement,
+      @data : Array(Tourmaline::EncryptedPassportElement) = [] of Tourmaline::EncryptedPassportElement
     )
     end
   end
@@ -8129,7 +9547,7 @@ module Tourmaline
       @file_id,
       @file_unique_id,
       @file_size,
-      @file_date,
+      @file_date
     )
     end
   end
@@ -8178,7 +9596,7 @@ module Tourmaline
       @front_side : Tourmaline::PassportFile | ::Nil = nil,
       @reverse_side : Tourmaline::PassportFile | ::Nil = nil,
       @selfie : Tourmaline::PassportFile | ::Nil = nil,
-      @translation : Array(Tourmaline::PassportFile) = [] of Tourmaline::PassportFile,
+      @translation : Array(Tourmaline::PassportFile) = [] of Tourmaline::PassportFile
     )
     end
   end
@@ -8199,7 +9617,7 @@ module Tourmaline
     def initialize(
       @data,
       @hash,
-      @secret,
+      @secret
     )
     end
   end
@@ -8240,7 +9658,7 @@ module Tourmaline
       @type,
       @field_name,
       @data_hash,
-      @message,
+      @message
     )
     end
   end
@@ -8265,7 +9683,7 @@ module Tourmaline
       @source,
       @type,
       @file_hash,
-      @message,
+      @message
     )
     end
   end
@@ -8290,7 +9708,7 @@ module Tourmaline
       @source,
       @type,
       @file_hash,
-      @message,
+      @message
     )
     end
   end
@@ -8315,7 +9733,7 @@ module Tourmaline
       @source,
       @type,
       @file_hash,
-      @message,
+      @message
     )
     end
   end
@@ -8340,7 +9758,7 @@ module Tourmaline
       @source,
       @type,
       @file_hash,
-      @message,
+      @message
     )
     end
   end
@@ -8365,7 +9783,7 @@ module Tourmaline
       @source,
       @type,
       @message,
-      @file_hashes : Array(String) = [] of String,
+      @file_hashes : Array(String) = [] of String
     )
     end
   end
@@ -8390,7 +9808,7 @@ module Tourmaline
       @source,
       @type,
       @file_hash,
-      @message,
+      @message
     )
     end
   end
@@ -8415,7 +9833,7 @@ module Tourmaline
       @source,
       @type,
       @message,
-      @file_hashes : Array(String) = [] of String,
+      @file_hashes : Array(String) = [] of String
     )
     end
   end
@@ -8440,7 +9858,7 @@ module Tourmaline
       @source,
       @type,
       @element_hash,
-      @message,
+      @message
     )
     end
   end
@@ -8455,7 +9873,7 @@ module Tourmaline
     # Description of the game
     property description : String
 
-    # Photo that will be displayed in the game message in chats.
+    # Photo that will be displayed in the game message in chats
     property photo : Array(Tourmaline::PhotoSize) = [] of Tourmaline::PhotoSize
 
     # Optional. Brief description of the game or high scores included in the game message. Can be automatically edited to include current high scores for the game when the bot calls setGameScore, or manually edited using editMessageText. 0-4096 characters.
@@ -8464,7 +9882,7 @@ module Tourmaline
     # Optional. Special entities that appear in text, such as usernames, URLs, bot commands, etc.
     property text_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity
 
-    # Optional. Animation that will be displayed in the game message in chats. Upload via BotFather
+    # Optional. Animation that will be displayed in the game message in chats. Upload via BotFather.
     property animation : Tourmaline::Animation | ::Nil
 
     def initialize(
@@ -8473,7 +9891,7 @@ module Tourmaline
       @photo : Array(Tourmaline::PhotoSize) = [] of Tourmaline::PhotoSize,
       @text : String | ::Nil = nil,
       @text_entities : Array(Tourmaline::MessageEntity) = [] of Tourmaline::MessageEntity,
-      @animation : Tourmaline::Animation | ::Nil = nil,
+      @animation : Tourmaline::Animation | ::Nil = nil
     )
     end
   end
@@ -8499,7 +9917,7 @@ module Tourmaline
     def initialize(
       @position,
       @user,
-      @score,
+      @score
     )
     end
   end
